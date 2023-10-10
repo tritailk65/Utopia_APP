@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.abc {
+    @apply w-full h-36 bg-slate-600;
+}
