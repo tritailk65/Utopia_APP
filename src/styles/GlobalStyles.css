@@ -2,3 +2,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sm-border {
+    @apply rounded-lg border-2;
+}
+
+.med-border {
+    @apply rounded-2xl  border-2;
+}
+
+.transition {
+    @apply transition-all duration-200 ease-in-out;
+}
+
+.flex-all-center {
+    @apply flex justify-center items-center;
+}

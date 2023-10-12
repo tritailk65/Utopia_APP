@@ -4,7 +4,7 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                'navbar-dark': 'rgb(17, 17, 17);',
+                'dark-blue': '#001F3E',
                 'controller-dark-gray': '#232323',
             },
             keyframes: {
