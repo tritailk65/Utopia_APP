@@ -11,6 +11,10 @@
     @apply rounded-2xl  border-2;
 }
 
+.circle {
+    @apply rounded-[50%];
+}
+
 .transition {
     @apply transition-all duration-200 ease-in-out;
 }

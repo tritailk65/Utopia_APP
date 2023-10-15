@@ -1,6 +1,9 @@
-import React from 'react'
+import React from 'react';
 import { ReactNode } from 'react';
 import { useEffect } from 'react';
+import ActionBar from '../components/Sidebar/ActionBar/ActionBar';
+import FriendBar from '../components/Sidebar/FriendBar/FriendBar';
+
 type DefaultLayoutProps = {
     children: ReactNode;
 };
@@ -11,10 +14,14 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
     }, []);
 
     return (
-        <div>
-            {children}
+        <div className="flex min-h-screen">
+            <ActionBar />
+            <div className="mx-auto flex h-[1500px] pt-6">
+                <div className="max-w-[630px] w-[630px]">{children}</div>
+                <FriendBar />
+            </div>
         </div>
     );
 };
 
-export default DefaultLayout
+export default DefaultLayout;
