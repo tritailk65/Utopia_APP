@@ -14,10 +14,10 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
     }, []);
 
     return (
-        <div className="flex min-h-screen">
+        <div className="flex min-h-screen ">
             <ActionBar />
-            <div className="mx-auto flex h-[1500px] pt-6">
-                <div className="max-w-[630px] w-[630px]">{children}</div>
+            <div className="mx-auto flex min-h-screen pt-6">
+                <div className="max-w-[630px] ">{children}</div>
                 <FriendBar />
             </div>
         </div>
