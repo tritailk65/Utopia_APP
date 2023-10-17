@@ -3,13 +3,13 @@ import { ReactNode } from 'react';
 
 type StickyWrapperProps = {
     children: ReactNode;
-    left?: number | null;
-    right?: number | null;
-    top?: number | null;
-    bottom?: number | null;
-    shadow?: boolean | null;
-    maxWidth?: number | null;
-    paddingLeft?: number | null;
+    left?: number | undefined;
+    right?: number | undefined;
+    top?: number | undefined;
+    bottom?: number | undefined;
+    shadow?: boolean | undefined;
+    maxWidth?: number | undefined;
+    paddingLeft?: number | undefined;
 };
 
 const StickyWrapper: React.FC<StickyWrapperProps> = ({
@@ -22,27 +22,27 @@ const StickyWrapper: React.FC<StickyWrapperProps> = ({
     maxWidth,
     paddingLeft,
 }) => {
-    const getStickyClass = () => {
-        const classes = ['sticky'];
+    // const getStickyClass = () => {
+    //     const classes = ['sticky'];
 
-        if (left !== null) {
-            classes.push(`left-${left}`);
-        }
+    //     if (left !== undefined) {
+    //         classes.push(`left-${left}`);
+    //     }
 
-        if (right !== null) {
-            classes.push(`right-${right}`);
-        }
+    //     if (right !== undefined) {
+    //         classes.push(`right-${right}`);
+    //     }
 
-        if (top !== null) {
-            classes.push(`top-${top}`);
-        }
+    //     if (top !== undefined) {
+    //         classes.push(`top-${top}`);
+    //     }
 
-        if (bottom !== null) {
-            classes.push(`bottom-${bottom}`);
-        }
+    //     if (bottom !== undefined) {
+    //         classes.push(`bottom-${bottom}`);
+    //     }
 
-        return classes.join(' ');
-    };
+    //     return classes.join(' ');
+    // };
 
     const getWrapperClass = () => {
         const Wrapper = [`mr-2 min-h-screen shrink-0 z-10`];
@@ -62,7 +62,13 @@ const StickyWrapper: React.FC<StickyWrapperProps> = ({
 
     return (
         <div className={getWrapperClass()}>
-            <div className={getStickyClass()}>{children}</div>
+            <div
+                className={`sticky ${top !== undefined && 'top-' + top} ${bottom !== undefined && 'bottom-' + bottom} ${
+                    left !== undefined && 'left-' + left
+                } ${right !== undefined && 'right-' + right} `}
+            >
+                {children}
+            </div>
         </div>
     );
 };

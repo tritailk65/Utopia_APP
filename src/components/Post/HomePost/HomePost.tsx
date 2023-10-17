@@ -4,6 +4,7 @@ import { BiBookmark } from 'react-icons/bi';
 import { BsFillBookmarkFill } from 'react-icons/bs';
 import { useState, useEffect } from 'react';
 import useDebounce from '../../../hooks/useDebounce';
+
 interface HomePostProps {
     avatar: string;
     username: string;
