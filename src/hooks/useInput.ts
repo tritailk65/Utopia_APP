@@ -5,7 +5,6 @@ const useInput = (initialValues: { [key: string]: string }) => {
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        console.log(name);
 
         setFormData((prevState) => ({
             ...prevState,
