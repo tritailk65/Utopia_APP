@@ -7,8 +7,8 @@ function SearchItem() {
                 <img src={avt} alt="avt" className="w-14 h-14 circle" />
             </div>
             <div className="">
-                <h1 className="font-semibold">sooyaa__</h1>
-                <div className="text-gray-500">
+                <h1 className="font-semibold text-lg">sooyaa__</h1>
+                <div className="text-gray-500 text-base">
                     <span className="mr-1">Jisoo Blackpink</span>
                     <span className="mr-1">-</span>
                     <span className="">408k followers</span>

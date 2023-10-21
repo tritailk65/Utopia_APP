@@ -63,9 +63,11 @@ const StickyWrapper: React.FC<StickyWrapperProps> = ({
     return (
         <div className={getWrapperClass()}>
             <div
-                className={`sticky ${top !== undefined && 'top-' + top} ${bottom !== undefined && 'bottom-' + bottom} ${
-                    left !== undefined && 'left-' + left
-                } ${right !== undefined && 'right-' + right} `}
+                className={`sticky ${top !== undefined && 'absolute top-' + top} ${
+                    bottom !== undefined && 'absolute bottom-' + bottom
+                } ${left !== undefined && 'absolute left-' + left} ${
+                    right !== undefined && 'absolute right-' + right
+                } `}
             >
                 {children}
             </div>

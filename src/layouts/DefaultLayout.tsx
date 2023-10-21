@@ -3,7 +3,7 @@ import { ReactNode, useState } from 'react';
 import { useEffect } from 'react';
 import ActionBar from '../components/Sidebar/ActionBar/ActionBar';
 import FriendBar from '../components/Sidebar/FriendBar/FriendBar';
-import SearchBar from '../components/Sidebar/SearchBar/SearchBar';
+import FixedBar from '../components/Sidebar/FixedBar/FixedBar';
 
 type DefaultLayoutProps = {
     children: ReactNode;
@@ -11,14 +11,30 @@ type DefaultLayoutProps = {
 
 const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
     const [show, setShow] = useState<boolean>(false);
+    const [panel, setPanel] = useState<number>(0);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
+    const onOpen = (index: number) => {
+        setShow(true);
+        setPanel(index);
+    };
+
+    const onClose = (index: number) => {
+        if (panel === index) {
+            setShow(false);
+            setPanel(0);
+        } else {
+            setPanel(index);
+        }
+    };
+
     return (
         <div className="flex min-h-screen ">
-            <ActionBar onOpen={() => setShow(true)} />
-            <SearchBar show={show} onClose={() => setShow(false)} />
+            <ActionBar onOpen={onOpen} />
+            <FixedBar show={show} onClose={onClose} panel={panel} />
             <div className="mx-auto flex min-h-screen pt-6">
                 <div className="max-w-[630px] ">{children}</div>
                 <FriendBar />
