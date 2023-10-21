@@ -9,6 +9,7 @@ import Profile from '../pages/Profile/Profile';
 // ========== import layout =============
 import DefaultLayout from '../layouts/DefaultLayout';
 import ContentOnlyLayout from '../layouts/ContentOnlyLayout';
+import LayoutProfile from '../layouts/LayoutProfile';
 
 
 type Route = {
@@ -22,5 +23,5 @@ export const PublicRoutes: Route[] = [
     { path: '/login', page: Login, layout: ContentOnlyLayout },
     { path: '/register', page: Register, layout: ContentOnlyLayout },
     { path: '/forget-password', page: ForgetPassword, layout: ContentOnlyLayout },
-    { path: '/profile', page: Profile, layout: DefaultLayout }
+    { path: '/profile', page: Profile, layout:  LayoutProfile}
 ];
