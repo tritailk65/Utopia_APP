@@ -34,11 +34,11 @@ function Login() {
                     />
                 </div>
 
-                <button className="bg-dark-blue border-dark-blue transition sm-border text-white text-2xl w-[420px] m-auto  h-14 mt-7 hover:bg-white hover:text-dark-blue">
+                <button className="bg-dark-blue border-dark-blue transition sm-border text-white text-2xl w-[420px] m-auto  h-14 mt-7 ml-20 hover:bg-white hover:text-dark-blue">
                     Login
                 </button>
                 <Link to={'/forget-password'}>
-                    <h3 className="text-xl mt-10 opacity-80 cursor-pointer hover:opacity-100 ">Forgot password?</h3>
+                    <h3 className="text-xl ml-20 mt-10 opacity-80 cursor-pointer hover:opacity-100 ">Forgot password?</h3>
                 </Link>
             </div>
             <div className="w-[570px] h-[100px]  m-auto mt-10 rounded-2xl border-slate-600 border-2 flex-all-center">
