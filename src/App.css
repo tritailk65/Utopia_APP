@@ -31,3 +31,7 @@ body {
         transform: rotate(360deg);
     }
 }
+
+.group:focus-within {
+    border: 2px solid #9b9a9a; /* Đổi màu và kích thước border theo mong muốn */
+}
