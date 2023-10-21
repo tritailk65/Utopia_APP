@@ -5,7 +5,13 @@ import { BiHomeAlt, BiSearchAlt } from 'react-icons/bi';
 import { AiOutlineHeart, AiOutlinePlusSquare } from 'react-icons/ai';
 import { IoIosNotificationsOutline } from 'react-icons/io';
 import StickyWrapper from '../../Wrapper/StickyWrapper/StickyWrapper';
-function ActionBar() {
+
+export interface ActionBarProps {
+    onOpen: () => void;
+}
+
+function ActionBar(props: ActionBarProps) {
+    const { onOpen } = props;
     return (
         <StickyWrapper top={0} left={0} shadow>
             <img src={logo1} alt="img" />
@@ -16,12 +22,12 @@ function ActionBar() {
                         <span className="">Home</span>
                     </li>
                 </Link>
-                <Link to={'/'} className="">
+                <div onClick={onOpen} className="cursor-pointer">
                     <li className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-slate-100 transition">
                         <BiSearchAlt className="mr-3" />
                         <span className="">Search</span>
                     </li>
-                </Link>
+                </div>
                 <Link to={'/'} className="">
                     <li className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-slate-100 transition">
                         <AiOutlineHeart className="mr-3" />
