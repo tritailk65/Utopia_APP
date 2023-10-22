@@ -7,7 +7,6 @@ function Login() {
         username: '',
         password: '',
     });
-
     return (
         <div className="min-h-full w-full">
             <div className="w-[570px] h-[625px]  m-auto mt-16  border-slate-600 med-border ">
