@@ -3,7 +3,7 @@ import ConfirmDialog from '../../../Dialog/ConfirmDialog/ConfirmDialog';
 import { useState } from 'react';
 function FollowItem() {
     const [dialog, setDialog] = useState<boolean>(false);
-    const [deleteItem, setDeleteItem] = useState<number[]>([]);
+    //const [deleteItem, setDeleteItem] = useState<number[]>([]);
 
     const onConfirm = () => {
         setDialog(false);
@@ -26,7 +26,7 @@ function FollowItem() {
                 <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer font-semibold ">
                     <button
                         onClick={() => setDialog(true)}
-                        className="text-sm bg-gray-300 px-5 border-2 border-transparent rounded-2xl text-lg text-gray-600 hover:opacity-90 hover:text-black py-2"
+                        className=" bg-gray-300 px-5 border-2 border-transparent rounded-2xl text-sm text-gray-600 hover:opacity-90 hover:text-black py-2"
                     >
                         Following
                     </button>

@@ -22,28 +22,6 @@ const StickyWrapper: React.FC<StickyWrapperProps> = ({
     maxWidth,
     paddingLeft,
 }) => {
-    // const getStickyClass = () => {
-    //     const classes = ['sticky'];
-
-    //     if (left !== undefined) {
-    //         classes.push(`left-${left}`);
-    //     }
-
-    //     if (right !== undefined) {
-    //         classes.push(`right-${right}`);
-    //     }
-
-    //     if (top !== undefined) {
-    //         classes.push(`top-${top}`);
-    //     }
-
-    //     if (bottom !== undefined) {
-    //         classes.push(`bottom-${bottom}`);
-    //     }
-
-    //     return classes.join(' ');
-    // };
-
     const getWrapperClass = () => {
         const Wrapper = [`mr-2 min-h-screen shrink-0 z-10`];
         if (shadow) {
