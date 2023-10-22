@@ -1,7 +1,7 @@
 import logo1 from '../../../assets/image/logo/logo1.png';
 import { Link } from 'react-router-dom';
 import { BiHomeAlt, BiSearchAlt } from 'react-icons/bi';
-import { AiOutlineHeart, AiOutlinePlusSquare } from 'react-icons/ai';
+import { AiFillProfile, AiOutlineHeart, AiOutlinePlusSquare, AiOutlineProfile } from 'react-icons/ai';
 import { IoIosNotificationsOutline } from 'react-icons/io';
 import StickyWrapper from '../../Wrapper/StickyWrapper/StickyWrapper';
 import FollowModal from '../../Modal/FollowModal/FollowModal';

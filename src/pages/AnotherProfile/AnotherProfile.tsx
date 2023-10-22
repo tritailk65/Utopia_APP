@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import hinhdaidien from '../../assets/image/hinhdaidien.png';
-import iconhinh from '../../assets/image/iconhinh.png';
-import iconsave from '../../assets/image/iconsave.png';
-import iconcamera from '../../assets/image/iconcamera.png';
+import success from '../../assets/image/success.png';
 import { Link } from 'react-router-dom';
 
-function Profile() {
+function AnotherProfile() {
   // Sử dụng useState để quản lý trạng thái của dropdown menu
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -23,11 +21,11 @@ function Profile() {
               </div>
           <div>
               <div className="flex  mb-[25px]">
-                <h1 className="text-3xl font-semibold ml-10 min-w-[200px] max-w-[200px]">Hello</h1>
+                <h1 className="text-3xl font-semibold ml-10 min-w-[200px] max-w-[200px]">Duc</h1>
                 <div className="ml-[200px]">
-                  <button className="bg-gray-300  px-4 py-2 rounded-lg">
-                    <Link to="/editprofile">
-                    Edit Profile
+                  <button className="bg-blue-800  px-4 py-2 rounded-lg">
+                    <Link to="">
+                    Follow
                     </Link>
                     </button>
                 </div>
@@ -63,34 +61,43 @@ function Profile() {
                   </ul>
             </div>
             <div className="mt-10 ml-10 ">
-                  <h1 className="text-3xl font-semibold mb-4">Hello</h1>
-                  <a href="#" className="text-blue-500">facebook.com</a>
+                  <h1 className="text-3xl font-semibold mb-4">Hello,.......</h1>
+                  <a href="#" className="text-blue-500">abcedc.com.vn</a>
             </div>
           </div>
       </div>
 
       <div>
           <div className="border-t-[3px] border-gray-300 mt-5 mb-4"></div>
-          <div className="flex space-x-6 justify-center">
-            <div className="flex">
-              <img src={iconhinh} className=""/>
-              <h1>POSTS</h1>
-            </div>
-            <div className="flex">
-              <img src={iconsave} className=""/>
-              <h1>SAVED</h1>
-            </div>
-          </div>
+                <div className="min-h-full w-full">
+                <div className="profile text-2xl w-[1000px] mx-auto mt-8 bg-white p-4 ">
+                    <div>
+                    <div className="grid grid-cols-3 gap-4">
+                        <div>
+                        <img src={success} className="w-full" />
+                        </div>
+                        <div>
+                        <img src={success} className="w-full" />
+                        </div>
+                        <div>
+                        <img src={success} className="w-full" />
+                        </div>
+                        <div>
+                        <img src={success} className="w-full" />
+                        </div>
+                        <div>
+                        <img src={success} className="w-full" />
+                        </div>
+                        <div>
+                        <img src={success} className="w-full" />
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
       </div>
 
-      <div className="mt-[100px] flex flex-col items-center justify-center space-y-10">
-            <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" /> 
-            <h1 className="text-3xl font-bold">Share Photos</h1>
-            <p className="text-center">When you share photos, they will appear on your profile</p>
-            <Link to={'/'}>
-              <span className="text-xl font-semibold cursor-pointer text-blue-500">Share your first photos</span>
-            </Link>
-      </div>
+      
     </div>
     </div>
     
@@ -98,4 +105,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default AnotherProfile;
