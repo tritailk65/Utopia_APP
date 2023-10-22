@@ -15,7 +15,8 @@ function Profile() {
   };
 
   return (
-    <div className="profile text-2xl w-[1000px] mx-auto mt-8 bg-white p-4 rounded-lg ">
+    <div className="min-h-full w-full">
+        <div className="profile text-2xl w-[1000px] mx-auto mt-8 bg-white p-4 rounded-lg ">
       <div className="flex items-center space-x-6">
               <div className="flex-shrink-0 mt-5">
                 <img src={hinhdaidien} alt="Profile Image" className="w-34 h-34 rounded-full" />
@@ -24,7 +25,11 @@ function Profile() {
               <div className="flex  mb-[25px]">
                 <h1 className="text-3xl font-semibold ml-10">Hello</h1>
                 <div className="ml-[200px]">
-                  <button className="bg-gray-300  px-4 py-2 rounded-lg">Edit Profile</button>
+                  <button className="bg-gray-300  px-4 py-2 rounded-lg">
+                    <Link to="/editprofile">
+                    Edit Profile
+                    </Link>
+                    </button>
                 </div>
                 <div className="relative inline-block text-left ml-4">
                       <button className="bg-gray-300 px-4 py-2 rounded-lg" onClick={handleDropdownClick}>
@@ -86,10 +91,9 @@ function Profile() {
               <span className="text-xl font-semibold cursor-pointer text-blue-500">Share your first photos</span>
             </Link>
       </div>
-                  
-      
-      
     </div>
+    </div>
+    
   
   );
 }

@@ -15,7 +15,7 @@ const LayoutProfile: React.FC<LayoutProfile> = ({ children }) => {
     return (
         <div className="flex min-h-screen ">
             <ActionBar />
-            <div className="ml-[400px] flex pt-6">
+            <div className="mx-auto flex min-h-screen pt-6 pr-[300px]">
             <div className="max-w-[630px] ">{children}</div>
             </div>
         </div>
