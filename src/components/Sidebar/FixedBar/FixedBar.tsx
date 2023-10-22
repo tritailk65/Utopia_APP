@@ -5,6 +5,7 @@ import logo from '../../../assets/image/logo/mini-logo.png';
 import { Link } from 'react-router-dom';
 import SearchPanel from './SearchPanel/SearchPanel';
 import NotificationPanel from './NotificationPanel/NotificationPanel';
+import FollowRequestPanel from './FollowRequestPanel/FollowRequestPanel';
 
 export interface FixedBarProps {
     show: boolean;
@@ -14,8 +15,6 @@ export interface FixedBarProps {
 
 function FixedBar(props: FixedBarProps) {
     const { show, panel, onClose } = props;
-
-    console.log(panel);
 
     return (
         <div className={`w-[486px] min-h-screen bg-white ${show ? 'fixed' : 'hidden'} z-50 flex shadow-2xl`}>
@@ -38,11 +37,11 @@ function FixedBar(props: FixedBarProps) {
                             <BiSearchAlt className="mr-3" />
                         </li>
                     </div>
-                    <Link to={'/'} className="">
+                    <div onClick={() => onClose(4)} className="cursor-pointer">
                         <li className="justify-center pl-1 h-[63px] text-2xl flex items-center mb-1 hover:bg-gray-200 transition">
                             <AiOutlineHeart className="mr-3" />
                         </li>
-                    </Link>
+                    </div>
                     <div onClick={() => onClose(2)} className="cursor-pointer">
                         <li
                             className={`justify-center pl-1 h-[63px] text-2xl flex items-center mb-1 hover:bg-gray-200 transition ${
@@ -61,7 +60,8 @@ function FixedBar(props: FixedBarProps) {
             </div>
             <div className="w-[80%]  py-8">
                 {panel === 1 && <SearchPanel />}
-                {panel === 2 && <NotificationPanel />}
+                {panel === 2 && <NotificationPanel onClose={onClose} />}
+                {panel === 3 && <FollowRequestPanel onClose={onClose} />}
             </div>
         </div>
     );

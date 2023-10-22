@@ -1,5 +1,4 @@
 import ModalContainer from '../ModalContainer/ModalContainer';
-import avt from '../../../assets/image/avt2.png';
 import FollowItem from './FollowItem/FollowItem';
 export interface FollowModalProps {
     show: boolean;
@@ -8,6 +7,7 @@ export interface FollowModalProps {
 
 function FollowModal(props: FollowModalProps) {
     const { show, onClose } = props;
+
     return (
         <>
             <ModalContainer show={show} onClose={onClose} width="medium">
