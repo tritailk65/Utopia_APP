@@ -41,7 +41,7 @@ function ForgetPassword() {
                   <div className="w-40 border-t border-gray-900"></div>
                 </div>
 
-                <Link to={'/forget-password'} className="flex items-center justify-center mr-24">
+                <Link to={'/register'} className="flex items-center justify-center mr-24">
                     <h3 className="text-xl ml-20 mt-10 opacity-80 cursor-pointer hover:opacity-100 ">Create New Account</h3>
                 </Link>
                 <div className="border-t border-gray-700 mt-4 bg-gray-300 h-16 rounded-b-xl">
