@@ -2,7 +2,7 @@ import React from 'react';
 import logo1 from '../../../assets/image/logo/logo1.png';
 import { Link } from 'react-router-dom';
 import { BiHomeAlt, BiSearchAlt } from 'react-icons/bi';
-import { AiOutlineHeart, AiOutlinePlusSquare } from 'react-icons/ai';
+import { AiFillProfile, AiOutlineHeart, AiOutlinePlusSquare, AiOutlineProfile } from 'react-icons/ai';
 import { IoIosNotificationsOutline } from 'react-icons/io';
 import StickyWrapper from '../../Wrapper/StickyWrapper/StickyWrapper';
 function ActionBar() {
@@ -38,6 +38,12 @@ function ActionBar() {
                     <li className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-slate-100 transition">
                         <AiOutlinePlusSquare className="mr-3" />
                         <span className="">Create</span>
+                    </li>
+                </Link>
+                <Link to={'/profile'} className="">
+                    <li className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-slate-100 transition">
+                        <AiOutlineProfile className="mr-3" />
+                        <span className="">Profile</span>
                     </li>
                 </Link>
             </ul>
