@@ -58,9 +58,11 @@ function Register() {
                         onChange={handleInputChange}
                     />
                 </div>
-                <button className="bg-dark-blue border-dark-blue transition sm-border text-white text-2xl w-[420px] m-auto  h-14 mt-5 hover:bg-white hover:text-dark-blue">
-                    Sign up
-                </button>
+                <div className="w-[420px] mx-auto">
+                    <button className="bg-dark-blue border-dark-blue transition sm-border text-white text-2xl w-[420px] m-auto  h-14 mt-5 hover:bg-white hover:text-dark-blue">
+                        Sign up
+                    </button>
+                </div>
             </div>
             <div className="w-[570px] h-[100px]  m-auto mt-10 rounded-2xl border-slate-600 border-2 flex-all-center">
                 <span className="text-xl mr-2">Have an account?</span>
