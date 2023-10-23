@@ -3,22 +3,18 @@
 @tailwind components;
 @tailwind utilities;
 
-.sm-border {
-    @apply rounded-lg border-2;
+.small {
+    @apply max-w-sm;
 }
 
-.med-border {
-    @apply rounded-2xl  border-2;
+.medium {
+    @apply max-w-md;
 }
 
-.circle {
-    @apply rounded-[50%];
+.large {
+    @apply max-w-lg;
 }
 
-.transition {
-    @apply transition-all duration-200 ease-in-out;
-}
-
-.flex-all-center {
-    @apply flex justify-center items-center;
+.xl-large {
+    @apply max-w-xl;
 }
