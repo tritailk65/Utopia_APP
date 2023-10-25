@@ -1,8 +1,8 @@
-export interface ApiResponse<T> {
-    success: boolean;
-    message: string;
-    data: T;
-    code: number;
+export interface Response<T> {
+    Status: number;
+    Message: string;
+    Exception: string;
+    Data: T;
 }
 
 export interface DataList<T> {
