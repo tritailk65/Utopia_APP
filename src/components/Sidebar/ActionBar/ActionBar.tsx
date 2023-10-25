@@ -5,6 +5,7 @@ import { AiOutlineHeart, AiOutlinePlusSquare } from 'react-icons/ai';
 import { IoIosNotificationsOutline } from 'react-icons/io';
 import FollowModal from '../../Modal/FollowModal/FollowModal';
 import { useState } from 'react';
+import { CgProfile } from 'react-icons/cg';
 
 export interface ActionBarProps {
     onOpen: (index: number) => void;
@@ -47,6 +48,12 @@ function ActionBar(props: ActionBarProps) {
                             <li className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-gray-200 transition">
                                 <AiOutlinePlusSquare className="mr-3" />
                                 <span className="">Create</span>
+                            </li>
+                        </Link>
+                        <Link to={'/profile'} className="">
+                            <li className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-gray-200 transition">
+                                <CgProfile className="mr-3" />
+                                <span className="">Profile</span>
                             </li>
                         </Link>
                     </ul>

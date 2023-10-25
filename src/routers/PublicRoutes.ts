@@ -12,6 +12,7 @@ import AnotherProfile from '../pages/AnotherProfile/AnotherProfile';
 import DefaultLayout from '../layouts/DefaultLayout';
 import ContentOnlyLayout from '../layouts/ContentOnlyLayout';
 import LayoutProfile from '../layouts/LayoutProfile';
+import SuggestFollowAll from '../pages/SuggestFollowAll/SuggestFollowAll';
 
 type Route = {
     path: string;
@@ -24,7 +25,8 @@ export const PublicRoutes: Route[] = [
     { path: '/login', page: Login, layout: ContentOnlyLayout },
     { path: '/register', page: Register, layout: ContentOnlyLayout },
     { path: '/forget-password', page: ForgetPassword, layout: ContentOnlyLayout },
-    { path: '/profile', page: Profile, layout:  LayoutProfile},
-    { path: '/editprofile', page:EditProfile, layout: LayoutProfile},
-    { path: '/anotherprofile', page:AnotherProfile, layout: LayoutProfile}
+    { path: '/profile', page: Profile, layout: LayoutProfile },
+    { path: '/editprofile', page: EditProfile, layout: LayoutProfile },
+    { path: '/anotherprofile', page: AnotherProfile, layout: LayoutProfile },
+    { path: '/suggestFollowAll', page: SuggestFollowAll, layout: LayoutProfile },
 ];
