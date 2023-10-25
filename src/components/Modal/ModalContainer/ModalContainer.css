@@ -18,3 +18,7 @@
 .xl-large {
     @apply max-w-xl;
 }
+
+.extra-large {
+    @apply max-w-[1080px];
+}
