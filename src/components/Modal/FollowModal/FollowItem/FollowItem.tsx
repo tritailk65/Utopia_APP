@@ -44,7 +44,7 @@ function FollowItem() {
                 <div className="flex flex-col justify-center">
                     <img src={avt} alt="avatar" className="circle w-44 h-44" />
 
-                    <p>If you change your mind, you'll have to request to follow @sooyaa agfain</p>
+                    <p>If you change your mind, you'll have to request to follow @sooyaa again</p>
                 </div>
             </ConfirmDialog>
         </>

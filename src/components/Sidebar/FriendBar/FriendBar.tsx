@@ -5,6 +5,7 @@ import bob from '../../../assets/image/bob.png';
 import jack from '../../../assets/image/jack.png';
 import dee from '../../../assets/image/dee.png';
 import StickyWrapper from '../../Wrapper/StickyWrapper/StickyWrapper';
+import { Link } from 'react-router-dom';
 function FriendBar() {
     return (
         <StickyWrapper top={14} right={0} paddingLeft={16}>
@@ -24,7 +25,9 @@ function FriendBar() {
 
                 <li className="flex justify-between text-sm tracking-wide py-1 mb-4">
                     <span className="opacity-80 text-base">Suggested for you</span>
-                    <span className="font-semibold cursor-pointer hover:text-[#787878]">See all</span>
+                    <Link to="/SuggestFollowAll">
+                        <span className="font-semibold cursor-pointer hover:text-[#787878]">See all</span>
+                    </Link>
                 </li>
 
                 <li className="text-base flex  mb-4 ">

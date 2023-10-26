@@ -2,11 +2,15 @@ import logo1 from '../../assets/image/logo/logo1.png';
 import './Login.css';
 import useInput from '../../hooks/useInput';
 import { Link } from 'react-router-dom';
+
 function Login() {
     const { formData, handleInputChange } = useInput({
         username: '',
         password: '',
     });
+
+    console.log(formData);
+
     return (
         <div className="min-h-full w-full">
             <div className="w-[570px] h-[625px]  m-auto mt-16  border-slate-600 med-border ">
@@ -33,11 +37,14 @@ function Login() {
                     />
                 </div>
 
-                <button className="bg-dark-blue border-dark-blue transition sm-border text-white text-2xl w-[420px] m-auto  h-14 mt-7 ml-20 hover:bg-white hover:text-dark-blue">
+                <button
+                    type="submit"
+                    className="bg-dark-blue border-dark-blue transition sm-border text-white text-2xl w-[420px] m-auto  h-14 mt-7 ml-20 hover:bg-white hover:text-dark-blue"
+                >
                     Login
                 </button>
                 <Link to={'/forget-password'}>
-                    <h3 className="text-xl ml-20 mt-10 opacity-80 cursor-pointer hover:opacity-100 ">
+                    <h3 className="text-xl ml-20 mt-10 opacity-80 cursor-pointer hover:opacity-100">
                         Forgot password?
                     </h3>
                 </Link>
