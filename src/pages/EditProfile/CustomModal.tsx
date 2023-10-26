@@ -18,7 +18,8 @@ function CustomModal({ isOpen, check ,message, onClose }: CustomModalProps) {
                     <div className="flex space-x-3 mt-2">
                         <img src={success} className="w-[100px] h-[100px]" alt="img" />
                         <div className="mt-[15px]">
-                            <p>{message}</p>
+                        {/* để nhận html khi truyền string */}
+                        <p dangerouslySetInnerHTML={{ __html: message }} /> 
                             <button
                                 onClick={onClose}
                                 className="mt-4 ml-[100px] bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"

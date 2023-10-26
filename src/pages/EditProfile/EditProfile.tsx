@@ -32,6 +32,8 @@ function EditProfile() {
     const maxCharacters = 150;
     const [successMessage, setSuccessMessage] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false); // Thêm trạng thái modal
+    // kiem tra hien bang gi
+    const [isCheck, setIsCheck]= useState(false);
 
     const handleBlogChange = (e: { target: { value: any } }) => {
         const inputText = e.target.value;
@@ -54,6 +56,7 @@ function EditProfile() {
         // và mở modal
         setSuccessMessage('Cập nhật thành công!');
         setIsModalOpen(true);
+        setIsCheck(true);
     };
 
     const closeModal = () => {
@@ -147,7 +150,7 @@ function EditProfile() {
                         </button>
                     </div>
                 </div>
-                <CustomModal isOpen={isModalOpen} message={successMessage} onClose={closeModal} />
+                <CustomModal isOpen={isModalOpen} check= {isCheck} message={successMessage} onClose={closeModal} />
             </div>
         </div>
     );
