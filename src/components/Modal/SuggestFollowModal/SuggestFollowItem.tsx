@@ -1,5 +1,3 @@
-import oggy from '../../../assets/image/oggy.png';
-
 export interface SuggesFollowItemProps {
     userName: string;
     fullName: string;

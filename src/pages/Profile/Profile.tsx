@@ -19,7 +19,7 @@ function Profile() {
             <div className="profile text-2xl w-[1000px] mx-auto mt-8 bg-white p-4 rounded-lg ">
                 <div className="flex items-center space-x-6">
                     <div className="flex-shrink-0 mt-5">
-                        <img src={hinhdaidien} alt="Profile Image" className="w-34 h-34 rounded-full" />
+                        <img src={hinhdaidien} alt="profile img" className="w-34 h-34 rounded-full" />
                     </div>
                     <div>
                         <div className="flex  mb-[25px]">
@@ -41,15 +41,15 @@ function Profile() {
                                             aria-orientation="vertical"
                                             aria-labelledby="options-menu"
                                         >
-                                            <a href="#" className="block px-4 py-2 text-gray-700" role="menuitem">
+                                            <div className="block px-4 py-2 text-gray-700" role="menuitem">
                                                 Option 1
-                                            </a>
-                                            <a href="#" className="block px-4 py-2 text-gray-700" role="menuitem">
+                                            </div>
+                                            <div className="block px-4 py-2 text-gray-700" role="menuitem">
                                                 Option 2
-                                            </a>
-                                            <a href="#" className="block px-4 py-2 text-gray-700" role="menuitem">
+                                            </div>
+                                            <div className="block px-4 py-2 text-gray-700" role="menuitem">
                                                 Option 3
-                                            </a>
+                                            </div>
                                         </div>
                                     </div>
                                 )}
@@ -73,9 +73,7 @@ function Profile() {
                         </div>
                         <div className="mt-10 ml-10 ">
                             <h1 className="text-3xl font-semibold mb-4">Hello</h1>
-                            <a href="#" className="text-blue-500">
-                                facebook.com
-                            </a>
+                            <div className="text-blue-500">facebook.com</div>
                         </div>
                     </div>
                 </div>
@@ -84,11 +82,11 @@ function Profile() {
                     <div className="border-t-[3px] border-gray-300 mt-5 mb-4"></div>
                     <div className="flex space-x-6 justify-center">
                         <div className="flex">
-                            <img src={iconhinh} className="" />
+                            <img src={iconhinh} className="" alt="img" />
                             <h1>POSTS</h1>
                         </div>
                         <div className="flex">
-                            <img src={iconsave} className="" />
+                            <img src={iconsave} className="" alt="img" />
                             <h1>SAVED</h1>
                         </div>
                     </div>
