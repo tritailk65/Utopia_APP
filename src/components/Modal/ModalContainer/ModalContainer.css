@@ -22,3 +22,7 @@
 .extra-large {
     @apply max-w-[1080px];
 }
+
+.super-large {
+    @apply max-w-[1480px];
+}

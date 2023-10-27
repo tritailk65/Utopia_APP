@@ -60,7 +60,7 @@ function CreatePostModal(props: CreatePostModalProps) {
     console.log(like);
 
     return (
-        <ModalContainer show={show} onClose={closeModal} width="extra-large">
+        <ModalContainer show={show} onClose={closeModal} width="extra-large" full>
             <div className=" min-h-[400px] flex flex-col w-full">
                 <div className="border-b-2 border-gray-300 h-14 flex items-center justify-between w-full px-4">
                     <h1
