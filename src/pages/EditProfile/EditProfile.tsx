@@ -1,31 +1,104 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef,useEffect } from 'react';
 import hinhdaidien from '../../assets/image/hinhdaidien.png';
 import useInput from '../../hooks/useInput';
 import CustomModal from './CustomModal'; // Import Modal
+import axios from 'axios';
+
+interface UserData {
+    id: BigInteger,
+    userName: string,
+    phone: string,
+    email: string,
+    fullName: string,
+    gender: string,
+    bio: string,
+    website: string,
+    avatarPath: string
+}
 
 function EditProfile() {
-    const { formData, handleInputChange } = useInput({
+    const [userData, setUserData] = useState<UserData | null>(null);
+        useEffect(() => {
+            // Truy cập Local Storage để lấy thông tin người dùng
+            const userFromLocalStorage = localStorage.getItem('userData');
+            if (userFromLocalStorage) {
+                const userData = JSON.parse(userFromLocalStorage);
+                setUserData(userData);
+                fetchAvatar();
+            }
+            // mỗi lần load trang ảnh hưởng tới trạng thái nên cần lưu url hình vô local r gán cho trạng thái để xuất hình
+            const storedAvatarUrl = localStorage.getItem('avatarUrl');
+            if (storedAvatarUrl) {
+                setAvatarUrl(storedAvatarUrl);
+            }
+        }, []);
+
+    const { formData, formError, handleInputChange, setFormError } = useInput({
         website: '',
         blo: '',
         gender: '',
+        fullName:'',
     });
 
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+     // Thêm state để lưu trữ tệp người dùng đã chọn
+     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
     const handleLinkClick = (e: React.MouseEvent) => {
         e.preventDefault(); // Ngăn chặn hành động mặc định của liên kết (chuyển trang)
         if (fileInputRef.current) {
             fileInputRef.current.click(); // Khi ấn vào link, kích hoạt sự kiện click cho file input
         }
     };
+
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const file = e.target.files[0];
             if (file) {
-                setSelectedFileName(file.name);
+                setSelectedFileName(file.name); // lưu trữ tên file đã chọn
+                setSelectedFile(file); // lưu trữ file đã chọn
             }
         }
     };
+    const handleFileUpload = () => {
+        if (selectedFile) {
+          const formData = new FormData();
+          formData.append('avatar', selectedFile);
+    
+          // Gửi tệp lên API
+          axios.post(`http://localhost:8080/api/User/UploadAvatar/${userData?.id}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          .then((response) => {
+            console.log('File uploaded successfully', response);
+          })
+          .catch((error) => {
+            console.error('File upload failed', error);
+          });
+        }
+      };
+      const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+      const fetchAvatar = () => {
+        // Gọi API để lấy ảnh đại diện dựa trên ID của người dùng
+        axios.get(`http://localhost:8080/api/User/Avatar/${userData?.id}`, { responseType: 'arraybuffer' })
+          .then((response) => {
+            // Chuyển đổi dữ liệu nhận được thành một Blob
+            const blob = new Blob([response.data], { type: response.headers['content-type'] });
+      
+            // Tạo một URL cho Blob
+            const imageUrl = URL.createObjectURL(blob);
+            localStorage.setItem('avatarUrl', imageUrl);
+            // Cập nhật trạng thái ảnh đại diện
+            setAvatarUrl(imageUrl);
+          })
+          .catch((error) => {
+            console.error('Error fetching avatar', error);
+          });
+      };
+      
 
     //kiem tra blog
     const [blog, setBlog] = useState('');
@@ -47,21 +120,52 @@ function EditProfile() {
     const handleGenderChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         //const selectedValue = e.target.value;
         handleInputChange(e); // Cập nhật giá trị 'gender' trong 'formData'
-        // Thực hiện các xử lý khác nếu cần
     };
-
+     // Xử lí cập nhật
     const handleSubmit = () => {
-        // Thực hiện xử lý gửi dữ liệu
-        // Sau khi gửi thành công, thiết lập giá trị `successMessage`
-        // và mở modal
-        setSuccessMessage('Cập nhật thành công!');
-        setIsModalOpen(true);
-        setIsCheck(true);
+        const error: { [key: string]: string } = {};
+        const data = {
+            fullName: formData.fullName || (userData ? userData.fullName : ''),
+            gender: formData.gender || (userData ? userData.gender : ''),
+            bio: formData.blo || (userData ? userData.bio : ''),
+            website: formData.website || (userData ? userData.website : ''),
+        };
+        const id = userData?.id;
+        axios.put(`http://localhost:8080/api/User/EditProfile/${id}`, data)
+                .then((response) => {
+                    if (response.data.Status === 200) {
+                        setSuccessMessage('Cập nhật thành công !');
+                        setIsModalOpen(true);
+                        setIsCheck(true);
+                        const userUpdate = {
+                            id: userData?.id,
+                            userName: userData?.userName,
+                            phone: userData?.phone,
+                            email: userData?.email,
+                            fullName: formData.fullName || (userData ? userData.fullName : ''),
+                            gender: formData.gender || (userData ? userData.gender : ''),
+                            bio: formData.blo || (userData ? userData.bio : ''),
+                            website: formData.website || (userData ? userData.website : ''),
+                            avatarPath: userData?.avatarPath,
+                        };
+                        localStorage.setItem('userData', JSON.stringify(userUpdate));
+                    } 
+                })
+                .catch((error) => {
+                    setSuccessMessage('Cập nhật thất bại!');
+                    setIsModalOpen(true);
+                    setIsCheck(false);
+                });
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
     };
+
+    const handleCombinedClick = () => {
+        handleSubmit();
+        handleFileUpload();
+      };
     return (
         <div className="w-[700px]  p-6 rounded-md">
             <h1 className="text-2xl font-bold mt-[150px]">Edit Profile</h1>
@@ -70,11 +174,19 @@ function EditProfile() {
                 <div className="mb-4">
                     <div className="flex items-center space-x-4">
                         <div className="h-12 w-12 rounded-full overflow-hidden">
-                            <img src={hinhdaidien} className="object-cover w-full h-full" alt="img" />
+                            <img src={avatarUrl || hinhdaidien} className="object-cover w-full h-full" alt="img" />
                         </div>
                         <div className="">
-                            <h1 className="ml-5">hello</h1>
-                            <a href="/" className="text-blue-600 hover:underline ml-5" onClick={handleLinkClick}>
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            className="w-[350px] rounded-md border-gray-900 shadow-sm border-2 ml-[35px] font-extrabold"
+                            value={formData.fullName}
+                            placeholder={userData?.fullName}
+                            onChange={handleInputChange}
+                        />
+                            <a href="/" className="text-blue-600 hover:underline ml-[35px]" onClick={handleLinkClick}>
                                 Change Profile Photo
                             </a>
                             <input
@@ -84,7 +196,7 @@ function EditProfile() {
                                 style={{ display: 'none' }}
                                 onChange={handleFileChange}
                             />
-                            {selectedFileName && <p className="ml-[20px]">Selected file: {selectedFileName}</p>}
+                            {selectedFileName && <p className="ml-[35px]">Selected file: {selectedFileName}</p>}
                         </div>
                     </div>
                 </div>
@@ -98,11 +210,12 @@ function EditProfile() {
                             type="text"
                             id="website"
                             name="website"
-                            className="w-[350px] rounded-md border-gray-900 shadow-sm border-2"
-                            placeholder="Website"
+                            className="w-[350px] rounded-md border-gray-900 shadow-sm border-2 font-extrabold"
+                            placeholder={userData?.website}
                             value={formData.website}
                             onChange={handleInputChange}
                         />
+                        {formError.website && <div className="error-messag text-red-600 mt-2 text-[14px]">{formError.website}</div>}
                     </div>
 
                     <div className="flex space-x-[42px]">
@@ -113,11 +226,12 @@ function EditProfile() {
                             type="text"
                             id="blog"
                             name="blog"
-                            className="w-[350px] h-[100px] rounded-md border-gray-900 shadow-sm border-2"
-                            placeholder="Blog"
+                            className="w-[350px] h-[100px] rounded-md border-gray-900 shadow-sm border-2 font-extrabold"
+                            placeholder={userData?.bio}
                             value={blog}
                             onChange={handleBlogChange}
                         />
+                        {formError.blog && <div className="error-messag text-red-600 mt-2 text-[14px]">{formError.blog}</div>}
                     </div>
                     <span className="text-gray-500 text-sm ml-[85px]">
                         {blog.length}/{maxCharacters}
@@ -131,9 +245,9 @@ function EditProfile() {
                             id="gender"
                             name="gender"
                             className="w-[350px] rounded-md border-gray-900 shadow-sm border-2"
-                            value={formData.gender}
+                            value={ formData.gender ? formData.gender :userData?.gender }
                             onChange={handleGenderChange}
-                        >
+                        >   
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                             <option value="other">Other</option>
@@ -144,7 +258,7 @@ function EditProfile() {
                         <button
                             type="submit"
                             className="bg-blue-800 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
-                            onClick={handleSubmit}
+                            onClick={handleCombinedClick}
                         >
                             Submit
                         </button>

@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import CustomModal from '../EditProfile/CustomModal'; // Import Modal
-
+import CustomModal from '../EditProfile/CustomModal';
 import useInput from '../../hooks/useInput';
-
 import logo1 from '../../assets/image/logo/logo1.png';
 import './Login.css';
 
