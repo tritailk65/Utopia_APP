@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { backend_utils } from "./api-utils"
+import { backend_utils } from './api-utils';
 
 export const server = axios.create({
     baseURL: backend_utils.backend_url,
@@ -8,7 +8,7 @@ export const server = axios.create({
 server.interceptors.request.use(
     (config) => {
         console.log(config);
-        
+
         // const token = Cookies.get('devify:AccessToken');
         // if (token) {
         //     config.headers.Authorization = `Bearer ${token}`;

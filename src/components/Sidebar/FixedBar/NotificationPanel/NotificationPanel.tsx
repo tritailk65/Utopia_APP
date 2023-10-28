@@ -1,9 +1,7 @@
-import React from 'react';
 import oggy from '../../../../assets/image/oggy.png';
 import olivia from '../../../../assets/image/olivia.png';
 import bob from '../../../../assets/image/bob.png';
 import jack from '../../../../assets/image/jack.png';
-import dee from '../../../../assets/image/dee.png';
 import ping from '../../../../assets/image/ping.png';
 import arrow from '../../../../assets/image/Arrow_left.png';
 export interface NotificationPanelProps {
@@ -14,10 +12,9 @@ function NotificationPanel(props: NotificationPanelProps) {
     const { onClose } = props;
     return (
         <div>
-            
             <h1 className="ml-2 text-3xl font-semibold mb-7">Notifications</h1>
             <ul className=" w-[379px] px-2 max-h-screen overflow-auto ">
-                <li className="text-base flex  mb-4 "  onClick={() => onClose(3)}>
+                <li className="text-base flex  mb-4 " onClick={() => onClose(3)}>
                     <div className="flex-1 w-1/6 relative">
                         <img src={bob} alt="avatar" className="rounded-full w-8 h-8 absolute top-1 left-1" />
                         <img src={olivia} alt="avatar" className="rounded-full w-8 h-8 absolute bottom-1 right-1" />
