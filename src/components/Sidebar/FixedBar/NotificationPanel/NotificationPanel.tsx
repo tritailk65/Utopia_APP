@@ -4,14 +4,33 @@ import bob from '../../../../assets/image/bob.png';
 import jack from '../../../../assets/image/jack.png';
 import ping from '../../../../assets/image/ping.png';
 import arrow from '../../../../assets/image/Arrow_left.png';
+import { useState, useEffect } from 'react';
+import { NotificationThisWeek } from '../../../../types/notification-type';
+import { Response } from '../../../../types/api-type';
+import { getListNotiThisWeek } from '../../../../services/notification-service';
+
 export interface NotificationPanelProps {
     onClose: (index: number) => void;
 }
 
 function NotificationPanel(props: NotificationPanelProps) {
     const { onClose } = props;
+
+    const [notiThisWeek, setNotiThisWeek] = useState<Response<NotificationThisWeek[]>>();
+
+    useEffect(() => {
+        const callAPI = async () => {
+            //ID User hiện tại sẽ được lấy trong local storage
+            const res: Response<NotificationThisWeek[]> = await getListNotiThisWeek(1);
+            setNotiThisWeek(res);
+        };
+
+        callAPI();
+    }, []);
+
     return (
         <div>
+            {/* Follow request section */}
             <h1 className="ml-2 text-3xl font-semibold mb-7">Notifications</h1>
             <ul className=" w-[379px] px-2 max-h-screen overflow-auto ">
                 <li className="text-base flex  mb-4 " onClick={() => onClose(3)}>
@@ -31,82 +50,26 @@ function NotificationPanel(props: NotificationPanelProps) {
                     </div>
                 </li>
 
+                {/* Notification section */}
+
                 <li className="flex justify-between text-sm font-semibold tracking-wide py-1 mb-4">
                     <span className="opacity-80 text-base">This week</span>
                 </li>
 
-                <li className="text-base flex  mb-4 " onClick={() => (window.location.href = '/profile')}>
-                    <div className="flex-1 w-1/6 ">
-                        <img src={oggy} alt="avatar" className="circle w-12 h-12" />
-                    </div>
-                    <div className="flex-5 w-5/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">Oggy</h3>
-                        <p>Like your post</p>
-                    </div>
-                </li>
-
-                <li className="text-base flex  mb-4 " onClick={() => (window.location.href = '/profile')}>
-                    <div className="flex-1 w-1/6 ">
-                        <img src={oggy} alt="avatar" className="circle w-12 h-12" />
-                    </div>
-                    <div className="flex-5 w-5/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">Oggy</h3>
-                        <p>Like your post</p>
-                    </div>
-                </li>
-
-                <li className="text-base flex  mb-4 " onClick={() => (window.location.href = '/profile')}>
-                    <div className="flex-1 w-1/6 ">
-                        <img src={oggy} alt="avatar" className="circle w-12 h-12" />
-                    </div>
-                    <div className="flex-5 w-5/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">Oggy</h3>
-                        <p>Like your post</p>
-                    </div>
-                </li>
-
-                <li className="text-base flex  mb-4 " onClick={() => (window.location.href = '/profile')}>
-                    <div className="flex-1 w-1/6 ">
-                        <img src={oggy} alt="avatar" className="circle w-12 h-12" />
-                    </div>
-                    <div className="flex-5 w-5/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">Oggy</h3>
-                        <p>Like your post</p>
-                    </div>
-                </li>
+                {notiThisWeek?.Data.map((noti, index) => (
+                    <li className="text-base flex  mb-4 " onClick={() => (window.location.href = '/profile')}>
+                        <div className="flex-1 w-1/6 ">
+                            <img src={oggy} alt="avatar" className="circle w-12 h-12" />
+                        </div>
+                        <div className="flex-5 w-5/6 text-left pl-4">
+                            <h3 className="font-semibold cursor-pointer">{noti.userSource.userName}</h3>
+                            <p>{noti.userSource.userName + ' ' + noti.context}</p>
+                        </div>
+                    </li>
+                ))}
 
                 <li className="flex justify-between text-sm font-semibold tracking-wide py-1 mb-4">
                     <span className="opacity-80 text-base">This month</span>
-                </li>
-
-                <li className="text-base flex  mb-4 " onClick={() => (window.location.href = '/profile')}>
-                    <div className="flex-1 w-1/6 ">
-                        <img src={jack} alt="avatar" className="circle w-12 h-12" />
-                    </div>
-                    <div className="flex-5 w-5/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">Jack</h3>
-                        <p>Like your post</p>
-                    </div>
-                </li>
-
-                <li className="text-base flex  mb-4 " onClick={() => (window.location.href = '/profile')}>
-                    <div className="flex-1 w-1/6 ">
-                        <img src={jack} alt="avatar" className="circle w-12 h-12" />
-                    </div>
-                    <div className="flex-5 w-5/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">Jack</h3>
-                        <p>Like your post</p>
-                    </div>
-                </li>
-
-                <li className="text-base flex  mb-4 " onClick={() => (window.location.href = '/profile')}>
-                    <div className="flex-1 w-1/6 ">
-                        <img src={jack} alt="avatar" className="circle w-12 h-12" />
-                    </div>
-                    <div className="flex-5 w-5/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">Jack</h3>
-                        <p>Like your post</p>
-                    </div>
                 </li>
 
                 <li className="text-base flex  mb-4 " onClick={() => (window.location.href = '/profile')}>
@@ -123,24 +86,6 @@ function NotificationPanel(props: NotificationPanelProps) {
                     <span className="opacity-80 text-base">Earlier</span>
                 </li>
 
-                <li className="text-base flex  mb-4 " onClick={() => (window.location.href = '/profile')}>
-                    <div className="flex-1 w-1/6 ">
-                        <img src={bob} alt="avatar" className="circle w-12 h-12" />
-                    </div>
-                    <div className="flex-5 w-5/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">Bob</h3>
-                        <p>Like your post</p>
-                    </div>
-                </li>
-                <li className="text-base flex  mb-4 " onClick={() => (window.location.href = '/profile')}>
-                    <div className="flex-1 w-1/6 ">
-                        <img src={bob} alt="avatar" className="circle w-12 h-12" />
-                    </div>
-                    <div className="flex-5 w-5/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">Bob</h3>
-                        <p>Like your post</p>
-                    </div>
-                </li>
                 <li className="text-base flex  mb-4 " onClick={() => (window.location.href = '/profile')}>
                     <div className="flex-1 w-1/6 ">
                         <img src={bob} alt="avatar" className="circle w-12 h-12" />
