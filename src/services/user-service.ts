@@ -1,4 +1,4 @@
-import { getAxios,getAxiosAvatar,postAxios,putAxios } from "../utils/api-request";
+import { getAxios,getAxiosAvatar,postAxios,putAxios,postAxiosFile } from "../utils/api-request";
 import { backend_utils } from "../utils/api-utils";
 
 export const getListUser = async () => {
@@ -79,3 +79,28 @@ export const register = async (userData: {} | undefined) => {
       console.log(error);
     }
   };
+
+  export const editprofile = async (userID: Uint8Array | undefined,UserData: {} | undefined) => {
+    try {
+      const path = `${backend_utils.backend_url}/User/EditProfile/${userID}`;
+      const response = await putAxios(path,UserData);
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  export const uploadAvatar = async (userId: Uint8Array | undefined, selectedFile: string | Blob) => {
+    try {
+        const path = `${backend_utils.backend_url}/User/UploadAvatar/${userId}`;
+        const formData = new FormData();
+        formData.append('avatar', selectedFile);
+
+        const response = await postAxiosFile(path, formData);
+
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};

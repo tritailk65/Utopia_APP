@@ -2,7 +2,6 @@ import logo1 from '../../assets/image/logo/logo1.png';
 import '../Login/Login.css';
 import useInput from '../../hooks/useInput';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import React, { useState } from "react";
 import CustomModal from '../EditProfile/CustomModal'; 
 import {register} from '../../services/user-service';
