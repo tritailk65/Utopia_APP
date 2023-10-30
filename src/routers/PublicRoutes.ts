@@ -25,8 +25,7 @@ export const PublicRoutes: Route[] = [
     { path: '/login', page: Login, layout: ContentOnlyLayout },
     { path: '/register', page: Register, layout: ContentOnlyLayout },
     { path: '/forget-password', page: ForgetPassword, layout: ContentOnlyLayout },
-    { path: '/profile', page: Profile, layout: LayoutProfile },
+    { path: '/profile/:id', page: Profile, layout: LayoutProfile },
     { path: '/profile/edit', page: EditProfile, layout: LayoutProfile },
-    { path: '/anotherprofile', page: AnotherProfile, layout: LayoutProfile },
     { path: '/suggest-follow', page: SuggestFollowAll, layout: LayoutProfile },
 ];

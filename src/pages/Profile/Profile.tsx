@@ -3,8 +3,10 @@ import hinhdaidien from '../../assets/image/hinhdaidien.png';
 import iconhinh from '../../assets/image/iconhinh.png';
 import iconsave from '../../assets/image/iconsave.png';
 import iconcamera from '../../assets/image/iconcamera.png';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { Link, useParams } from 'react-router-dom';
+import {getUserDataById, getAvatar} from '../../services/user-service';
+import Posts from './Posts';
+import Saved from './Saved';
 
 interface UserData {
         id: BigInteger,
@@ -19,21 +21,52 @@ interface UserData {
 }
 
 function Profile() {
+        const [checkUser, setIsCheckUser] = useState(false);
+        const [userData, setUserData] = useState<UserData | null>(null);
+        const [userDateFromAPI, setUserDateFromAPI] = useState<UserData | null>(null);
+        const [idUserData, setIdUserData] = useState(0);
+        const { id } = useParams();
+        const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+ 
+        //lay user tu db
+        useEffect(() => {
+            getUserDataById(id)
+                .then((userDateFromAPI) => {
+                        localStorage.setItem('userDataFromAPI', JSON.stringify(userDateFromAPI));
+                        setUserDateFromAPI(userDateFromAPI);
+                });
+        }, [id]);
+        // lay user tu local
+        useEffect(() => {
+            fetchAvatar(id);
+            const idCheck= Number(userDateFromAPI?.id);
+            
+            // Truy cập Local Storage để lấy thông tin người dùng
+            const userFromLocalStorage = localStorage.getItem('userData');
+            
+            if (userFromLocalStorage) {
+                const userData = JSON.parse(userFromLocalStorage);
+                setUserData(userData);
+                setIdUserData(userData.id);
+            }
+            
+        
+            // Kiểm tra điều kiện sau khi cập nhật dữ liệu
+            if (idCheck === idUserData) {
+                setIsCheckUser(true);
+            } else {
+                setIsCheckUser(false);
+            }
 
-    const [userData, setUserData] = useState<UserData | null>(null);
-    useEffect(() => {
-        // Truy cập Local Storage để lấy thông tin người dùng
-        const userFromLocalStorage = localStorage.getItem('userData');
-        if (userFromLocalStorage) {
-            const userData = JSON.parse(userFromLocalStorage);
-            setUserData(userData);
-            fetchAvatar();
-        }
-        const storedAvatarUrl = localStorage.getItem('avatarUrl');
-        if (storedAvatarUrl) {
-            setAvatarUrl(storedAvatarUrl);
-        }
-    }, []);
+
+             // Lấy avatar URL từ Local Storage và cập nhật state (nếu tồn tại)
+             const storedAvatarUrl = localStorage.getItem('avatarUrl');
+             if (storedAvatarUrl) {
+                 setAvatarUrl(storedAvatarUrl);
+             }
+        }, [userDateFromAPI, idUserData]);
+    
+    
 
     // Sử dụng useState để quản lý trạng thái của dropdown menu
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -44,23 +77,28 @@ function Profile() {
         setIsDropdownOpen(!isDropdownOpen);
     };
 
-      const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-      const fetchAvatar = () => {
+  
+      const fetchAvatar = (id: string | undefined) => {
         // Gọi API để lấy ảnh đại diện dựa trên ID của người dùng chuyển sang arraybuffer để tao blog
-        axios.get(`http://localhost:8080/api/User/Avatar/${userData?.id}`, { responseType: 'arraybuffer' })
-          .then((response) => {
-            // Chuyển đổi dữ liệu nhận được thành một Blob
-            const blob = new Blob([response.data], { type: response.headers['content-type'] });
-      
-            // Tạo một URL cho Blob
-            const imageUrl = URL.createObjectURL(blob);
-            localStorage.setItem('avatarUrl', imageUrl);
-            // Cập nhật trạng thái ảnh đại diện
-            setAvatarUrl(imageUrl);
+        getAvatar(id)
+          .then((avatarUrl) => {
+            if (avatarUrl !== undefined) 
+            {
+            localStorage.setItem('avatarUrl', avatarUrl);
+            setAvatarUrl(avatarUrl);
+            }     
           })
-          .catch((error) => {
-            console.error('Error fetching avatar', error);
-          });
+      };
+
+      const [activeTab, setActiveTab] = useState('POSTS'); // kiem tra trang thai dang click
+      const [checkSave,setSave]= useState(false); // kiem tra co save k
+      const [checkPost,setPost]= useState(false); // kiem tra co post k
+      const s=0; // save
+      const p=0; // post
+      const handleTabClick = (tabName: React.SetStateAction<string>) => {
+          s>0 ? setSave(true) : setSave(false);
+          p>0 ? setPost(true) : setPost(false); 
+          setActiveTab(tabName);
       };
 
     return (
@@ -72,13 +110,21 @@ function Profile() {
                     </div>
                     <div>
                         <div className="flex  mb-[25px]">
-                            {userData &&(
-                                <h1 className="text-3xl font-semibold ml-10 min-w-[200px] max-w-[200px]">{userData.fullName}</h1>
+                            {userDateFromAPI &&(
+                                <h1 className="text-3xl font-semibold ml-10 min-w-[200px] max-w-[200px]">{userDateFromAPI.fullName}</h1>
                             )}
                             <div className="ml-[200px]">
-                                <button className="bg-gray-300  px-4 py-2 rounded-lg">
+                               {checkUser?(
+                                    <button className="bg-gray-300  px-4 py-2 rounded-lg">
                                     <Link to="/profile/edit">Edit Profile</Link>
+                                    </button>
+                               ): (
+                                <button className="bg-blue-800  px-4 py-2 rounded-lg">
+                                    <Link to="">Follow</Link>
                                 </button>
+                               )
+                               }
+                               
                             </div>
                             <div className="relative inline-block text-left ml-4">
                                 <button className="bg-gray-300 px-4 py-2 rounded-lg" onClick={handleDropdownClick}>
@@ -123,8 +169,8 @@ function Profile() {
                             </ul>
                         </div>
                         <div className="mt-10 ml-10 ">
-                            {userData && (
-                            <><h1 className="text-3xl font-semibold mb-4">{userData.bio}</h1><div className="text-blue-500">{userData.website}</div></>
+                            {userDateFromAPI && (
+                            <><h1 className="text-3xl font-semibold mb-4">{userDateFromAPI.bio}</h1><div className="text-blue-500">{userDateFromAPI.website}</div></>
                             )
                             }
                         </div>
@@ -134,27 +180,89 @@ function Profile() {
                 <div>
                     <div className="border-t-[3px] border-gray-300 mt-5 mb-4"></div>
                     <div className="flex space-x-6 justify-center">
-                        <div className="flex">
-                            <img src={iconhinh} className="" alt="img" />
-                            <h1>POSTS</h1>
+                    <div
+                        className={`flex cursor-pointer items-center p-2 ${
+                            activeTab === 'POSTS' ? 'bg-gray-400 text-white font-semibold' : ''
+                        }`}
+                        onClick={() => handleTabClick('POSTS')}
+                        >
+                        <div className={`w-8 h-8 ${activeTab === 'POSTS' ? 'bg-gray-400' : ''}`}>
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="100%"
+                            height="100%"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            >
+                            <rect x="4" y="4" width="8" height="8" rx="2" ry="2" />
+                            <rect x="12" y="4" width="8" height="8" rx="2" ry="2" />
+                            <rect x="4" y="12" width="8" height="8" rx="2" ry="2" />
+                            <rect x="12" y="12" width="8" height="8" rx="2" ry="2" />
+                            </svg>
                         </div>
-                        <div className="flex">
-                            <img src={iconsave} className="" alt="img" />
-                            <h1>SAVED</h1>
+                        <h1>POSTS</h1>
+                    </div>
+
+                    <div
+                        className={`flex cursor-pointer items-center p-2 ${
+                            activeTab === 'SAVED' ? 'bg-gray-400 text-white font-semibold' : ''
+                        }`}
+                        onClick={() => handleTabClick('SAVED')}
+                    >
+                        <div className={`w-8 h-8 rounded-full ${activeTab === 'SAVED' ? 'bg-gray-400' : ''}`}>
+                            <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="100%"
+                            height="100%"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            >
+                            <polygon points="6 4 19 4 21 12 12 20 3 12 6 4" />
+                            </svg>
                         </div>
+                        <h1>SAVED</h1>
                     </div>
                 </div>
-
-                <div className="mt-[100px] flex flex-col items-center justify-center space-y-10">
-                    <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
-                    <h1 className="text-3xl font-bold">Share Photos</h1>
-                    <p className="text-center">When you share photos, they will appear on your profile</p>
-                    <Link to={'/'}>
-                        <span className="text-xl font-semibold cursor-pointer text-blue-500">
-                            Share your first photos
-                        </span>
-                    </Link>
+                    {activeTab === 'POSTS' ? (
+                        checkPost ? (
+                        <Posts />
+                        ) : (
+                        <div className="mt-[100px] flex flex-col items-center justify-center space-y-10">
+                            <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
+                            <h1 className="text-3xl font-bold">Share Photos</h1>
+                            <p className="text-center">When you share photos, they will appear on your profile</p>
+                            <Link to={'/'}>
+                                <span className="text-xl font-semibold cursor-pointer text-blue-500">
+                                    Share your first photos
+                                </span>
+                            </Link>
+                        </div>
+                        )
+                    ) : (
+                        checkSave ? (
+                        <Saved />
+                        ) : (
+                        <div className="mt-[100px] flex flex-col items-center justify-center space-y-10">
+                            <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
+                            <h1 className="text-3xl font-bold">Save</h1>
+                            <p className="text-center w-[480px] text-[19px]">
+                                Save photos and videos that you want to see again. No one is notified, and only you can see what you've saved.
+                            </p>
+                        </div>
+                        )
+                    )}             
                 </div>
+
+                
+
             </div>
         </div>
     );
