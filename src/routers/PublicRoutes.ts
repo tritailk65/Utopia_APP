@@ -7,7 +7,7 @@ import Home from '../pages/Home/Home';
 import ForgetPassword from '../pages/ForgetPassword/ForgetPassword';
 import Profile from '../pages/Profile/Profile';
 import EditProfile from '../pages/EditProfile/EditProfile';
-import AnotherProfile from '../pages/AnotherProfile/AnotherProfile';
+
 // ========== import layout =============
 import DefaultLayout from '../layouts/DefaultLayout';
 import ContentOnlyLayout from '../layouts/ContentOnlyLayout';

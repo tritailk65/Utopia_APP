@@ -105,9 +105,16 @@ function Profile() {
         <div className="min-h-full w-full">
             <div className="profile text-2xl w-[1000px] mx-auto mt-8 bg-white p-4 rounded-lg ">
                 <div className="flex items-center space-x-6">
+                    {avatarUrl ? (
                     <div className="flex-shrink-0 mt-5">
-                        <img src={avatarUrl || hinhdaidien} alt="profile img" className="rounded-full h-[200px] w-[200px] mb-5" />
+                    <img src={avatarUrl} alt="profile img" className="rounded-full h-[200px] w-[200px] mb-5" />
                     </div>
+                    ):(
+                    <div className="flex-shrink-0 mt-5">
+                    <img src={hinhdaidien} alt="profile img" className="rounded-full h-[200px] w-[200px] mb-5" />
+                    </div>
+                    )
+                    }
                     <div>
                         <div className="flex  mb-[25px]">
                             {userDateFromAPI &&(
