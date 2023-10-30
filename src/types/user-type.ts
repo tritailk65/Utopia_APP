@@ -8,3 +8,7 @@ export type userInfo = {
     createDate: Date;
     updateDate: Date;
 };
+
+export type UserAvatar = {
+    avatar: string;
+};

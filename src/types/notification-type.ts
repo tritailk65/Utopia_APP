@@ -8,3 +8,21 @@ export type NotificationThisWeek = {
     userSource: userInfo;
     userTarget: userInfo;
 };
+
+export type NotificationThisMonth = {
+    userId: number;
+    sourceId: number;
+    context: string;
+    updateAt: Date;
+    userSource: userInfo;
+    userTarget: userInfo;
+};
+
+export type NotificationEarlier = {
+    userId: number;
+    sourceId: number;
+    context: string;
+    updateAt: Date;
+    userSource: userInfo;
+    userTarget: userInfo;
+};
