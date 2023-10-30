@@ -73,7 +73,7 @@ function Register() {
         axios.post('http://localhost:8080/api/User/SignUp', RgtData)
             .then((response) => {
                 if (response.data.Status === 200) {
-                    setSuccessMessage('Đăng ký thành công! Back to <a class="text-blue-600 hover:underline" href="/login">Login</a>');
+                    setSuccessMessage('Đăng ký thành công! Back to <a className="text-blue-700 hover:underline" href="/login">Login</a>');
                     setIsModalOpen(true);
                     setIsCheck(true);
                 } 

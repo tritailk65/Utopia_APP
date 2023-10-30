@@ -32,6 +32,18 @@ export const getAxios = async (path: string, option = {}) => {
     }
 };
 
+export const getAxiosAvatar = async (path: string, option = {}) => {
+    try {
+        let response = await server.get(path, option);
+        return response;
+    } catch (e: any) {
+        if (e.response && e.response.data) {
+            return e.response;
+        }
+        throw e;
+    }
+};
+
 export const postAxios = async (path: string, option = {}) => {
     try {
         let response = await server.post(path, option);
