@@ -1,12 +1,11 @@
-import { userInfo } from './user-type';
+import { userInfo, userNotiProps } from './user-type';
 
 export type NotificationThisWeek = {
     userId: number;
     sourceId: number;
     context: string;
     updateAt: Date;
-    userSource: userInfo;
-    userTarget: userInfo;
+    userSource: userNotiProps;
 };
 
 export type NotificationThisMonth = {
@@ -14,8 +13,7 @@ export type NotificationThisMonth = {
     sourceId: number;
     context: string;
     updateAt: Date;
-    userSource: userInfo;
-    userTarget: userInfo;
+    userSource: userNotiProps;
 };
 
 export type NotificationEarlier = {
@@ -23,6 +21,5 @@ export type NotificationEarlier = {
     sourceId: number;
     context: string;
     updateAt: Date;
-    userSource: userInfo;
-    userTarget: userInfo;
+    userSource: userNotiProps;
 };

@@ -29,8 +29,8 @@ export const getUserAvatar = async (id: number) => {
     try {
         const path = `${backend_utils.userController}/User/Avatar/` + id;
 
-        const response = await getAxios(path, {});
-        return response;
+        const response = await getAxios(path, { responseType: 'blob' });
+        return URL.createObjectURL(response);
     } catch (e) {
         console.log(e);
     }

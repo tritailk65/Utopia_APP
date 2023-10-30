@@ -7,8 +7,13 @@ export type userInfo = {
     description: string;
     createDate: Date;
     updateDate: Date;
+    avatart: Blob;
 };
 
-export type UserAvatar = {
+export type userNotiProps = {
+    id: number;
+    userName: string;
     avatar: string;
+    context: string;
+    follower: string;
 };
