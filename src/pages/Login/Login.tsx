@@ -6,6 +6,7 @@ import CustomModal from '../EditProfile/CustomModal';
 import useInput from '../../hooks/useInput';
 import logo1 from '../../assets/image/logo/logo1.png';
 import './Login.css';
+import {login} from '../../services/user-service';
 
 function Login() {
     const navigate = useNavigate();
@@ -47,25 +48,27 @@ function Login() {
         setFormError(error); // Set the errors
 
         if (Object.keys(error).length === 0) {
-            // Validation passed, make the API call
-            const loginData = {
-                [fieldType]: formData.value,
-                password: formData.password,
-            };
-
-            axios.post('http://localhost:8080/api/User/Login', loginData)
-                .then((response) => {
-                    if (response.data.Status === 200) {
-                        localStorage.setItem('userData', JSON.stringify(response.data.Data));
-                        navigate('/');
-                    }
-                })
-                .catch((error) => {
-                    setSuccessMessage('Đăng nhập thất bại, kiểm tra lại thông tin đăng nhập!');
-                    setIsModalOpen(true);
-                    setIsCheck(false);
-                });
-        }
+          // Validation passed, make the API call
+          const loginData = {
+              [fieldType]: formData.value,
+              password: formData.password,
+          };
+      
+          login(loginData)
+              .then((response) => {
+                  if (response.Status === 200) {
+                      localStorage.setItem('userData', JSON.stringify(response.Data));
+                      navigate('/');
+                  } else if (response.Status === 404) {
+                      setSuccessMessage('Đăng nhập thất bại, kiểm tra lại thông tin đăng nhập!');
+                      setIsModalOpen(true);
+                      setIsCheck(false);
+                  } 
+              })
+              .catch(() => {
+                  console.error('Đăng nhập thất bại');
+              });
+      }
     }
     const [isModalOpen, setIsModalOpen] = useState(false); // Thêm trạng thái modal
     const [successMessage, setSuccessMessage] = useState('');

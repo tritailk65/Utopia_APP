@@ -1,4 +1,4 @@
-import { getAxios,getAxiosAvatar } from "../utils/api-request";
+import { getAxios,getAxiosAvatar,postAxios,putAxios } from "../utils/api-request";
 import { backend_utils } from "../utils/api-utils";
 
 export const getListUser = async () => {
@@ -45,6 +45,8 @@ export const getUserDataById = async (userId: string | undefined) => {
     }
   };
 
+
+
 export const getDetailUser = async (code:string) => {
     try {
         const path = `/${backend_utils.userController}/code`;
@@ -56,3 +58,24 @@ export const getDetailUser = async (code:string) => {
         console.log(e);
     }
 };
+
+export const login = async (loginData: { [key: string]: string } | undefined) => {
+    try {
+        const path = `${backend_utils.backend_url}/User/Login`;
+        const response = await postAxios(path, loginData);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const register = async (userData: {} | undefined) => {
+    try {
+      const path = `${backend_utils.backend_url}/User/SignUp`;
+      const response = await postAxios(path,userData);
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  };
