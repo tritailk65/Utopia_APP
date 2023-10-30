@@ -3,4 +3,5 @@ export const backend_utils = {
     userController: '',
     postController: '/Post',
     commentController: '/PostComment',
+    notificationController: '/Notification',
 };
