@@ -86,18 +86,17 @@
 // export default SearchItem;
 
 import React, { useEffect, useState } from 'react';
+import { getAvatarUser } from '../../../../services/user-service';
 
-type User = {
-    id: number;
+type SearchItemProps = {
+    user: {
+        id: number;
     userName: string;
     createAt: Date;
     updateAt: Date;
     avatarPath: string;
     website: string;
-};
-
-type SearchItemProps = {
-    user: User;
+    }
 };
 
 function SearchItem({ user }: SearchItemProps) {
@@ -108,13 +107,23 @@ function SearchItem({ user }: SearchItemProps) {
     const [avatarBase64, setAvatarBase64] = useState<string | null>(null);
 
     useEffect(() => {
-        // Fetch the image blob data from the server
-        if (user.avatarPath) {
-            // Sử dụng avatarPath để hiển thị hình ảnh trực tiếp
-            setAvatarBase64(user.avatarPath);
+        const fetchAvatar = async () => {
+            try {
+                const response = await getAvatarUser(user.id);
+                const blob = new Blob([response], { type: 'image/png' }); // Thay đổi 'image/png' thành Content-Type của ảnh bạn nhận được
+                blobToBase64(blob, (base64Data) => {
+                    setAvatarBase64(base64Data);
+                });
+            } catch (error) {
+                console.error('Error fetching avatar:', error);
+            }
+        };
+    
+        if (user.id) {
+            fetchAvatar();
         }
     }, [user.id]);
-
+    
     function blobToBase64(blob: Blob, callback: (base64Data: string) => void) {
         const reader = new FileReader();
         reader.onload = function () {

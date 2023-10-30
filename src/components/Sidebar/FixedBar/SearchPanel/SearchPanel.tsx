@@ -67,6 +67,7 @@ import SearchItem from './SearchItem';
 import { PostForViewer, UserPostForViewer } from '../../../../types/post-type';
 import { Response } from '../../../../types/api-type';
 import useDebounce from '../../../../hooks/useDebounce';
+import { json } from 'react-router-dom';
 
 interface User {
     id: number;
@@ -79,17 +80,19 @@ interface User {
 
 function SearchPanel() {
     const [input, setInput] = useState<string>('');
-    const [results, setResults] = useState<Response<UserPostForViewer[]> | undefined>();
+    const [results, setResults] = useState<UserPostForViewer[]>([]);
     const delayDebounce = useDebounce(input, 1000);
-
     
     useEffect(() => {
-        const Data = async () => {
+        const fetchData = async () => {
             try {
                 const response: Response<UserPostForViewer[]> = await getListUser();
                 if (response && response.Status === 200) {
-                    
-                    setResults(response);
+                    // Lọc người dùng dựa trên input
+                    const filteredResults = response.Data.filter(user => {
+                        return user.userName.toLowerCase().includes(input.toLowerCase());
+                    });
+                    setResults(filteredResults);
                 } else {
                     throw new Error('Invalid response format');
                 }
@@ -98,9 +101,8 @@ function SearchPanel() {
                 // Xử lý lỗi ở đây (ví dụ: hiển thị thông báo lỗi cho người dùng)
             }
         };
-        
 
-        Data();
+        fetchData();
     }, [delayDebounce]);
 
     const handleChange = (value: string) => {
@@ -126,10 +128,10 @@ function SearchPanel() {
                 )}
             </div>
             <div>
-    {results && Array.isArray(results) && results.map((user: User) => (
-        <SearchItem key={user.id} user={user} />
-    ))}
-</div>
+                {results.map((user) => (
+                    <SearchItem key={user.id} user={user} />
+                ))}
+            </div>
         </div>
     );
 }
