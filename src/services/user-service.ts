@@ -3,7 +3,7 @@ import { backend_utils } from '../utils/api-utils';
 
 export const getListUser = async () => {
     try {
-        const path = `/${backend_utils.userController}/getListUser`;
+        const path = `${backend_utils.backend_url}/User`;
         const response = await getAxios(path, {});
         console.log(response);
 
