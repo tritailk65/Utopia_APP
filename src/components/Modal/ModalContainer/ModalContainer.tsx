@@ -5,12 +5,14 @@ import './ModalContainer.css';
 export interface ModalContainerProps {
     show: boolean;
     width: string;
+    full?: boolean;
     onClose: () => void;
     children?: ReactNode;
 }
 
 function ModalContainer(props: ModalContainerProps) {
-    const { show, width, onClose, children } = props;
+    const { show, full = false, width, onClose, children } = props;
+
     return (
         <>
             <Transition appear show={show} as={Fragment}>
@@ -39,7 +41,9 @@ function ModalContainer(props: ModalContainerProps) {
                                 leaveTo="opacity-0 scale-95"
                             >
                                 <Dialog.Panel
-                                    className={`w-full ${width} transform overflow-hidden rounded-2xl bg-white  py-2 text-left align-middle shadow-xl transition-all`}
+                                    className={`${
+                                        full && 'w-full'
+                                    } ${width}  transform overflow-hidden rounded-2xl bg-white  py-2 text-left align-middle shadow-xl transition-all`}
                                 >
                                     {children}
                                 </Dialog.Panel>

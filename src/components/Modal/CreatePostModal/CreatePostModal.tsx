@@ -7,9 +7,10 @@ import { Switch } from '@headlessui/react';
 import { PostCreate } from '../../../types/post-type';
 import { Response } from '../../../types/api-type';
 import { createNewPost } from '../../../services/post-service';
+
 export interface CreatePostModalProps {
     show: boolean;
-    onClose: () => void;
+    onClose: (index: number) => void;
 }
 
 function CreatePostModal(props: CreatePostModalProps) {
@@ -32,7 +33,7 @@ function CreatePostModal(props: CreatePostModalProps) {
     };
 
     const closeModal = () => {
-        onClose();
+        onClose(2);
         setTimeout(function () {
             setSelectedImage(null);
             setLike(false);
@@ -54,17 +55,15 @@ function CreatePostModal(props: CreatePostModalProps) {
         } else {
             alert('thất bại');
         }
-        onClose();
+        onClose(2);
     };
 
-    console.log(like);
-
     return (
-        <ModalContainer show={show} onClose={closeModal} width="extra-large">
+        <ModalContainer show={show} onClose={closeModal} width="extra-large" full>
             <div className=" min-h-[400px] flex flex-col w-full">
                 <div className="border-b-2 border-gray-300 h-14 flex items-center justify-between w-full px-4">
                     <h1
-                        onClick={onClose}
+                        onClick={() => onClose(2)}
                         className="text-xl text-gray-500 font-semibold tracking-wide my-14 cursor-pointer hover:text-gray-600 transition"
                     >
                         Back

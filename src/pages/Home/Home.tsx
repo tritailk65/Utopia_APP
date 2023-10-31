@@ -10,14 +10,14 @@ import { getListPostForViewer } from '../../services/post-service';
 function Home() {
     const [data, setData] = useState<Response<PostForViewer[]>>();
 
-    useEffect(() => {
-        const callApi = async () => {
-            const res: Response<PostForViewer[]> = await getListPostForViewer();
-            setData(res);
-        };
+    // useEffect(() => {
+    //     const callApi = async () => {
+    //         const res: Response<PostForViewer[]> = await getListPostForViewer();
+    //         setData(res);
+    //     };
 
-        callApi();
-    }, []);
+    //     callApi();
+    // }, []);
 
     console.log(data);
 

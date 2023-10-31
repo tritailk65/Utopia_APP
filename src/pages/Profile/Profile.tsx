@@ -1,36 +1,111 @@
-import React, { useState } from 'react';
-import hinhdaidien from '../../assets/image/hinhdaidien.png';
-import iconhinh from '../../assets/image/iconhinh.png';
-import iconsave from '../../assets/image/iconsave.png';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
+import none_avatar from '../../assets/image/none_avatar.jpg';
 import iconcamera from '../../assets/image/iconcamera.png';
-import { Link } from 'react-router-dom';
+import bookmark from '../../assets/image/icon/Bookmark.png';
+import { Link, useParams } from 'react-router-dom';
+import { getUserDataById, getAvatar } from '../../services/user-service';
+import Posts from './ProfilePosts';
+import Saved from './ProfilePostSaved';
+import { UserInfo } from '../../types/user-type';
+import { AiOutlinePicture } from 'react-icons/ai';
 
 function Profile() {
+    const [checkUser, setIsCheckUser] = useState(true);
+    const [userInfo, setUserInfo] = useState<UserInfo>();
+    const [userAnyInfo, setUserAnyInfo] = useState<UserInfo>();
+    const { id } = useParams();
+    const [avatar, setAvatar] = useState<string | undefined>('');
     // Sử dụng useState để quản lý trạng thái của dropdown menu
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(true);
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('userData') || '');
+        if (user) {
+            if (user.id != id) {
+                getUserDataById(id).then((_) => {
+                    setUserAnyInfo(_);
+                    getAvatar(_.id).then((res) => {
+                        if (res) {
+                            setAvatar(res);
+                        }
+                    });
+                    setIsCheckUser(false);
+                });
+            } else {
+                setUserInfo(user);
+                getAvatar(user.id).then((res) => {
+                    if (res) {
+                        setAvatar(res);
+                    }
+                });
+            }
+        }
+    }, []);
 
     const handleDropdownClick = () => {
         // Khi nút "..." được nhấn, đảm bảo toggle trạng thái của dropdown menu
         setIsDropdownOpen(!isDropdownOpen);
     };
 
+    const [activeTab, setActiveTab] = useState('POSTS'); // kiem tra trang thai dang click
+    const [checkSave, setSave] = useState(false); // kiem tra co save k
+    const [checkPost, setPost] = useState(false); // kiem tra co post k
+    const s = 0; // save
+    const p = 0; // post
+    const handleTabClick = (tabName: React.SetStateAction<string>) => {
+        s > 0 ? setSave(true) : setSave(false);
+        p > 0 ? setPost(true) : setPost(false);
+        setActiveTab(tabName);
+    };
+
     return (
-        <div className="min-h-full w-full">
-            <div className="profile text-2xl w-[1000px] mx-auto mt-8 bg-white p-4 rounded-lg ">
+        <div className="w-[130%] mx-auto ml-10">
+            <div className="profile text-xl w-[100%] mx-auto mt-8 bg-white p-4 rounded-lg ">
                 <div className="flex items-center space-x-6">
-                    <div className="flex-shrink-0 mt-5">
-                        <img src={hinhdaidien} alt="profile img" className="w-34 h-34 rounded-full" />
-                    </div>
+                    {avatar ? (
+                        <div className="flex-shrink-0 mt-5">
+                            <img src={avatar} alt="profile img" className="rounded-full h-[150px] w-[150px] mb-5" />
+                        </div>
+                    ) : (
+                        <div className="flex-shrink-0 mt-5">
+                            <img
+                                src={none_avatar}
+                                alt="profile img"
+                                className="rounded-full h-[150px] w-[150px] mb-5"
+                            />
+                        </div>
+                    )}
                     <div>
                         <div className="flex  mb-[25px]">
-                            <h1 className="text-3xl font-semibold ml-10 min-w-[200px] max-w-[200px]">Hello</h1>
-                            <div className="ml-[200px]">
-                                <button className="bg-gray-300  px-4 py-2 rounded-lg">
-                                    <Link to="/editprofile">Edit Profile</Link>
-                                </button>
+                            {userInfo && (
+                                <h1 className="text-2xl font-semibold ml-10 min-w-[200px] max-w-[200px]">
+                                    {userInfo.fullName}
+                                </h1>
+                            )}
+                            {userAnyInfo && (
+                                <h1 className="text-2xl font-semibold ml-10 min-w-[200px] max-w-[200px]">
+                                    {userAnyInfo.fullName}
+                                </h1>
+                            )}
+                            <div className="ml-[180px]">
+                                {checkUser ? (
+                                    <button className=" bg-[#001F3E] w-[115px] font-semibold transition border-2 border-transparent rounded-xl text-sm text-[#ffffff] hover:bg-[#ffffff] hover:border-[#001F3E] hover:text-[#001F3E] px-4 py-1.5 mr-3">
+                                        <Link to="/profile/edit">Edit profile</Link>
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => {}}
+                                        className=" bg-[#001F3E] transition border-2 border-transparent rounded-xl text-sm text-[#ffffff] hover:bg-[#ffffff] hover:border-[#001F3E] hover:text-[#001F3E] px-4 py-1.5 mr-3"
+                                    >
+                                        Follow
+                                    </button>
+                                )}
                             </div>
                             <div className="relative inline-block text-left ml-4">
-                                <button className="bg-gray-300 px-4 py-2 rounded-lg" onClick={handleDropdownClick}>
+                                <button
+                                    onClick={handleDropdownClick}
+                                    className=" bg-[#8E8E8E]/30 transition border-2 border-transparent rounded-xl text-sm text-[#000000]  px-4 py-1.5 mr-3"
+                                >
                                     {isDropdownOpen ? 'X' : '...'}
                                 </button>
                                 {isDropdownOpen && (
@@ -72,35 +147,83 @@ function Profile() {
                             </ul>
                         </div>
                         <div className="mt-10 ml-10 ">
-                            <h1 className="text-3xl font-semibold mb-4">Hello</h1>
-                            <div className="text-blue-500">facebook.com</div>
+                            {userInfo && (
+                                <>
+                                    <h1 className="text-2xl font-semibold mb-4">{userInfo.bio}</h1>
+                                    <div className="text-blue-500">{userInfo.website}</div>
+                                </>
+                            )}
+                            {userAnyInfo && (
+                                <>
+                                    <h1 className="text-2xl font-semibold mb-4">{userAnyInfo.bio}</h1>
+                                    <div className="text-blue-500">{userAnyInfo.website}</div>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <div className="border-t-[3px] border-gray-300 mt-5 mb-4"></div>
+                    <div className="border-t-[3px] border-gray-300 rounded-xl mt-5 mb-4"></div>
                     <div className="flex space-x-6 justify-center">
-                        <div className="flex">
-                            <img src={iconhinh} className="" alt="img" />
-                            <h1>POSTS</h1>
+                        <div
+                            className={`flex cursor-pointer items-center p-2 rounded-2xl ${
+                                activeTab === 'POSTS' ? 'bg-gray-400/30 text-black font-semibold' : ''
+                            }`}
+                            onClick={() => handleTabClick('POSTS')}
+                        >
+                            <div className={`w-8 h-8 ${activeTab === 'POSTS' ? 'bg-gray-400/0' : ''}`}>
+                                <AiOutlinePicture className="w-6 h-6 ml-1 mt-1" />
+                            </div>
+                            <h1 className="text-lg">POSTS</h1>
                         </div>
-                        <div className="flex">
-                            <img src={iconsave} className="" alt="img" />
-                            <h1>SAVED</h1>
-                        </div>
+                        {userInfo && (
+                            <div
+                                className={`flex cursor-pointer items-center p-2 rounded-2xl ${
+                                    activeTab === 'SAVED' ? 'bg-gray-400/30 text-black font-semibold' : ''
+                                }`}
+                                onClick={() => handleTabClick('SAVED')}
+                            >
+                                <div
+                                    className={`w-6 h-6 mr-1 rounded-full ${
+                                        activeTab === 'SAVED' ? 'bg-gray-400/0' : ''
+                                    }`}
+                                >
+                                    <img src={bookmark} alt=""></img>
+                                </div>
+                                <h1 className="text-lg">SAVED</h1>
+                            </div>
+                        )}
                     </div>
-                </div>
-
-                <div className="mt-[100px] flex flex-col items-center justify-center space-y-10">
-                    <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
-                    <h1 className="text-3xl font-bold">Share Photos</h1>
-                    <p className="text-center">When you share photos, they will appear on your profile</p>
-                    <Link to={'/'}>
-                        <span className="text-xl font-semibold cursor-pointer text-blue-500">
-                            Share your first photos
-                        </span>
-                    </Link>
+                    {activeTab === 'POSTS' ? (
+                        checkPost ? (
+                            <Posts />
+                        ) : (
+                            <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
+                                <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
+                                <h1 className="text-2xl font-bold">Share Photos</h1>
+                                <p className="text-center text-lg">
+                                    When you share photos, they will appear on your profile
+                                </p>
+                                <Link to={'/'}>
+                                    <span className="text-xl font-semibold cursor-pointer text-blue-500">
+                                        Share your first photos
+                                    </span>
+                                </Link>
+                            </div>
+                        )
+                    ) : checkSave ? (
+                        <Saved />
+                    ) : (
+                        <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
+                            <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
+                            <h1 className="text-2xl font-bold">Save</h1>
+                            <p className="text-center text-lg w-[480px] text-[19px]">
+                                Save photos and videos that you want to see again. No one is notified, and only you can
+                                see what you've saved.
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
