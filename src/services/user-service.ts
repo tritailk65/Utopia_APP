@@ -1,4 +1,4 @@
-import { getAxios,getAxiosAvatar } from "../utils/api-request";
+import { getAxios, getAxiosAvatar, postAxios } from "../utils/api-request";
 import { backend_utils } from "../utils/api-utils";
 import axios from 'axios';
 
@@ -14,30 +14,6 @@ export const getListUser = async () => {
     }
 };
 
-export const getAvatarUser = async (id: number) => {
-    try {
-        const path = `${backend_utils.backend_url}/User/Avatar/${id}`;
-        const response = await axios.get(path, {
-            responseType: 'arraybuffer', // Yêu cầu dữ liệu trả về dưới dạng array buffer
-        });
-
-        const contentType = response.headers['content-type']; // Lấy Content-Type từ headers
-
-        if (contentType && contentType.startsWith('image')) {
-            // Nếu Content-Type là hình ảnh, trả về dữ liệu phản hồi
-            return response.data;
-        } else {
-            // Nếu không phải là hình ảnh, ném lỗi
-            throw new Error('Invalid content type');
-        }
-    } catch (e) {
-        console.error(e);
-        throw new Error('Failed to fetch avatar data');
-    }
-};
-
-
-
 export const getDetailUser = async (code:string) => {
     try {
         const path = `/${backend_utils.userController}/code`;
@@ -48,6 +24,60 @@ export const getDetailUser = async (code:string) => {
     } catch (e) {
         console.log(e);
     }
+};
+
+export const getAvatarUser = async (id: number) => {
+  try {
+      const path = `${backend_utils.backend_url}/User/Avatar/${id}`;
+      const response = await axios.get(path, {
+          responseType: 'arraybuffer', // Yêu cầu dữ liệu trả về dưới dạng array buffer
+      });
+
+      const contentType = response.headers['content-type']; // Lấy Content-Type từ headers
+
+      if (contentType && contentType.startsWith('image')) {
+          // Nếu Content-Type là hình ảnh, trả về dữ liệu phản hồi
+          return response.data;
+      } else {
+          // Nếu không phải là hình ảnh, ném lỗi
+          throw new Error('Invalid content type');
+      }
+  } catch (e) {
+      console.error(e);
+      throw new Error('Failed to fetch avatar data');
+  }
+};
+
+export const getUserDataById = async (userId: string | undefined) => {
+  try {
+    const path = `${backend_utils.backend_url}/User/${userId}`;
+    const response = await getAxios(path,{});
+    if (response.Status === 200) {
+      return response.Data;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getAvatar = async (userId: string | undefined) => {
+  try {
+    const path = `${backend_utils.backend_url}/User/Avatar/${userId}`;
+    const response = await getAxiosAvatar(path, { responseType: 'arraybuffer' });
+
+    const contentType = response.headers && response.headers['content-type'] ? response.headers['content-type'] : 'Loading';
+
+    const blob = new Blob([response.data], { type: contentType });
+    if (blob.size > 0) { 
+      const imageUrl = URL.createObjectURL(blob);
+      return imageUrl;
+    } else {
+      console.error('Error: Blob is empty or invalid');
+    }
+  } catch (error) {
+    console.error('Error fetching avatar', error);
+    throw error;
+  }
 };
 
 export const login = async (loginData: { [key: string]: string } | undefined) => {
@@ -69,4 +99,5 @@ export const register = async (userData: {} | undefined) => {
     } catch (error) {
       console.log(error);
     }
-  };
+};
+
