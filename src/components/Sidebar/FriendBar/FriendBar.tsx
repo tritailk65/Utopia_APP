@@ -1,25 +1,63 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import oggy from '../../../assets/image/oggy.png';
-import olivia from '../../../assets/image/olivia.png';
+import none_avatar from '../../../assets/image/none_avatar.jpg';
 import bob from '../../../assets/image/bob.png';
 import jack from '../../../assets/image/jack.png';
 import dee from '../../../assets/image/dee.png';
 import StickyWrapper from '../../Wrapper/StickyWrapper/StickyWrapper';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserInfo } from '../../../types/user-type';
+import ConfirmDialog from '../../Dialog/ConfirmDialog/ConfirmDialog';
+import { getAvatar } from '../../../services/user-service';
+
 function FriendBar() {
+    const navigate = useNavigate();
+    const [userInfo, setUserInfo] = useState<UserInfo>();
+    const [titleComfirmModel, setTitleComfirmModel] = useState('');
+    const [showConfirmModel, setShowCofirmModel] = useState(false);
+    const [avatar, setAvatar] = useState('');
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('userData') || '');
+        if (user) {
+            setUserInfo(user);
+            getAvatar(user.id).then((res) => {
+                if (res) {
+                    setAvatar(res);
+                }
+            });
+        }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('userData');
+        navigate('/login');
+    };
+
+    const logoutConfirm = () => {
+        setTitleComfirmModel('Bạn có chắc muốn đăng xuất ?');
+        setShowCofirmModel(true);
+    };
+
     return (
         <StickyWrapper top={14} right={0} paddingLeft={16}>
             <ul className=" w-[319px] px-2">
                 <li className="text-base flex  mb-4 ">
                     <div className="flex-1 w-1/6 ">
-                        <img src={olivia} alt="avatar" className="circle w-12 h-12" />
+                        {avatar ? (
+                            <img src={avatar} alt="avatar" className="circle w-12 h-12" />
+                        ) : (
+                            <img src={none_avatar} alt="avatar" className="circle w-12 h-12" />
+                        )}
                     </div>
                     <div className="flex-4 w-4/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">Olivia</h3>
-                        <p>OliviaCute</p>
+                        <h3 className="font-semibold cursor-pointer">{userInfo?.userName}</h3>
+                        <p>{userInfo?.fullName}</p>
                     </div>
                     <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer text-blue-600 font-semibold opacity-70 hover:opacity-100">
-                        <span className="text-sm">Switch</span>
+                        <span onClick={logoutConfirm} className="text-sm">
+                            Switch
+                        </span>
                     </div>
                 </li>
 
@@ -79,12 +117,17 @@ function FriendBar() {
                     </div>
                 </li>
             </ul>
-        </StickyWrapper>
-        // <div className="max-w-[383px] min-h-screen  pl-16 shrink z-10 ">
-        //     <div className=" mt-8  sticky top-14 right-0 ">
 
-        //     </div>
-        // </div>
+            <ConfirmDialog
+                title={titleComfirmModel}
+                confirmText="OK"
+                cancelText="Cancle"
+                onClose={() => {}}
+                onCancel={() => setShowCofirmModel(false)}
+                onConfirm={() => handleLogout()}
+                show={showConfirmModel}
+            />
+        </StickyWrapper>
     );
 }
 

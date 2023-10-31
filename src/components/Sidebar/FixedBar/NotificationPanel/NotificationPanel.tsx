@@ -10,7 +10,6 @@ import {
     getListNotiThisMonth,
     getListNotiThisWeek,
 } from '../../../../services/notification-service';
-import { getUserAvatar } from '../../../../services/user-service';
 import NotificationItem from './NotificationItem';
 
 export interface NotificationPanelProps {
@@ -23,8 +22,6 @@ function NotificationPanel(props: NotificationPanelProps) {
     const [notiThisWeek, setNotiThisWeek] = useState<Response<NotificationThisWeek[]>>();
     const [notiThisMonth, setNotiThisMonth] = useState<Response<NotificationThisMonth[]>>();
     const [notiEarlier, setnotiEarlier] = useState<Response<NotificationEarlier[]>>();
-
-    const [urlBlod, setUrlBlod] = useState<string>();
 
     useEffect(() => {
         const callAPI = async () => {

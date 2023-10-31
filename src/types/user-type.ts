@@ -1,13 +1,16 @@
-export type userInfo = {
+export type UserInfo = {
     id: number;
     code: string;
-    slug: string;
     userName: string;
     fullName: string;
-    description: string;
-    createDate: Date;
-    updateDate: Date;
-    avatart: Blob;
+    bio: string;
+    createAt: Date;
+    updateAt: Date;
+    avatartPath: string;
+    phone: number;
+    email: string;
+    gender: string;
+    website: string;
 };
 
 export type userNotiProps = {

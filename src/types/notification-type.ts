@@ -1,4 +1,4 @@
-import { userInfo, userNotiProps } from './user-type';
+import { UserInfo, userNotiProps } from './user-type';
 
 export type NotificationThisWeek = {
     userId: number;

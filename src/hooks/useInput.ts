@@ -11,7 +11,7 @@ const useInput = (initialValues: { [key: string]: string }) => {
             ...prevState,
             [name]: value,
         }));
-        
+
         // Clear the error for this field when it's being edited
         setFormError((prevState) => ({
             ...prevState,

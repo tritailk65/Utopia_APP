@@ -25,24 +25,15 @@ export const getUserDataById = async (userId: string | undefined) => {
     }
 };
 
-export const getAvatar = async (userId: string | undefined) => {
+export const getAvatar = async (id: number | undefined) => {
     try {
-        const path = `${backend_utils.backend_url}/User/Avatar/${userId}`;
-        const response = await getAxiosAvatar(path, { responseType: 'arraybuffer' });
+        const path = `${backend_utils.userController}/User/Avatar/` + id;
 
-        const contentType =
-            response.headers && response.headers['content-type'] ? response.headers['content-type'] : 'Loading';
+        const response = await getAxios(path, { responseType: 'blob' });
 
-        const blob = new Blob([response.data], { type: contentType });
-        if (blob.size > 0) {
-            const imageUrl = URL.createObjectURL(blob);
-            return imageUrl;
-        } else {
-            console.error('Error: Blob is empty or invalid');
-        }
-    } catch (error) {
-        console.error('Error fetching avatar', error);
-        throw error;
+        return URL.createObjectURL(response);
+    } catch (e) {
+        console.log(e);
     }
 };
 
@@ -58,17 +49,18 @@ export const getDetailUser = async (code: string) => {
     }
 };
 
-export const login = async (loginData: { [key: string]: string } | undefined) => {
+export const userLogin = async (loginData: { [key: string]: string } | undefined) => {
     try {
         const path = `${backend_utils.backend_url}/User/Login`;
         const response = await postAxios(path, loginData);
+
         return response;
     } catch (error) {
         console.log(error);
     }
 };
 
-export const register = async (userData: {} | undefined) => {
+export const userRegister = async (userData: {} | undefined) => {
     try {
         const path = `${backend_utils.backend_url}/User/SignUp`;
         const response = await postAxios(path, userData);

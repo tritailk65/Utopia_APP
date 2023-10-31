@@ -1,50 +1,49 @@
-import React, { useState, useRef,useEffect } from 'react';
-import hinhdaidien from '../../assets/image/hinhdaidien.png';
+import React, { useState, useRef, useEffect } from 'react';
+import none_avatar from '../../assets/image/none_avatar.jpg';
 import useInput from '../../hooks/useInput';
 import CustomModal from './CustomModal'; // Import Modal
-import {editprofile,getAvatar,uploadAvatar} from '../../services/user-service';
-
+import { editprofile, getAvatar, uploadAvatar } from '../../services/user-service';
 
 interface UserData {
-    id: BigInteger,
-    userName: string,
-    phone: string,
-    email: string,
-    fullName: string,
-    gender: string,
-    bio: string,
-    website: string,
-    avatarPath: string
+    id: BigInteger;
+    userName: string;
+    phone: string;
+    email: string;
+    fullName: string;
+    gender: string;
+    bio: string;
+    website: string;
+    avatarPath: string;
 }
 
 function EditProfile() {
     const [userData, setUserData] = useState<UserData | null>(null);
-        useEffect(() => {
-            // Truy cập Local Storage để lấy thông tin người dùng
-            const userFromLocalStorage = localStorage.getItem('userData');
-            if (userFromLocalStorage) {
-                const userData = JSON.parse(userFromLocalStorage);
-                setUserData(userData);
-                fetchAvatar(userData.id);
-            }
-            // mỗi lần load trang ảnh hưởng tới trạng thái nên cần lưu url hình vô local r gán cho trạng thái để xuất hình
-            const storedAvatarUrl = localStorage.getItem('avatarUrl');
-            if (storedAvatarUrl) {
-                setAvatarUrl(storedAvatarUrl);
-            }
-        }, []);
+    useEffect(() => {
+        // Truy cập Local Storage để lấy thông tin người dùng
+        const userFromLocalStorage = localStorage.getItem('userData');
+        if (userFromLocalStorage) {
+            const userData = JSON.parse(userFromLocalStorage);
+            setUserData(userData);
+            fetchAvatar(userData.id);
+        }
+        // mỗi lần load trang ảnh hưởng tới trạng thái nên cần lưu url hình vô local r gán cho trạng thái để xuất hình
+        const storedAvatarUrl = localStorage.getItem('avatarUrl');
+        if (storedAvatarUrl) {
+            setAvatarUrl(storedAvatarUrl);
+        }
+    }, []);
 
     const { formData, formError, handleInputChange, setFormError } = useInput({
         website: '',
         blo: '',
         gender: '',
-        fullName:'',
+        fullName: '',
     });
     const id = userData?.id;
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
-     // Thêm state để lưu trữ tệp người dùng đã chọn
-     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    // Thêm state để lưu trữ tệp người dùng đã chọn
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     const handleLinkClick = (e: React.MouseEvent) => {
         e.preventDefault(); // Ngăn chặn hành động mặc định của liên kết (chuyển trang)
@@ -73,19 +72,16 @@ function EditProfile() {
                 });
         }
     };
-    
-      const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-      const fetchAvatar = (id: any) => {
-        getAvatar(id)
-          .then((avatarUrl) => {
-            if (avatarUrl !== undefined) 
-            {
-            localStorage.setItem('avatarUrl', avatarUrl);
-            setAvatarUrl(avatarUrl);
-            }     
-          })
-      };
-      
+
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+    const fetchAvatar = (id: any) => {
+        getAvatar(id).then((avatarUrl) => {
+            if (avatarUrl !== undefined) {
+                localStorage.setItem('avatarUrl', avatarUrl);
+                setAvatarUrl(avatarUrl);
+            }
+        });
+    };
 
     //kiem tra blog
     const [blog, setBlog] = useState('');
@@ -93,7 +89,7 @@ function EditProfile() {
     const [successMessage, setSuccessMessage] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false); // Thêm trạng thái modal
     // kiem tra hien bang gi
-    const [isCheck, setIsCheck]= useState(false);
+    const [isCheck, setIsCheck] = useState(false);
 
     const handleBlogChange = (e: { target: { value: any } }) => {
         const inputText = e.target.value;
@@ -108,7 +104,7 @@ function EditProfile() {
         //const selectedValue = e.target.value;
         handleInputChange(e); // Cập nhật giá trị 'gender' trong 'formData'
     };
-     // Xử lí cập nhật
+    // Xử lí cập nhật
     const handleSubmit = () => {
         const error: { [key: string]: string } = {};
         const data = {
@@ -117,31 +113,31 @@ function EditProfile() {
             bio: formData.blo || (userData ? userData.bio : ''),
             website: formData.website || (userData ? userData.website : ''),
         };
-  
-        editprofile(id,data)
-                .then((response) => {
-                    if (response.data.Status === 200) {
-                        setSuccessMessage('Cập nhật thành công !');
-                        setIsModalOpen(true);
-                        setIsCheck(true);
-                        const userUpdate = {
-                            id: userData?.id,
-                            userName: userData?.userName,
-                            phone: userData?.phone,
-                            email: userData?.email,
-                            fullName: formData.fullName || (userData ? userData.fullName : ''),
-                            gender: formData.gender || (userData ? userData.gender : ''),
-                            bio: formData.blo || (userData ? userData.bio : ''),
-                            website: formData.website || (userData ? userData.website : ''),
-                        };
-                        localStorage.setItem('userData', JSON.stringify(userUpdate));
-                    } 
-                })
-                .catch((error) => {
-                    setSuccessMessage('Cập nhật thất bại!');
+
+        editprofile(id, data)
+            .then((response) => {
+                if (response.data.Status === 200) {
+                    setSuccessMessage('Cập nhật thành công !');
                     setIsModalOpen(true);
-                    setIsCheck(false);
-                });
+                    setIsCheck(true);
+                    const userUpdate = {
+                        id: userData?.id,
+                        userName: userData?.userName,
+                        phone: userData?.phone,
+                        email: userData?.email,
+                        fullName: formData.fullName || (userData ? userData.fullName : ''),
+                        gender: formData.gender || (userData ? userData.gender : ''),
+                        bio: formData.blo || (userData ? userData.bio : ''),
+                        website: formData.website || (userData ? userData.website : ''),
+                    };
+                    localStorage.setItem('userData', JSON.stringify(userUpdate));
+                }
+            })
+            .catch((error) => {
+                setSuccessMessage('Cập nhật thất bại!');
+                setIsModalOpen(true);
+                setIsCheck(false);
+            });
     };
 
     const closeModal = () => {
@@ -151,31 +147,35 @@ function EditProfile() {
 
     const handleCombinedClick = () => {
         handleSubmit();
-        if(selectedFileName){
-        handleFileUpload();
+        if (selectedFileName) {
+            handleFileUpload();
         }
-      };
+    };
     return (
-        <div className="w-[700px]  p-6 rounded-md">
-            <h1 className="text-2xl font-bold mt-[150px]">Edit Profile</h1>
+        <div className="w-[100%]  p-6 rounded-md">
+            <h1 className="text-2xl font-bold mt-[120px]">Edit Profile</h1>
 
-            <div className="ml-[200px] mt-[100px]">
+            <div className="ml-[200px] mt-[80px]">
                 <div className="mb-4">
                     <div className="flex items-center space-x-4">
-                        <div className="h-12 w-12 rounded-full overflow-hidden">
-                            <img src={avatarUrl || hinhdaidien} className="object-cover w-full h-full" alt="img" />
+                        <div className="w-[20%] rounded-full overflow-hidden">
+                            <img src={avatarUrl || none_avatar} className="object-cover " alt="img" />
                         </div>
                         <div className="">
-                        <input
-                            type="text"
-                            id="fullName"
-                            name="fullName"
-                            className="w-[350px] rounded-md border-gray-900 shadow-sm border-2 ml-[35px] font-extrabold"
-                            value={formData.fullName}
-                            placeholder={userData?.fullName}
-                            onChange={handleInputChange}
-                        />
-                            <a href="/" className="text-blue-600 hover:underline ml-[35px]" onClick={handleLinkClick}>
+                            {/* <input
+                                type="text"
+                                id="fullName"
+                                name="fullName"
+                                className="w-full rounded-md border-gray-900 shadow-sm border-2 ml-[35px] font-extrabold"
+                                value={formData.fullName}
+                                placeholder={userData?.fullName}
+                                onChange={handleInputChange}
+                            /> */}
+                            <div className="bg-white w-full h-5 ">
+                                <h2 className="w-full text-base font-semibold text-black">{userData?.userName}</h2>
+                            </div>
+
+                            <a href="/" className="text-blue-600 hover:underline  float-left" onClick={handleLinkClick}>
                                 Change Profile Photo
                             </a>
                             <input
@@ -204,7 +204,9 @@ function EditProfile() {
                             value={formData.website}
                             onChange={handleInputChange}
                         />
-                        {formError.website && <div className="error-messag text-red-600 mt-2 text-[14px]">{formError.website}</div>}
+                        {formError.website && (
+                            <div className="error-messag text-red-600 mt-2 text-[14px]">{formError.website}</div>
+                        )}
                     </div>
 
                     <div className="flex space-x-[42px]">
@@ -220,7 +222,9 @@ function EditProfile() {
                             value={blog}
                             onChange={handleBlogChange}
                         />
-                        {formError.blog && <div className="error-messag text-red-600 mt-2 text-[14px]">{formError.blog}</div>}
+                        {formError.blog && (
+                            <div className="error-messag text-red-600 mt-2 text-[14px]">{formError.blog}</div>
+                        )}
                     </div>
                     <span className="text-gray-500 text-sm ml-[85px]">
                         {blog.length}/{maxCharacters}
@@ -234,9 +238,9 @@ function EditProfile() {
                             id="gender"
                             name="gender"
                             className="w-[350px] rounded-md border-gray-900 shadow-sm border-2"
-                            value={ formData.gender ? formData.gender :userData?.gender }
+                            value={formData.gender ? formData.gender : userData?.gender}
                             onChange={handleGenderChange}
-                        >   
+                        >
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                             <option value="other">Other</option>
@@ -253,7 +257,7 @@ function EditProfile() {
                         </button>
                     </div>
                 </div>
-                <CustomModal isOpen={isModalOpen} check= {isCheck} message={successMessage} onClose={closeModal} />
+                <CustomModal isOpen={isModalOpen} check={isCheck} message={successMessage} onClose={closeModal} />
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getUserAvatar } from '../../../../services/user-service';
+import { getAvatar } from '../../../../services/user-service';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 type NotificationItemProps = {
@@ -18,7 +18,7 @@ function NotificationItem({ user, context }: NotificationItemProps) {
 
     useEffect(() => {
         const callAPI = async () => {
-            const res = await getUserAvatar(user.id);
+            const res = await getAvatar(user.id);
             setAvatar(res);
         };
 

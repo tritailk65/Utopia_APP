@@ -6,6 +6,11 @@ import { Link } from 'react-router-dom';
 import SearchPanel from './SearchPanel/SearchPanel';
 import NotificationPanel from './NotificationPanel/NotificationPanel';
 import FollowRequestPanel from './FollowRequestPanel/FollowRequestPanel';
+import { LuBellRing } from 'react-icons/lu';
+import { BsPersonCircle } from 'react-icons/bs';
+import { useEffect, useState } from 'react';
+import CreatePostModal from '../../Modal/CreatePostModal/CreatePostModal';
+import { UserInfo } from '../../../types/user-type';
 
 export interface FixedBarProps {
     show: boolean;
@@ -15,6 +20,17 @@ export interface FixedBarProps {
 
 function FixedBar(props: FixedBarProps) {
     const { show, panel, onClose } = props;
+    const [create, setCreate] = useState<boolean>(false);
+    const [userInfo, setUserInfo] = useState<UserInfo>();
+    const [navigateProfile, setNavigateProfile] = useState('');
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('userData') || '');
+        if (user) {
+            setUserInfo(user);
+            setNavigateProfile('/profile/' + user.id);
+        }
+    }, []);
 
     return (
         <div className={`w-[550px] min-h-screen bg-white ${show ? 'fixed' : 'hidden'} z-50 flex shadow-2xl`}>
@@ -23,11 +39,14 @@ function FixedBar(props: FixedBarProps) {
                     <img src={logo} alt="img" className="w-14 h-14" />
                 </div>
                 <ul>
+                    {/* Home */}
                     <Link to={'/'} className="">
                         <li className="justify-center pl-1 h-[63px] text-2xl flex items-center mb-1 hover:bg-gray-200 transition">
                             <BiHomeAlt className="mr-3" />
                         </li>
                     </Link>
+
+                    {/* Search */}
                     <div onClick={() => onClose(1)} className="cursor-pointer">
                         <li
                             className={`justify-center pl-1 h-[63px] text-2xl flex items-center mb-1 hover:bg-gray-200 transition ${
@@ -37,23 +56,29 @@ function FixedBar(props: FixedBarProps) {
                             <BiSearchAlt className="mr-3" />
                         </li>
                     </div>
+
+                    {/* Following */}
                     <div onClick={() => onClose(4)} className="cursor-pointer">
                         <li className="justify-center pl-1 h-[63px] text-2xl flex items-center mb-1 hover:bg-gray-200 transition">
                             <AiOutlineHeart className="mr-3" />
                         </li>
                     </div>
+
+                    {/* Notification */}
                     <div onClick={() => onClose(2)} className="cursor-pointer">
                         <li
                             className={`justify-center pl-1 h-[63px] text-2xl flex items-center mb-1 hover:bg-gray-200 transition ${
                                 panel === 2 ? 'bg-gray-200' : 'bg-transparent'
                             }`}
                         >
-                            <IoIosNotificationsOutline className="mr-3" />
+                            <LuBellRing className="mr-3" />
                         </li>
                     </div>
-                    <Link to={'/'} className="">
+
+                    {/* Profile */}
+                    <Link to={navigateProfile} className="">
                         <li className="justify-center pl-1 h-[63px] text-2xl flex items-center mb-1 hover:bg-slate-200 transition">
-                            <AiOutlinePlusSquare className="mr-3" />
+                            <BsPersonCircle className="mr-3" />
                         </li>
                     </Link>
                 </ul>
