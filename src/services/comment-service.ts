@@ -3,9 +3,9 @@ import { PostCreate } from '../types/post-type';
 import { getAxios, postAxios } from '../utils/api-request';
 import { backend_utils as backend } from '../utils/api-utils';
 
-export const getListCommentById = async (id: number) => {
+export const getListCommentByPostId = async (id: number) => {
     try {
-        const path = `${backend.commentController}/${id}`;
+        const path = `${backend.commentController}/Post/${id}`;
 
         const response = await getAxios(path, {});
         return response;

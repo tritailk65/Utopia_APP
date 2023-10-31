@@ -5,6 +5,9 @@ import CommentItem from './CommentItem/CommentItem';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BsChatSquareDots, BsSend } from 'react-icons/bs';
 import { BiBookmark } from 'react-icons/bi';
+import { Response } from '../../../types/api-type';
+import { getListCommentByPostId } from '../../../services/comment-service';
+import CommentSkeleton from '../../Skeleton/CommentSkeleton';
 
 interface PostCommentModalProps {
     idPost: number;
@@ -15,7 +18,25 @@ interface PostCommentModalProps {
 function PostCommentModal(props: PostCommentModalProps) {
     const { idPost, show, onClose } = props;
     const [screenHeight, setScreenHeight] = useState(window.screen.height);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [data, setData] = useState<Response<Comment[]>>();
     const [input, setInput] = useState<string>('');
+
+    useEffect(() => {
+        if (show === true) {
+            setLoading(true);
+            const fetchData = async () => {
+                const res: Response<Comment[]> = await getListCommentByPostId(idPost);
+                if (res.Status === 200) {
+                    setData(res);
+                    setTimeout(() => {
+                        setLoading(false);
+                    }, 1000);
+                }
+            };
+            fetchData();
+        }
+    }, [show]);
 
     useEffect(() => {
         const updateScreenHeight = () => {
@@ -26,8 +47,7 @@ function PostCommentModal(props: PostCommentModalProps) {
             window.removeEventListener('resize', updateScreenHeight);
         };
     }, []);
-
-    console.log(screenHeight);
+    console.log(loading);
 
     return (
         <ModalContainer show={show} onClose={onClose} width="extra-larges">
@@ -38,8 +58,22 @@ function PostCommentModal(props: PostCommentModalProps) {
                     </div>
                     <div className="w-[460px] h-full  pt-4 flex flex-col">
                         <div className="overflow-y-auto text-justify border-b-2 border-gray-200  pl-2 h-[88%]">
-                            <CommentItem />
-                            <CommentItem />
+                            {!loading && (
+                                <>
+                                    <CommentItem />
+                                    <CommentItem />
+                                </>
+                            )}
+                            {loading && (
+                                <>
+                                    <CommentSkeleton />
+                                    <CommentSkeleton />
+                                    <CommentSkeleton />
+                                    <CommentSkeleton />
+                                    <CommentSkeleton />
+                                    <CommentSkeleton />
+                                </>
+                            )}
                         </div>
                         <div className="h-[18%]  w-full pt-2">
                             <div className="flex justify-between text-2xl px-2 h-[35%]">

@@ -25,11 +25,11 @@ function HomePost(props: HomePostProps) {
     const saveDebounce = useDebounce(like, 1000);
 
     useEffect(() => {
-        console.log(likeDebounce);
+        // console.log(likeDebounce);
     }, [likeDebounce]);
 
     useEffect(() => {
-        console.log(saveDebounce);
+        //console.log(saveDebounce);
     }, [saveDebounce]);
 
     return (
@@ -92,7 +92,7 @@ function HomePost(props: HomePostProps) {
                     Add a comment ...
                 </p>
             </div>
-            <PostCommentModal idPost={3} show={modal} onClose={() => setModal(false)} />
+            <PostCommentModal idPost={1} show={modal} onClose={() => setModal(false)} />
         </>
     );
 }
