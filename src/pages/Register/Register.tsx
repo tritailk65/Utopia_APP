@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import React, { useState } from "react";
 import CustomModal from '../EditProfile/CustomModal'; 
+import {register} from '../../services/user-service';
 
 function Register() {
     //Tạo State cho các biến
@@ -28,7 +29,7 @@ function Register() {
     const phoneRegex = /^\d{10}$/;
     const userNameRegex= /^[a-zA-Z0-9]{6,15}$/;// Kiểm tra userName gồm ký tự lẫn số và hơn 6 kí tự
     const passwordRegex= /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])(?=.{8,15})/; // Kiểm tra password có ít nhất 1 chữ hoa, 1 kí tự đặt biệt và số, ít nhất 8 kí tự
-    const fullNameRegex= /^[\p{L}0-9]{3,10}$/u;// Kiểm tra fullName có từ 3 đến 10 ký tự và không chứa ký tự đặc biệt, lấy dấu
+    const fullNameRegex = /^[\p{L}0-9\s]{3,10}$/u;// Kiểm tra fullName có từ 3 đến 10 ký tự và không chứa ký tự đặc biệt, lấy dấu
 
     const handleRegister = () => {
         const error: { [key: string]: string } = {};
@@ -70,24 +71,23 @@ function Register() {
             email   : formData.email,
         };
         // goi API
-        axios.post('http://localhost:8080/api/User/SignUp', RgtData)
+         register(RgtData)
             .then((response) => {
-                if (response.data.Status === 200) {
+                if (response.Status === 200) {
                     setSuccessMessage('Đăng ký thành công! Back to <a className="text-blue-700 hover:underline" href="/login">Login</a>');
                     setIsModalOpen(true);
                     setIsCheck(true);
                 } 
-            })
-            .catch((error) => {
-                if (error.response && error.response.status === 400) {
-                    const errorMessage = error.response.data.Message;
+                else if (response.data.Status === 400) {
+                    const errorMessage = response.data.Message;
                     const parsedErrorMessage = errorMessage.split(': ')[1];
                     setSuccessMessage(parsedErrorMessage);
                     setIsModalOpen(true);
                     setIsCheck(false);
-                } else {
-                    console.error('Lỗi khi gọi API', error);
-                }
+                } 
+            })
+            .catch((error) => {
+                console.log(error);
             });            
     };
     }
