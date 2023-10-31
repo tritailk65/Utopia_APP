@@ -13,8 +13,6 @@ export interface ModalContainerProps {
 function ModalContainer(props: ModalContainerProps) {
     const { show, full = false, width, onClose, children } = props;
 
-    console.log(full);
-
     return (
         <>
             <Transition appear show={show} as={Fragment}>

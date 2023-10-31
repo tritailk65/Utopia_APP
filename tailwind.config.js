@@ -24,6 +24,9 @@ module.exports = {
             md: '768px',
             // Laptop
             lg: '1024px',
+            // Larger
+            extra: '1400px',
+            xl: '1920px',
         },
     },
     plugins: [],

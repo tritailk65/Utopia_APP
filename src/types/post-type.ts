@@ -23,7 +23,7 @@ export interface UserPostForViewer {
     id: number;
     userName: string;
     createAt: Date;
-    updateAt: Date;
-    avatarPath: string;
-    website: string;
+    updateAt: Date | null;
+    avatarPath: string | null;
+    website: string | null;
 }

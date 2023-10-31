@@ -14,7 +14,9 @@
     font-size: calc(10px + 2vmin);
     color: white;
 }
-
+textarea {
+    resize: none;
+}
 .App-link {
     color: #61dafb;
 }

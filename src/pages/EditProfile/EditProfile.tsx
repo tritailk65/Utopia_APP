@@ -2,7 +2,8 @@ import React, { useState, useRef,useEffect } from 'react';
 import hinhdaidien from '../../assets/image/hinhdaidien.png';
 import useInput from '../../hooks/useInput';
 import CustomModal from './CustomModal'; // Import Modal
-import axios from 'axios';
+import {editprofile,getAvatar,uploadAvatar} from '../../services/user-service';
+
 
 interface UserData {
     id: BigInteger,
@@ -24,7 +25,7 @@ function EditProfile() {
             if (userFromLocalStorage) {
                 const userData = JSON.parse(userFromLocalStorage);
                 setUserData(userData);
-                fetchAvatar();
+                fetchAvatar(userData.id);
             }
             // mỗi lần load trang ảnh hưởng tới trạng thái nên cần lưu url hình vô local r gán cho trạng thái để xuất hình
             const storedAvatarUrl = localStorage.getItem('avatarUrl');
@@ -39,7 +40,7 @@ function EditProfile() {
         gender: '',
         fullName:'',
     });
-
+    const id = userData?.id;
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
      // Thêm state để lưu trữ tệp người dùng đã chọn
@@ -63,40 +64,26 @@ function EditProfile() {
     };
     const handleFileUpload = () => {
         if (selectedFile) {
-          const formData = new FormData();
-          formData.append('avatar', selectedFile);
-    
-          // Gửi tệp lên API
-          axios.post(`http://localhost:8080/api/User/UploadAvatar/${userData?.id}`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          })
-          .then((response) => {
-            console.log('File uploaded successfully', response);
-          })
-          .catch((error) => {
-            console.error('File upload failed', error);
-          });
+            uploadAvatar(userData?.id, selectedFile)
+                .then((response) => {
+                    setAvatarUrl(response);
+                })
+                .catch((error) => {
+                    console.error('File upload failed', error);
+                });
         }
-      };
+    };
+    
       const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-      const fetchAvatar = () => {
-        // Gọi API để lấy ảnh đại diện dựa trên ID của người dùng
-        axios.get(`http://localhost:8080/api/User/Avatar/${userData?.id}`, { responseType: 'arraybuffer' })
-          .then((response) => {
-            // Chuyển đổi dữ liệu nhận được thành một Blob
-            const blob = new Blob([response.data], { type: response.headers['content-type'] });
-      
-            // Tạo một URL cho Blob
-            const imageUrl = URL.createObjectURL(blob);
-            localStorage.setItem('avatarUrl', imageUrl);
-            // Cập nhật trạng thái ảnh đại diện
-            setAvatarUrl(imageUrl);
+      const fetchAvatar = (id: any) => {
+        getAvatar(id)
+          .then((avatarUrl) => {
+            if (avatarUrl !== undefined) 
+            {
+            localStorage.setItem('avatarUrl', avatarUrl);
+            setAvatarUrl(avatarUrl);
+            }     
           })
-          .catch((error) => {
-            console.error('Error fetching avatar', error);
-          });
       };
       
 
@@ -130,8 +117,8 @@ function EditProfile() {
             bio: formData.blo || (userData ? userData.bio : ''),
             website: formData.website || (userData ? userData.website : ''),
         };
-        const id = userData?.id;
-        axios.put(`http://localhost:8080/api/User/EditProfile/${id}`, data)
+  
+        editprofile(id,data)
                 .then((response) => {
                     if (response.data.Status === 200) {
                         setSuccessMessage('Cập nhật thành công !');
@@ -146,7 +133,6 @@ function EditProfile() {
                             gender: formData.gender || (userData ? userData.gender : ''),
                             bio: formData.blo || (userData ? userData.bio : ''),
                             website: formData.website || (userData ? userData.website : ''),
-                            avatarPath: userData?.avatarPath,
                         };
                         localStorage.setItem('userData', JSON.stringify(userUpdate));
                     } 
@@ -160,11 +146,14 @@ function EditProfile() {
 
     const closeModal = () => {
         setIsModalOpen(false);
+        window.location.reload();
     };
 
     const handleCombinedClick = () => {
         handleSubmit();
+        if(selectedFileName){
         handleFileUpload();
+        }
       };
     return (
         <div className="w-[700px]  p-6 rounded-md">
