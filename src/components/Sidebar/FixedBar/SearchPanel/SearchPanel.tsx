@@ -88,7 +88,7 @@ function SearchPanel() {
             try {
                 const response: Response<UserPostForViewer[]> = await getListUser();
                 if (response && response.Status === 200) {
-                    // Lọc người dùng dựa trên input
+
                     const filteredResults = response.Data.filter(user => {
                         return user.userName.toLowerCase().includes(input.toLowerCase());
                     });
@@ -98,7 +98,6 @@ function SearchPanel() {
                 }
             } catch (error) {
                 console.error('There has been a problem with your fetch operation:', error);
-                // Xử lý lỗi ở đây (ví dụ: hiển thị thông báo lỗi cho người dùng)
             }
         };
 

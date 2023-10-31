@@ -51,16 +51,14 @@ export const getAvatarUser = async (id: number) => {
   try {
       const path = `${backend_utils.backend_url}/User/Avatar/${id}`;
       const response = await axios.get(path, {
-          responseType: 'arraybuffer', // Yêu cầu dữ liệu trả về dưới dạng array buffer
+          responseType: 'arraybuffer',
       });
 
-      const contentType = response.headers['content-type']; // Lấy Content-Type từ headers
+      const contentType = response.headers['content-type']; 
 
       if (contentType && contentType.startsWith('image')) {
-          // Nếu Content-Type là hình ảnh, trả về dữ liệu phản hồi
           return response.data;
       } else {
-          // Nếu không phải là hình ảnh, ném lỗi
           throw new Error('Invalid content type');
       }
   } catch (e) {

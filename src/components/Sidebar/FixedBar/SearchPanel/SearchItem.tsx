@@ -86,7 +86,7 @@
 // export default SearchItem;
 
 import React, { useEffect, useState } from 'react';
-import { getUserAvatar } from '../../../../services/user-service';
+import { getAvatarUser, getUserAvatar } from '../../../../services/user-service';
 import { UserPostForViewer } from '../../../../types/post-type';
 
 type SearchItemProps = {
@@ -103,8 +103,8 @@ function SearchItem({ user }: SearchItemProps) {
     useEffect(() => {
         const fetchAvatar = async () => {
             try {
-                const response = await getUserAvatar(user.id);
-                const blob = new Blob([response], { type: 'image/png' }); // Thay đổi 'image/png' thành Content-Type của ảnh bạn nhận được
+                const response = await getAvatarUser(user.id);
+                const blob = new Blob([response], { type: 'image/png' }); 
                 blobToBase64(blob, (base64Data) => {
                     setAvatarBase64(base64Data);
                 });
