@@ -12,6 +12,14 @@ export type UserInfo = {
     gender: string;
     website: string;
 };
+export interface UserPostForViewer {
+    id: number;
+    userName: string;
+    createAt: Date;
+    updateAt: Date;
+    avatarPath?: string | null;
+    website?: string | null;
+}
 
 export type userNotiProps = {
     id: number;

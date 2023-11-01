@@ -25,11 +25,11 @@ function FixedBar(props: FixedBarProps) {
     const [navigateProfile, setNavigateProfile] = useState('');
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('userData') || '');
-        if (user) {
-            setUserInfo(user);
-            setNavigateProfile('/profile/' + user.id);
-        }
+        // const user = JSON.parse(localStorage.getItem('userData') || '');
+        // if (user) {
+        //     setUserInfo(user);
+        //     setNavigateProfile('/profile/' + user.id);
+        // }
     }, []);
 
     return (
