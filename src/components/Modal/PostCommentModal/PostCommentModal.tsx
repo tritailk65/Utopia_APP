@@ -8,35 +8,32 @@ import { BiBookmark } from 'react-icons/bi';
 import { Response } from '../../../types/api-type';
 import { getListCommentByPostId } from '../../../services/comment-service';
 import CommentSkeleton from '../../Skeleton/CommentSkeleton';
-
-interface PostCommentModalProps {
-    idPost: number;
-    show: boolean;
-    onClose: () => void;
-}
-
-function PostCommentModal(props: PostCommentModalProps) {
-    const { idPost, show, onClose } = props;
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../../redux/store';
+import { closeCommentModalReducer } from '../../../redux/reducers/CommentModalSlice';
+import useCommentModal from '../../../hooks/useCommentModal';
+function PostCommentModal() {
     const [screenHeight, setScreenHeight] = useState(window.screen.height);
     const [loading, setLoading] = useState<boolean>(false);
     const [data, setData] = useState<Response<Comment[]>>();
     const [input, setInput] = useState<string>('');
+    const { commentModalState, closeCommentModal } = useCommentModal();
 
     useEffect(() => {
-        if (show === true) {
-            setLoading(true);
-            const fetchData = async () => {
-                const res: Response<Comment[]> = await getListCommentByPostId(idPost);
-                if (res.Status === 200) {
-                    setData(res);
-                    setTimeout(() => {
-                        setLoading(false);
-                    }, 1000);
-                }
-            };
-            fetchData();
-        }
-    }, [show]);
+        // if (commentModal.show === true) {
+        //     setLoading(true);
+        //     const fetchData = async () => {
+        //         const res: Response<Comment[]> = await getListCommentByPostId(commentModal.postId);
+        //         if (res.Status === 200) {
+        //             setData(res);
+        //             setTimeout(() => {
+        //                 setLoading(false);
+        //             }, 1000);
+        //         }
+        //     };
+        //     fetchData();
+        // }
+    }, [commentModalState.show]);
 
     useEffect(() => {
         const updateScreenHeight = () => {
@@ -47,10 +44,9 @@ function PostCommentModal(props: PostCommentModalProps) {
             window.removeEventListener('resize', updateScreenHeight);
         };
     }, []);
-    console.log(loading);
 
     return (
-        <ModalContainer show={show} onClose={onClose} width="extra-larges">
+        <ModalContainer show={commentModalState.show} onClose={closeCommentModal} width="extra-larges">
             <div className={`min-h-[${screenHeight}px] flex flex-col w-full my-[-8px]`}>
                 <div className="xl:h-[60vh]  h-[90vh] flex ">
                     <div className=" h-full flex flex-col items-center justify-center border-r-2 border-gray-200 ">

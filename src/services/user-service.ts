@@ -1,4 +1,4 @@
-import { getAxios, getAxiosAvatar, postAxios, putAxios, postAxiosFile } from '../utils/api-request';
+import { getAxios, postAxios, putAxios, postAxiosFile } from '../utils/api-request';
 import { backend_utils } from '../utils/api-utils';
 
 export const getListUser = async () => {
@@ -33,6 +33,17 @@ export const getAvatar = async (id: number | undefined) => {
         const response = await getAxios(path, { responseType: 'blob' });
 
         return URL.createObjectURL(response);
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+export const getUserAvatar = async (id: number) => {
+    try {
+        const path = `${backend_utils.userController}/User/Avatar/` + id;
+
+        const response = await getAxios(path, {});
+        return response;
     } catch (e) {
         console.log(e);
     }

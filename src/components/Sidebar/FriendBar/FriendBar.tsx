@@ -18,15 +18,15 @@ function FriendBar() {
     const [avatar, setAvatar] = useState('');
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('userData') || '');
-        if (user) {
-            setUserInfo(user);
-            getAvatar(user.id).then((res) => {
-                if (res) {
-                    setAvatar(res);
-                }
-            });
-        }
+        // const user = JSON.parse(localStorage.getItem('userData') || '');
+        // if (user) {
+        //     setUserInfo(user);
+        //     getAvatar(user.id).then((res) => {
+        //         if (res) {
+        //             setAvatar(res);
+        //         }
+        //     });
+        // }
     }, []);
 
     const handleLogout = () => {
@@ -44,15 +44,15 @@ function FriendBar() {
             <ul className=" w-[319px] px-2">
                 <li className="text-base flex  mb-4 ">
                     <div className="flex-1 w-1/6 ">
-                        {avatar ? (
+                        {/* {avatar ? (
                             <img src={avatar} alt="avatar" className="circle w-12 h-12" />
                         ) : (
                             <img src={none_avatar} alt="avatar" className="circle w-12 h-12" />
-                        )}
+                        )} */}
                     </div>
                     <div className="flex-4 w-4/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">{userInfo?.userName}</h3>
-                        <p>{userInfo?.fullName}</p>
+                        <h3 className="font-semibold cursor-pointer"></h3>
+                        {/* <p>{userInfo?.fullName}</p> */}
                     </div>
                     <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer text-blue-600 font-semibold opacity-70 hover:opacity-100">
                         <span onClick={logoutConfirm} className="text-sm">
