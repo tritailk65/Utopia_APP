@@ -8,9 +8,6 @@ import { BiBookmark } from 'react-icons/bi';
 import { Response } from '../../../types/api-type';
 import { getListCommentByPostId } from '../../../services/comment-service';
 import CommentSkeleton from '../../Skeleton/CommentSkeleton';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState, AppDispatch } from '../../../redux/store';
-import { closeCommentModalReducer } from '../../../redux/reducers/CommentModalSlice';
 import useCommentModal from '../../../hooks/useCommentModal';
 function PostCommentModal() {
     const [screenHeight, setScreenHeight] = useState(window.screen.height);
@@ -20,19 +17,19 @@ function PostCommentModal() {
     const { commentModalState, closeCommentModal } = useCommentModal();
 
     useEffect(() => {
-        // if (commentModal.show === true) {
-        //     setLoading(true);
-        //     const fetchData = async () => {
-        //         const res: Response<Comment[]> = await getListCommentByPostId(commentModal.postId);
-        //         if (res.Status === 200) {
-        //             setData(res);
-        //             setTimeout(() => {
-        //                 setLoading(false);
-        //             }, 1000);
-        //         }
-        //     };
-        //     fetchData();
-        // }
+        if (commentModalState.show === true && commentModalState.postId > 0) {
+            setLoading(true);
+            const fetchData = async () => {
+                const res: Response<Comment[]> = await getListCommentByPostId(commentModalState.postId);
+                if (res.Status === 200) {
+                    setData(res);
+                    setTimeout(() => {
+                        setLoading(false);
+                    }, 1000);
+                }
+            };
+            fetchData();
+        }
     }, [commentModalState.show]);
 
     useEffect(() => {
