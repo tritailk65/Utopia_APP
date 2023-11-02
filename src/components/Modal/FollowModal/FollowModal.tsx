@@ -1,16 +1,12 @@
+import useFollowModal from '../../../hooks/useFollowModal';
 import ModalContainer from '../ModalContainer/ModalContainer';
 import FollowItem from './FollowItem/FollowItem';
-export interface FollowModalProps {
-    show: boolean;
-    onClose: () => void;
-}
 
-function FollowModal(props: FollowModalProps) {
-    const { show, onClose } = props;
-
+function FollowModal() {
+    const { followModalState, closeFollowModal } = useFollowModal();
     return (
         <>
-            <ModalContainer show={show} onClose={onClose} width="medium" full>
+            <ModalContainer show={followModalState.show} onClose={() => closeFollowModal()} width="medium" full>
                 <div className=" min-h-[400px] flex flex-col w-full">
                     <div className="border-b-4 border-gray-300 h-12 flex items-center justify-center w-full">
                         <h1 className="font-semibold text-lg">Following</h1>

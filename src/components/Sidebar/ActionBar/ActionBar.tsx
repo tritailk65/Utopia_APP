@@ -9,6 +9,8 @@ import CreatePostModal from '../../Modal/CreatePostModal/CreatePostModal';
 import { LuBellRing } from 'react-icons/lu';
 import { BsPersonCircle } from 'react-icons/bs';
 import { UserInfo } from '../../../types/user-type';
+import useCreatePostModal from '../../../hooks/useCreatePostModal';
+import useFollowModal from '../../../hooks/useFollowModal';
 
 export interface ActionBarProps {
     onOpen: (index: number) => void;
@@ -18,10 +20,9 @@ function ActionBar(props: ActionBarProps) {
     const navigate = useNavigate();
     const { onOpen } = props;
     const [navigateProfile, setNavigateProfile] = useState('');
-    const [modal, setModal] = useState<boolean>(false);
-    const [create, setCreate] = useState<boolean>(false);
     const [userInfo, setUserInfo] = useState<UserInfo>();
-
+    const { openCreatePostModal } = useCreatePostModal();
+    const { openFollowModal } = useFollowModal();
     useEffect(() => {
         // const user = JSON.parse(localStorage.getItem('userData') || '');
         // if (user) {
@@ -48,7 +49,7 @@ function ActionBar(props: ActionBarProps) {
                                 <span className="">Search</span>
                             </li>
                         </div>
-                        <div className="cursor-pointer" onClick={() => setModal(true)}>
+                        <div className="cursor-pointer" onClick={() => openFollowModal(1)}>
                             <li className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-gray-200 transition">
                                 <AiOutlineHeart className="mr-3" />
                                 <span className="">Following</span>
@@ -60,7 +61,7 @@ function ActionBar(props: ActionBarProps) {
                                 <span className="">Notification</span>
                             </li>
                         </div>
-                        <div className="cursor-pointer" onClick={() => setCreate(true)}>
+                        <div className="cursor-pointer" onClick={() => openCreatePostModal(1)}>
                             <li className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-gray-200 transition">
                                 <AiOutlinePlusSquare className="mr-3" />
                                 <span className="">Create</span>
@@ -75,8 +76,6 @@ function ActionBar(props: ActionBarProps) {
                     </ul>
                 </div>
             </div>
-            <FollowModal show={modal} onClose={() => setModal(false)} />
-            <CreatePostModal show={create} onClose={() => setCreate(false)} />
         </>
     );
 }

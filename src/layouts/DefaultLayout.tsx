@@ -5,6 +5,7 @@ import ActionBar from '../components/Sidebar/ActionBar/ActionBar';
 import FriendBar from '../components/Sidebar/FriendBar/FriendBar';
 import FixedBar from '../components/Sidebar/FixedBar/FixedBar';
 import FollowModal from '../components/Modal/FollowModal/FollowModal';
+import CreatePostModal from '../components/Modal/CreatePostModal/CreatePostModal';
 
 type DefaultLayoutProps = {
     children: ReactNode;
@@ -12,7 +13,6 @@ type DefaultLayoutProps = {
 
 const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
     const [show, setShow] = useState<boolean>(false);
-    const [follow, setFollow] = useState<boolean>(false);
     const [panel, setPanel] = useState<number>(0);
 
     useEffect(() => {
@@ -28,12 +28,7 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
         if (panel === index) {
             setShow(false);
             setPanel(0);
-        } else if (index === 4) {
-            setShow(false);
-            setPanel(0);
-            setFollow(true);
         } else {
-            console.log('condition 3');
             setPanel(index);
         }
     };
@@ -48,7 +43,6 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
                     <FriendBar />
                 </div>
             </div>
-            <FollowModal show={follow} onClose={() => setFollow(false)} />
         </>
     );
 };

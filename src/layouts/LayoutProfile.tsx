@@ -27,10 +27,6 @@ const LayoutProfile: React.FC<LayoutProfileProps> = ({ children }) => {
         if (panel === index) {
             setShow(false);
             setPanel(0);
-        } else if (index === 4) {
-            setShow(false);
-            setPanel(0);
-            setFollow(true);
         } else {
             console.log('condition 3');
             setPanel(index);
@@ -45,7 +41,6 @@ const LayoutProfile: React.FC<LayoutProfileProps> = ({ children }) => {
                     <div className="max-w-[630px] ">{children}</div>
                 </div>
             </div>
-            <FollowModal show={follow} onClose={() => setFollow(false)} />
         </>
     );
 };

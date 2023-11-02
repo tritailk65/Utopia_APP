@@ -4,6 +4,9 @@ import { PublicRoutes } from './routers/PublicRoutes';
 import GlobalStyles from './styles/GlobalStyles';
 
 import './App.css';
+import FollowModal from './components/Modal/FollowModal/FollowModal';
+import CreatePostModal from './components/Modal/CreatePostModal/CreatePostModal';
+import PostCommentModal from './components/Modal/PostCommentModal/PostCommentModal';
 
 function App() {
     return (
@@ -28,6 +31,9 @@ function App() {
                         })}
                     </Routes>
                 </div>
+                <FollowModal />
+                <CreatePostModal />
+                <PostCommentModal />
             </GlobalStyles>
         </Router>
     );

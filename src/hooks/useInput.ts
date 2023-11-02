@@ -12,7 +12,6 @@ const useInput = (initialValues: { [key: string]: string }) => {
             [name]: value,
         }));
 
-        // Clear the error for this field when it's being edited
         setFormError((prevState) => ({
             ...prevState,
             [name]: '',
@@ -23,7 +22,7 @@ const useInput = (initialValues: { [key: string]: string }) => {
         formData,
         formError,
         handleInputChange,
-        setFormError, // You can use this to manually set errors if needed
+        setFormError,
     };
 };
 
