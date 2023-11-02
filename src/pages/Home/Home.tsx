@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import { PostForViewer } from '../../types/post-type';
 import { Response } from '../../types/api-type';
 import { getListPostForViewer } from '../../services/post-service';
-import PostCommentModal from '../../components/Modal/PostCommentModal/PostCommentModal';
+
 function Home() {
     const [data, setData] = useState<Response<PostForViewer[]>>();
 
@@ -43,7 +43,6 @@ function Home() {
                     />
                 </div>
             </div>
-            <PostCommentModal />
         </>
     );
 }

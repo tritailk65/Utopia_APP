@@ -1,8 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 import CommentModalReducer from './reducers/CommentModalSlice';
+import FollowModalReducer from './reducers/FollowModalSlice';
+import CreatePostModalReducer from './reducers/CreatePostModalSlice';
+
 export const store = configureStore({
     reducer: {
         commentModal: CommentModalReducer,
+        followModal: FollowModalReducer,
+        createPostModal: CreatePostModalReducer,
     },
 });
 
