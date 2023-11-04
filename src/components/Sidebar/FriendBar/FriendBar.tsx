@@ -18,15 +18,15 @@ function FriendBar() {
     const [avatar, setAvatar] = useState('');
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('userData') || '');
-        if (user) {
-            setUserInfo(user);
-            getAvatar(user.id).then((res) => {
-                if (res) {
-                    setAvatar(res);
-                }
-            });
-        }
+        // const user = JSON.parse(localStorage.getItem('userData') || '');
+        // if (user) {
+        //     setUserInfo(user);
+        //     getAvatar(user.id).then((res) => {
+        //         if (res) {
+        //             setAvatar(res);
+        //         }
+        //     });
+        // }
     }, []);
 
     const handleLogout = () => {

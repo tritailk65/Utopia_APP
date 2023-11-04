@@ -33,6 +33,8 @@ function Login() {
         }
     };
 
+    console.log('hi');
+
     const handleInputValueChange = (value: string) => {
         const newFieldType = determineFieldType(value);
         setFieldType(newFieldType);
