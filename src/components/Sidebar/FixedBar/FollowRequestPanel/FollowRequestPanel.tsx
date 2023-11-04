@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import arrow from '../../../../assets/image/Arrow_left.png';
 import avt from '../../../../assets/image/avt2.png';
 import FollowRequestItem from './FollowRequestItem';
@@ -9,6 +9,8 @@ export interface FollowRequestPanelProps {
 
 function FollowRequestPanel(props: FollowRequestPanelProps) {
     const { onClose } = props;
+
+    useEffect(() => {}, []);
 
     return (
         <div>
@@ -22,22 +24,6 @@ function FollowRequestPanel(props: FollowRequestPanelProps) {
 
             {/* Item section */}
             <div className="overflow-auto max-h-screen">
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
-                <FollowRequestItem />
                 <FollowRequestItem />
             </div>
 

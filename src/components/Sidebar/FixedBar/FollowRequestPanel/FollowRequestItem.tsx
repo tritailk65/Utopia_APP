@@ -8,7 +8,7 @@ function FollowRequestItem() {
                     <img src={avt} alt="avatar" className="circle w-14 h-14" />
                 </div>
                 <div className="flex-4 w-[38%] text-left">
-                    <h3 className="font-semibold cursor-pointer text-[18px]">sooyaa__</h3>
+                    <h3 className="font-semiboldtext-[18px]">sooyaa__</h3>
                     <p className="text-gray-500 text-sm">24.8M Followers</p>
                 </div>
                 <div className="flex-1 w-[47%] flex flex-row items-center cursor-pointer font-semibold ">
@@ -20,7 +20,7 @@ function FollowRequestItem() {
                     </button>
                     <button
                         onClick={() => {}}
-                        className=" bg-[#8E8E8E]/30 transition border-2 border-transparent rounded-xl text-sm text-black hover:bg-[#464646]/30 px-4 py-1.5 mr-3"
+                        className=" bg-[#8E8E8E]/30 transition border-2 border-transparent cursor-pointer rounded-xl text-sm text-black hover:bg-[#464646]/30 px-4 py-1.5 mr-3"
                     >
                         Delete
                     </button>

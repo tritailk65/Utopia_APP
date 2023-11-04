@@ -17,23 +17,6 @@ function App() {
                             const Page = value.page;
                             const Layout = value.layout;
                             return (
-                                <Route element={<Auth />} key="key">
-                                    <Route
-                                        path={value.path}
-                                        element={
-                                            <Layout>
-                                                <Page />
-                                            </Layout>
-                                        }
-                                        key={value.path}
-                                    />
-                                </Route>
-                            );
-                        })}
-                        {PrivateRoutes.map((value, index) => {
-                            const Page = value.page;
-                            const Layout = value.layout;
-                            return (
                                 <Route
                                     path={value.path}
                                     element={

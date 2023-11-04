@@ -1,5 +1,3 @@
-import { NotificationThisWeek } from '../types/notification-type';
-
 import { getAxios, postAxios } from '../utils/api-request';
 import { backend_utils as backend } from '../utils/api-utils';
 

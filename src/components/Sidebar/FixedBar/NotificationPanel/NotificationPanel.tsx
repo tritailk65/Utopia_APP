@@ -3,7 +3,7 @@ import bob from '../../../../assets/image/bob.png';
 import ping from '../../../../assets/image/ping.png';
 import arrow from '../../../../assets/image/Arrow_right.png';
 import { useState, useEffect } from 'react';
-import { NotificationEarlier, NotificationThisMonth, NotificationThisWeek } from '../../../../types/notification-type';
+import { NotificationItemType } from '../../../../types/notification-type';
 import { Response } from '../../../../types/api-type';
 import {
     getListNotiEarlier,
@@ -20,9 +20,9 @@ export interface NotificationPanelProps {
 function NotificationPanel(props: NotificationPanelProps) {
     const { onClose } = props;
     const [user, setUser] = useState<UserInfo>();
-    const [notiThisWeek, setNotiThisWeek] = useState<Response<NotificationThisWeek[]>>();
-    const [notiThisMonth, setNotiThisMonth] = useState<Response<NotificationThisMonth[]>>();
-    const [notiEarlier, setnotiEarlier] = useState<Response<NotificationEarlier[]>>();
+    const [notiThisWeek, setNotiThisWeek] = useState<Response<NotificationItemType[]> | null>();
+    const [notiThisMonth, setNotiThisMonth] = useState<Response<NotificationItemType[]> | null>();
+    const [notiEarlier, setnotiEarlier] = useState<Response<NotificationItemType[]> | null>();
 
     useEffect(() => {
         if (localStorage['userData']) {
@@ -33,15 +33,19 @@ function NotificationPanel(props: NotificationPanelProps) {
     useEffect(() => {
         if (user) {
             const callAPI = async () => {
-                console.log(user.id);
-                //ID User hiện tại sẽ được lấy trong local storage
-                const resThisWeek: Response<NotificationThisWeek[]> = await getListNotiThisWeek(user.id);
-                const resThisMonth: Response<NotificationThisWeek[]> = await getListNotiThisMonth(user.id);
-                const resEalier: Response<NotificationThisWeek[]> = await getListNotiEarlier(user.id);
+                const resThisWeek: Response<NotificationItemType[]> = await getListNotiThisWeek(user.id);
+                const resThisMonth: Response<NotificationItemType[]> = await getListNotiThisMonth(user.id);
+                const resEalier: Response<NotificationItemType[]> = await getListNotiEarlier(user.id);
 
-                setNotiThisWeek(resThisWeek);
-                setNotiThisMonth(resThisMonth);
-                setnotiEarlier(resEalier);
+                if (resThisWeek.Data.length != 0) {
+                    setNotiThisWeek(resThisWeek);
+                }
+                if (resThisMonth.Data.length != 0) {
+                    setNotiThisMonth(resThisMonth);
+                }
+                if (resEalier.Data.length != 0) {
+                    setnotiEarlier(resEalier);
+                }
             };
             callAPI();
         }
@@ -52,58 +56,31 @@ function NotificationPanel(props: NotificationPanelProps) {
             {/* Follow request section */}
             <h1 className="ml-2 text-2xl font-semibold mb-7">Notifications</h1>
             <ul className=" w-[100%] max-h-screen overflow-auto ">
-                <li className="text-base flex  mb-4 " onClick={() => onClose(3)}>
+                <li className="text-base flex  mb-4 ">
                     <div className="flex-1 w-1/6 relative ml-3">
                         <img src={bob} alt="avatar" className="rounded-full w-8 h-8 absolute top-1 left-1" />
                         <img src={olivia} alt="avatar" className="rounded-full w-8 h-8 absolute bottom-1 right-1" />
                     </div>
                     <div className="flex-4 w-4/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">Follow request</h3>
+                        <h3 className="font-semibold">Follow request</h3>
                         <span className="opacity-50 text-base">postmalone + 99 others</span>
                     </div>
                     <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer text-blue-600 font-semibold opacity-70 hover:opacity-100 pr-4 ">
-                        <button className="flex items-center space-x-2">
+                        <button className="flex items-center space-x-2" onClick={() => onClose(3)}>
                             <img src={ping} alt="icon1" className="w-2 h-2 ml-1" />
                             <img src={arrow} alt="icon2" className="w-6 h-6 ml-2" />
                         </button>
                     </div>
                 </li>
 
-                <div className="w-[100%] h-1 bg-[#9D9C9C]/20 mb-2 rounded-xl"></div>
-
                 {/* Notification this week section */}
-
-                <li className="flex justify-between text-sm font-semibold tracking-wide py-1 mb-4">
-                    <span className="opacity-80 text-base px-2">This week</span>
-                </li>
-
-                {notiThisWeek?.Data.map((noti) => (
-                    <NotificationItem user={noti.userSource} context={noti.context} />
-                ))}
-
-                <div className="w-[100%] h-1 bg-[#9D9C9C]/20 mb-2 rounded-xl"></div>
+                {notiThisWeek ? <NotificationItem title="This week" noti={notiThisWeek.Data} /> : <></>}
 
                 {/* Notification this month section */}
-
-                <li className="flex justify-between text-sm font-semibold tracking-wide py-1 mb-4">
-                    <span className="opacity-80 text-base px-2">This month</span>
-                </li>
-
-                {notiThisMonth?.Data.map((noti, index) => (
-                    <NotificationItem key={index} user={noti.userSource} context={noti.context} />
-                ))}
-
-                <div className="w-[100%] h-1 bg-[#9D9C9C]/20 mb-2 rounded-xl"></div>
+                {notiThisMonth ? <NotificationItem title="This month" noti={notiThisMonth.Data} /> : <></>}
 
                 {/* Notification earlier section */}
-
-                <li className="flex justify-between text-sm font-semibold tracking-wide py-1 mb-4">
-                    <span className="opacity-80 text-base px-2">Earlier</span>
-                </li>
-
-                {notiEarlier?.Data.map((noti, index) => (
-                    <NotificationItem key={index} user={noti.userSource} context={noti.context} />
-                ))}
+                {notiEarlier ? <NotificationItem title="Earlier" noti={notiEarlier.Data} /> : <></>}
             </ul>
         </div>
     );
