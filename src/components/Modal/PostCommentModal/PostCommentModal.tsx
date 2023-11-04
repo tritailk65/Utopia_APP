@@ -20,12 +20,16 @@ function PostCommentModal() {
         if (commentModalState.show === true && commentModalState.postId > 0) {
             setLoading(true);
             const fetchData = async () => {
-                const res: Response<Comment[]> = await getListCommentByPostId(commentModalState.postId);
-                if (res.Status === 200) {
-                    setData(res);
-                    setTimeout(() => {
-                        setLoading(false);
-                    }, 1000);
+                try {
+                    const res: Response<Comment[]> = await getListCommentByPostId(commentModalState.postId);
+                    if (res.Status === 200) {
+                        setData(res);
+                        setTimeout(() => {
+                            setLoading(false);
+                        }, 1000);
+                    }
+                } catch (e) {
+                    setLoading(false);
                 }
             };
             fetchData();
@@ -47,7 +51,7 @@ function PostCommentModal() {
             <div className={`min-h-[${screenHeight}px] flex flex-col w-full my-[-8px]`}>
                 <div className="xl:h-[60vh]  h-[90vh] flex ">
                     <div className=" h-full flex flex-col items-center justify-center border-r-2 border-gray-200 ">
-                        <img src={avt} alt="selected img" className="h-full" />
+                        {/* <img src={avt} alt="selected img" className="h-full" /> */}
                     </div>
                     <div className="w-[460px] h-full  pt-4 flex flex-col">
                         <div className="overflow-y-auto text-justify border-b-2 border-gray-200  pl-2 h-[88%]">

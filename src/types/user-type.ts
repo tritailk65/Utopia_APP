@@ -6,7 +6,7 @@ export type UserInfo = {
     bio: string;
     createAt: Date;
     updateAt: Date;
-    avatartPath: string;
+    avatarPath: string;
     phone: number;
     email: string;
     gender: string;

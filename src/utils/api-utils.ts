@@ -6,4 +6,5 @@ export const backend_utils = {
     notificationController: '/Notification',
     postLikeController: '/PostLike',
     postFavoriteController: '/PostFavorite',
+    imagePath: 'http://localhost:8080/api/User/Avatar/',
 };
