@@ -25,17 +25,7 @@ function HomePost(props: HomePostProps) {
     const { avatar, username, since, img, likes, title, comments } = props;
     const [like, setLike] = useState<boolean>(false);
     const [save, setSave] = useState<boolean>(false);
-    const likeDebounce = useDebounce(like, 1000);
-    const saveDebounce = useDebounce(save, 1000);
     const { openCommentModal } = useCommentModal();
-
-    useEffect(() => {
-        console.log('likeDebounce');
-    }, [likeDebounce]);
-
-    useEffect(() => {
-        console.log('saveDebounce');
-    }, [saveDebounce]);
 
     const onLikePost = async () => {
         const res: Response<SavePostLike> = await postLikeService(1, 1);

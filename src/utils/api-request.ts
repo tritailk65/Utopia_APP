@@ -7,7 +7,7 @@ export const server = axios.create({
 
 server.interceptors.request.use(
     (config) => {
-        console.log(config);
+        //console.log(config);
 
         // const token = Cookies.get('devify:AccessToken');
         // if (token) {
@@ -61,18 +61,17 @@ export const postAxiosFile = async (path: string, data = {}, headers = {}) => {
         const response = await server.post(path, data, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                ...headers
-            }
+                ...headers,
+            },
         });
-      return response.data;
+        return response.data;
     } catch (e: any) {
-      if (e.response && e.response.data) {
-        return e.response.data;
-      }
-      throw e;
+        if (e.response && e.response.data) {
+            return e.response.data;
+        }
+        throw e;
     }
-  };
-  
+};
 
 export const putAxios = async (path: string, option = {}) => {
     try {

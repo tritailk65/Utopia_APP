@@ -9,6 +9,7 @@ import { Response } from '../../../types/api-type';
 import { getListCommentByPostId } from '../../../services/comment-service';
 import CommentSkeleton from '../../Skeleton/CommentSkeleton';
 import useCommentModal from '../../../hooks/useCommentModal';
+import { Comment } from '../../../types/comment-type';
 function PostCommentModal() {
     const [screenHeight, setScreenHeight] = useState(window.screen.height);
     const [loading, setLoading] = useState<boolean>(false);
@@ -51,14 +52,15 @@ function PostCommentModal() {
             <div className={`min-h-[${screenHeight}px] flex flex-col w-full my-[-8px]`}>
                 <div className="xl:h-[60vh]  h-[90vh] flex ">
                     <div className=" h-full flex flex-col items-center justify-center border-r-2 border-gray-200 ">
-                        {/* <img src={avt} alt="selected img" className="h-full" /> */}
+                        <img src={avt} alt="selected img" className="h-full" />
                     </div>
                     <div className="w-[460px] h-full  pt-4 flex flex-col">
                         <div className="overflow-y-auto text-justify border-b-2 border-gray-200  pl-2 h-[88%]">
-                            {!loading && (
+                            {!loading && data?.Data && (
                                 <>
-                                    <CommentItem />
-                                    <CommentItem />
+                                    {data.Data.map((val: Comment, index) => {
+                                        return <CommentItem data={val} />;
+                                    })}
                                 </>
                             )}
                             {loading && (
