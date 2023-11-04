@@ -3,7 +3,7 @@ import { backend_utils } from '../utils/api-utils';
 
 export const getListUser = async () => {
     try {
-        const path = `${backend_utils.backend_url}/User`;
+        const path = `${backend_utils.userController}`;
         const response = await getAxios(path, {});
         console.log(response);
 
@@ -16,7 +16,7 @@ export const getListUser = async () => {
 //export const getDetailUser = async (code: string) => {
 export const getUserDataById = async (userId: string | undefined) => {
     try {
-        const path = `${backend_utils.backend_url}/User/${userId}`;
+        const path = `${backend_utils.userController}/${userId}`;
         const response = await getAxios(path, {});
         if (response.Status === 200) {
             return response.Data;
@@ -28,7 +28,7 @@ export const getUserDataById = async (userId: string | undefined) => {
 
 export const getAvatar = async (id: number | undefined) => {
     try {
-        const path = `${backend_utils.userController}/User/Avatar/` + id;
+        const path = `${backend_utils.userController}/Avatar/` + id;
 
         const response = await getAxios(path, { responseType: 'blob' });
 
@@ -63,7 +63,7 @@ export const getDetailUser = async (code: string) => {
 
 export const userLogin = async (loginData: { [key: string]: string } | undefined) => {
     try {
-        const path = `${backend_utils.backend_url}/User/Login`;
+        const path = `${backend_utils.userController}/Login`;
         const response = await postAxios(path, loginData);
 
         return response;
@@ -74,7 +74,7 @@ export const userLogin = async (loginData: { [key: string]: string } | undefined
 
 export const userRegister = async (userData: {} | undefined) => {
     try {
-        const path = `${backend_utils.backend_url}/User/SignUp`;
+        const path = `${backend_utils.userController}/SignUp`;
         const response = await postAxios(path, userData);
         console.log(response);
         return response;
@@ -85,7 +85,7 @@ export const userRegister = async (userData: {} | undefined) => {
 
 export const editprofile = async (userID: Uint8Array | undefined, UserData: {} | undefined) => {
     try {
-        const path = `${backend_utils.backend_url}/User/EditProfile/${userID}`;
+        const path = `${backend_utils.userController}/EditProfile/${userID}`;
         const response = await putAxios(path, UserData);
         console.log(response);
         return response;
@@ -96,7 +96,7 @@ export const editprofile = async (userID: Uint8Array | undefined, UserData: {} |
 
 export const uploadAvatar = async (userId: Uint8Array | undefined, selectedFile: string | Blob) => {
     try {
-        const path = `${backend_utils.backend_url}/User/UploadAvatar/${userId}`;
+        const path = `${backend_utils.userController}/UploadAvatar/${userId}`;
         const formData = new FormData();
         formData.append('avatar', selectedFile);
 
