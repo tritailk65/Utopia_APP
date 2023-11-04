@@ -97,8 +97,8 @@ function Register() {
                         setIsCheck(true);
                         setIsModalOpen(true);
                         setIsRegisterSuccess(true);
-                    } else if (response.data.Status === 400) {
-                        const errorMessage = response.data.Message;
+                    } else if (response.Status === 400) {
+                        const errorMessage = response.Message;
                         const parsedErrorMessage = errorMessage.split(': ')[1];
                         setSuccessMessage(parsedErrorMessage);
                         setIsCheck(false);

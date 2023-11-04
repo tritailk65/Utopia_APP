@@ -11,6 +11,7 @@ import {
     getListNotiThisWeek,
 } from '../../../../services/notification-service';
 import NotificationItem from './NotificationItem';
+import { UserInfo } from '../../../../types/user-type';
 
 export interface NotificationPanelProps {
     onClose: (index: number) => void;
@@ -18,25 +19,33 @@ export interface NotificationPanelProps {
 
 function NotificationPanel(props: NotificationPanelProps) {
     const { onClose } = props;
-
+    const [user, setUser] = useState<UserInfo>();
     const [notiThisWeek, setNotiThisWeek] = useState<Response<NotificationThisWeek[]>>();
     const [notiThisMonth, setNotiThisMonth] = useState<Response<NotificationThisMonth[]>>();
     const [notiEarlier, setnotiEarlier] = useState<Response<NotificationEarlier[]>>();
 
     useEffect(() => {
-        const callAPI = async () => {
-            //ID User hiện tại sẽ được lấy trong local storage
-            const resThisWeek: Response<NotificationThisWeek[]> = await getListNotiThisWeek(1);
-            const resThisMonth: Response<NotificationThisWeek[]> = await getListNotiThisMonth(1);
-            const resEalier: Response<NotificationThisWeek[]> = await getListNotiEarlier(1);
-
-            setNotiThisWeek(resThisWeek);
-            setNotiThisMonth(resThisMonth);
-            setnotiEarlier(resEalier);
-        };
-
-        callAPI();
+        if (localStorage['userData']) {
+            setUser(JSON.parse(localStorage['userData']));
+        }
     }, []);
+
+    useEffect(() => {
+        if (user) {
+            const callAPI = async () => {
+                console.log(user.id);
+                //ID User hiện tại sẽ được lấy trong local storage
+                const resThisWeek: Response<NotificationThisWeek[]> = await getListNotiThisWeek(user.id);
+                const resThisMonth: Response<NotificationThisWeek[]> = await getListNotiThisMonth(user.id);
+                const resEalier: Response<NotificationThisWeek[]> = await getListNotiEarlier(user.id);
+
+                setNotiThisWeek(resThisWeek);
+                setNotiThisMonth(resThisMonth);
+                setnotiEarlier(resEalier);
+            };
+            callAPI();
+        }
+    }, [user]);
 
     return (
         <div>
