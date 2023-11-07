@@ -8,35 +8,34 @@ import { BiBookmark } from 'react-icons/bi';
 import { Response } from '../../../types/api-type';
 import { getListCommentByPostId } from '../../../services/comment-service';
 import CommentSkeleton from '../../Skeleton/CommentSkeleton';
-
-interface PostCommentModalProps {
-    idPost: number;
-    show: boolean;
-    onClose: () => void;
-}
-
-function PostCommentModal(props: PostCommentModalProps) {
-    const { idPost, show, onClose } = props;
+import useCommentModal from '../../../hooks/useCommentModal';
+import { Comment } from '../../../types/comment-type';
+function PostCommentModal() {
     const [screenHeight, setScreenHeight] = useState(window.screen.height);
     const [loading, setLoading] = useState<boolean>(false);
     const [data, setData] = useState<Response<Comment[]>>();
     const [input, setInput] = useState<string>('');
+    const { commentModalState, closeCommentModal } = useCommentModal();
 
     useEffect(() => {
-        if (show === true) {
+        if (commentModalState.show === true && commentModalState.postId > 0) {
             setLoading(true);
             const fetchData = async () => {
-                const res: Response<Comment[]> = await getListCommentByPostId(idPost);
-                if (res.Status === 200) {
-                    setData(res);
-                    setTimeout(() => {
-                        setLoading(false);
-                    }, 1000);
+                try {
+                    const res: Response<Comment[]> = await getListCommentByPostId(commentModalState.postId);
+                    if (res.Status === 200) {
+                        setData(res);
+                        setTimeout(() => {
+                            setLoading(false);
+                        }, 1000);
+                    }
+                } catch (e) {
+                    setLoading(false);
                 }
             };
             fetchData();
         }
-    }, [show]);
+    }, [commentModalState.show]);
 
     useEffect(() => {
         const updateScreenHeight = () => {
@@ -47,10 +46,9 @@ function PostCommentModal(props: PostCommentModalProps) {
             window.removeEventListener('resize', updateScreenHeight);
         };
     }, []);
-    console.log(loading);
 
     return (
-        <ModalContainer show={show} onClose={onClose} width="extra-larges">
+        <ModalContainer show={commentModalState.show} onClose={closeCommentModal} width="extra-larges">
             <div className={`min-h-[${screenHeight}px] flex flex-col w-full my-[-8px]`}>
                 <div className="xl:h-[60vh]  h-[90vh] flex ">
                     <div className=" h-full flex flex-col items-center justify-center border-r-2 border-gray-200 ">
@@ -58,10 +56,11 @@ function PostCommentModal(props: PostCommentModalProps) {
                     </div>
                     <div className="w-[460px] h-full  pt-4 flex flex-col">
                         <div className="overflow-y-auto text-justify border-b-2 border-gray-200  pl-2 h-[88%]">
-                            {!loading && (
+                            {!loading && data?.Data && (
                                 <>
-                                    <CommentItem />
-                                    <CommentItem />
+                                    {data.Data.map((val: Comment, index) => {
+                                        return <CommentItem data={val} />;
+                                    })}
                                 </>
                             )}
                             {loading && (

@@ -7,18 +7,14 @@ import { Switch } from '@headlessui/react';
 import { PostCreate } from '../../../types/post-type';
 import { Response } from '../../../types/api-type';
 import { createNewPost } from '../../../services/post-service';
+import useCreatePostModal from '../../../hooks/useCreatePostModal';
 
-export interface CreatePostModalProps {
-    show: boolean;
-    onClose: (index: number) => void;
-}
-
-function CreatePostModal(props: CreatePostModalProps) {
-    const { show, onClose } = props;
+function CreatePostModal() {
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [title, setTitle] = useState<string>('');
     const [like, setLike] = useState<boolean>(false);
     const [comment, setComment] = useState<boolean>(false);
+    const { createPostModalState, closeCreatePostModal } = useCreatePostModal();
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -33,7 +29,7 @@ function CreatePostModal(props: CreatePostModalProps) {
     };
 
     const closeModal = () => {
-        onClose(2);
+        closeCreatePostModal();
         setTimeout(function () {
             setSelectedImage(null);
             setLike(false);
@@ -55,15 +51,15 @@ function CreatePostModal(props: CreatePostModalProps) {
         } else {
             alert('thất bại');
         }
-        onClose(2);
+        closeCreatePostModal();
     };
 
     return (
-        <ModalContainer show={show} onClose={closeModal} width="extra-large" full>
+        <ModalContainer show={createPostModalState.show} onClose={closeModal} width="extra-large" full>
             <div className=" min-h-[400px] flex flex-col w-full">
                 <div className="border-b-2 border-gray-300 h-14 flex items-center justify-between w-full px-4">
                     <h1
-                        onClick={() => onClose(2)}
+                        onClick={closeModal}
                         className="text-xl text-gray-500 font-semibold tracking-wide my-14 cursor-pointer hover:text-gray-600 transition"
                     >
                         Back

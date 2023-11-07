@@ -19,31 +19,31 @@ function Home() {
     //     callApi();
     // }, []);
 
-    console.log(data);
-
     return (
-        <div className="abc text-2xl  w-[630px] mt-8">
-            <div className="w-[468px] mx-auto">
-                <HomePost
-                    avatar={avatar}
-                    username={'cr7.ronaldo.official'}
-                    since="2d"
-                    img={avatar}
-                    likes="23.346"
-                    title="Siuuu !!!"
-                    comments="5604"
-                />
-                <HomePost
-                    avatar={avt2}
-                    username={'sooyaaa__'}
-                    since="1d"
-                    img={avt2}
-                    likes="17.092"
-                    title="Beautiful day"
-                    comments="1208"
-                />
+        <>
+            <div className="abc text-2xl  w-[630px] mt-8">
+                <div className="w-[468px] mx-auto">
+                    <HomePost
+                        avatar={avatar}
+                        username={'cr7.ronaldo.official'}
+                        since="2d"
+                        img={avatar}
+                        likes="23.346"
+                        title="Siuuu !!!"
+                        comments="5604"
+                    />
+                    <HomePost
+                        avatar={avt2}
+                        username={'sooyaaa__'}
+                        since="1d"
+                        img={avt2}
+                        likes="17.092"
+                        title="Beautiful day"
+                        comments="1208"
+                    />
+                </div>
             </div>
-        </div>
+        </>
     );
 }
 

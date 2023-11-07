@@ -10,6 +10,8 @@ import { userLogin } from '../../services/user-service';
 function Login() {
     const navigate = useNavigate();
 
+    console.log('aaa');
+
     const { formData, formError, handleInputChange, setFormError } = useInput({
         value: '',
         password: '',

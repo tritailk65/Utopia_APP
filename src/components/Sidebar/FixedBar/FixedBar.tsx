@@ -11,6 +11,7 @@ import { BsPersonCircle } from 'react-icons/bs';
 import { useEffect, useState } from 'react';
 import CreatePostModal from '../../Modal/CreatePostModal/CreatePostModal';
 import { UserInfo } from '../../../types/user-type';
+import useFollowModal from '../../../hooks/useFollowModal';
 
 export interface FixedBarProps {
     show: boolean;
@@ -23,7 +24,7 @@ function FixedBar(props: FixedBarProps) {
     const [create, setCreate] = useState<boolean>(false);
     const [userInfo, setUserInfo] = useState<UserInfo>();
     const [navigateProfile, setNavigateProfile] = useState('');
-
+    const { openFollowModal } = useFollowModal();
     useEffect(() => {
         // const user = JSON.parse(localStorage.getItem('userData') || '');
         // if (user) {
@@ -58,7 +59,7 @@ function FixedBar(props: FixedBarProps) {
                     </div>
 
                     {/* Following */}
-                    <div onClick={() => onClose(4)} className="cursor-pointer">
+                    <div onClick={() => openFollowModal(1)} className="cursor-pointer">
                         <li className="justify-center pl-1 h-[63px] text-2xl flex items-center mb-1 hover:bg-gray-200 transition">
                             <AiOutlineHeart className="mr-3" />
                         </li>
