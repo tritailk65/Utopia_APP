@@ -1,3 +1,5 @@
+import { ImageType } from './image-type';
+
 export type PostCreate = {
     userId: number;
     title: string;
@@ -17,6 +19,7 @@ export interface PostForViewer {
     datePublished: Date;
     lastUpdate: Date;
     user: UserPostForViewer;
+    images: ImageType[];
 }
 
 export interface UserPostForViewer {

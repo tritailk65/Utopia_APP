@@ -1,13 +1,16 @@
 import React from 'react';
 import { ReplyComment } from '../../../../types/comment-type';
 import { backend_utils as backend } from '../../../../utils/api-utils';
-
+import usePostingComment from '../../../../hooks/usePostingComment';
+import useGetUserInfo from '../../../../hooks/useGetUserInfo';
 interface ReplyItemProps {
     data: ReplyComment;
 }
 
 function ReplyItem(props: ReplyItemProps) {
     const { data } = props;
+    const { onFocusReply } = usePostingComment();
+
     return (
         <div className="flex mb-6">
             <div className="w-[12%]">
@@ -23,7 +26,10 @@ function ReplyItem(props: ReplyItemProps) {
                     <span className="text-xs mr-4 cursor-pointer font-semibold opacity-70 transition hover:opacity-100">
                         Likes
                     </span>
-                    <span className="text-xs  cursor-pointer font-semibold opacity-70 transition hover:opacity-100">
+                    <span
+                        className="text-xs  cursor-pointer font-semibold opacity-70 transition hover:opacity-100"
+                        onClick={() => onFocusReply(data.postId, data.parentId, data.user.userName)}
+                    >
                         Reply
                     </span>
                 </div>
