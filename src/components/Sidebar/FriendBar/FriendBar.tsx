@@ -19,7 +19,9 @@ function FriendBar() {
     const [showConfirmModel, setShowCofirmModel] = useState(false);
 
     const handleLogout = () => {
-        localStorage.removeItem('userData');
+        if (userInfo != null) {
+            localStorage.removeItem('userData');
+        }
         navigate('/login');
     };
 
@@ -27,8 +29,6 @@ function FriendBar() {
         setTitleComfirmModel('Bạn có chắc muốn đăng xuất ?');
         setShowCofirmModel(true);
     };
-    console.log(userInfo);
-    console.log(userInfo.avatarPath);
 
     return (
         <StickyWrapper top={14} right={0} paddingLeft={16}>
@@ -46,7 +46,8 @@ function FriendBar() {
                         )}
                     </div>
                     <div className="flex-4 w-4/6 text-left pl-4 ">
-                        <h3 className="font-semibold cursor-pointer">{userInfo?.fullName}</h3>
+                        <h3 className="font-semibold cursor-pointer">{userInfo?.userName}</h3>
+                        <h3>{userInfo?.fullName}</h3>
                     </div>
                     <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer text-blue-600 font-semibold opacity-70 hover:opacity-100">
                         <span onClick={logoutConfirm} className="text-sm">

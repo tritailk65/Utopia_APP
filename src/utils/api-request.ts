@@ -7,7 +7,7 @@ export const server = axios.create({
 
 server.interceptors.request.use(
     (config) => {
-        //console.log(config);
+        // console.log(config);
 
         // const token = Cookies.get('devify:AccessToken');
         // if (token) {
