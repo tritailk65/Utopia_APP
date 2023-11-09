@@ -116,7 +116,7 @@ function HomePost(props: HomePostProps) {
                     <span className="text-xl">{post.title}</span>
                 </div>
                 <p className="text-gray-500 text-left text-xl mt-2 hover:cursor-pointer hover:text-black">
-                    View all {post.commentStat} comments
+                    View all {post.commentCount} comments
                 </p>
                 <p className="text-gray-500 text-left text-xl mt-2 hover:cursor-pointer hover:text-black">
                     Add a comment ...

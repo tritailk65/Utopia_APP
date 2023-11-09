@@ -14,6 +14,7 @@ export interface PostForViewer {
     content: string;
     likeCount: number;
     shareCount: number;
+    commentCount: number;
     isHideLike: number;
     commentStat: number;
     isLiked: boolean;
