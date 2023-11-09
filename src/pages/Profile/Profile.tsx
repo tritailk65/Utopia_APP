@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import none_avatar from '../../assets/image/none_avatar.jpg';
 import iconcamera from '../../assets/image/iconcamera.png';
 import bookmark from '../../assets/image/icon/Bookmark.png';

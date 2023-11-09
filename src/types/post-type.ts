@@ -16,6 +16,9 @@ export interface PostForViewer {
     shareCount: number;
     isHideLike: number;
     commentStat: number;
+    isLiked: boolean;
+    isSaved: boolean;
+    isOwner: boolean;
     datePublished: Date;
     lastUpdate: Date;
     user: UserPostForViewer;
@@ -27,6 +30,6 @@ export interface UserPostForViewer {
     userName: string;
     createAt: Date;
     updateAt: Date | null;
-    avatarPath: string | null;
+    avatarPath: string;
     website: string | null;
 }
