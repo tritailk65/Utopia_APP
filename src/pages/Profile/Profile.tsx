@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import none_avatar from '../../assets/image/none_avatar.jpg';
 import iconcamera from '../../assets/image/iconcamera.png';
 import bookmark from '../../assets/image/icon/Bookmark.png';
 import { Link, useParams } from 'react-router-dom';
 import { getUserDataById, getAvatar } from '../../services/user-service';
+import { backend_utils as backend } from '../../utils/api-utils';
 import Posts from './ProfilePosts';
 import Saved from './ProfilePostSaved';
 import { UserInfo } from '../../types/user-type';
@@ -64,12 +65,16 @@ function Profile() {
                 <div className="flex items-center space-x-6">
                     {avatar ? (
                         <div className="flex-shrink-0 mt-5">
-                            <img src={avatar} alt="profile img" className="rounded-full h-[150px] w-[150px] mb-5" />
+                            <img
+                                src={backend.imagePath + userInfo?.avatarPath}
+                                alt="profile img"
+                                className="rounded-full h-[150px] w-[150px] mb-5"
+                            />
                         </div>
                     ) : (
                         <div className="flex-shrink-0 mt-5">
                             <img
-                                src={none_avatar}
+                                src={backend.imagePath + none_avatar}
                                 alt="profile img"
                                 className="rounded-full h-[150px] w-[150px] mb-5"
                             />

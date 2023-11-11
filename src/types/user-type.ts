@@ -6,7 +6,7 @@ export type UserInfo = {
     bio: string;
     createAt: Date;
     updateAt: Date;
-    avatartPath: string;
+    avatarPath: string;
     phone: number;
     email: string;
     gender: string;
@@ -20,11 +20,3 @@ export interface UserPostForViewer {
     avatarPath?: string | null;
     website?: string | null;
 }
-
-export type userNotiProps = {
-    id: number;
-    userName: string;
-    avatar: string;
-    context: string;
-    follower: string;
-};

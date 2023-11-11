@@ -1,25 +1,8 @@
-import { UserInfo, userNotiProps } from './user-type';
+import { UserInfo } from './user-type';
 
-export type NotificationThisWeek = {
-    userId: number;
-    sourceId: number;
+export type NotificationItemType = {
+    type: number;
     context: string;
     updateAt: Date;
-    userSource: userNotiProps;
-};
-
-export type NotificationThisMonth = {
-    userId: number;
-    sourceId: number;
-    context: string;
-    updateAt: Date;
-    userSource: userNotiProps;
-};
-
-export type NotificationEarlier = {
-    userId: number;
-    sourceId: number;
-    context: string;
-    updateAt: Date;
-    userSource: userNotiProps;
+    userSource: UserInfo;
 };

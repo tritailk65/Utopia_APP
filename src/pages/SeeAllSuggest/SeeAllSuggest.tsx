@@ -1,7 +1,7 @@
 import SuggestFollowItem from '../../components/Modal/SuggestFollowModal/SuggestFollowItem';
 import oggy from '../../assets/image/oggy.png';
 
-function SuggestFollowAll() {
+function SeeAllSuggest() {
     return (
         <div className="abc text-2xl  w-[650px] mt-16 pl-5">
             <div>
@@ -21,4 +21,4 @@ function SuggestFollowAll() {
     );
 }
 
-export default SuggestFollowAll;
+export default SeeAllSuggest;
