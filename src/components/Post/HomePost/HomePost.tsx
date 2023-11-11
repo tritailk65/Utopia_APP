@@ -2,8 +2,9 @@ import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { BsChatSquareDots, BsSend } from 'react-icons/bs';
 import { BiBookmark } from 'react-icons/bi';
 import { BsFillBookmarkFill } from 'react-icons/bs';
-import { useState, useEffect } from 'react';
-import useDebounce from '../../../hooks/useDebounce';
+import { useState } from 'react';
+import avt1 from '../../../assets/image/avatar.png';
+import avt2 from '../../../assets/image/avt2.png';
 import useCommentModal from '../../../hooks/useCommentModal';
 import { Response } from '../../../types/api-type';
 import { SavePostLike } from '../../../types/post-like-type';
@@ -13,13 +14,34 @@ import { postFavoriteService } from '../../../services/post-favorite-service';
 import { PostForViewer } from '../../../types/post-type';
 import { backend_utils as backend } from '../../../utils/api-utils';
 import useGetUserInfo from '../../../hooks/useGetUserInfo';
+import Slider, { Settings } from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
 interface HomePostProps {
     data: PostForViewer;
 }
+interface Image {
+    id: number;
+    src: string;
+}
+
+const settings: Settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    dotsClass: 'slick-dots',
+};
 
 function HomePost(props: HomePostProps) {
     const { data } = props;
     const [post, setPost] = useState<PostForViewer>(data);
+    const [images, setImages] = useState<Image[]>([
+        { id: 1, src: avt1 },
+        { id: 2, src: avt2 },
+    ]);
     const user = useGetUserInfo();
     const { openCommentModal } = useCommentModal();
 
@@ -74,9 +96,18 @@ function HomePost(props: HomePostProps) {
                     <span className="">-</span>
                     <span className="px-2">{'2d'}</span>
                 </div>
-                <div className="w-[468px] mt-5 bg-black">
-                    {/* <img src={img} alt="avatar2" className="mx-auto h-full w-full" /> */}
+                <div className="w-[468px] mt-5 bg-black min-h-[468px]">
+                    <Slider {...settings}>
+                        {images.map((image) => (
+                            <img
+                                src={image.src}
+                                alt={`avatar${image.id}`}
+                                className="mx-auto h-full w-full my-auto relative top-[50%]"
+                            />
+                        ))}
+                    </Slider>
                 </div>
+
                 <div className="flex my-4 items-center justify-between">
                     <div className="flex items-center">
                         {post.isLiked ? (
@@ -92,7 +123,7 @@ function HomePost(props: HomePostProps) {
                         )}
                         <BsChatSquareDots
                             className="mr-6 text-3xl cursor-pointer hover:text-gray-500"
-                            onClick={() => openCommentModal(1)}
+                            onClick={() => openCommentModal(2)}
                         />
                         <BsSend className="mr-6 text-3xl cursor-pointer hover:text-gray-500" />
                     </div>
@@ -115,7 +146,10 @@ function HomePost(props: HomePostProps) {
                     <span className="font-semibold text-lg mr-3">{post.user.userName}</span>
                     <span className="text-xl">{post.title}</span>
                 </div>
-                <p className="text-gray-500 text-left text-xl mt-2 hover:cursor-pointer hover:text-black">
+                <p
+                    className="text-gray-500 text-left text-xl mt-2 hover:cursor-pointer hover:text-black"
+                    onClick={() => openCommentModal(2)}
+                >
                     View all {post.commentCount} comments
                 </p>
                 <p className="text-gray-500 text-left text-xl mt-2 hover:cursor-pointer hover:text-black">

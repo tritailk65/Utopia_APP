@@ -4,7 +4,7 @@ import { backend_utils as backend } from '../utils/api-utils';
 
 export const getListPostForViewer = async (id: number, page: number) => {
     try {
-        const path = `${backend.postController}/getListPostForViewer/id=${id}&page=${page}`;
+        const path = `${backend.postController}/getListPostForViewer/page=${page}`;
 
         const response = await getAxios(path, {});
         return response;

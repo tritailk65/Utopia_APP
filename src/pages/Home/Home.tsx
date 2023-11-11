@@ -8,6 +8,7 @@ import { Response } from '../../types/api-type';
 import { getListPostForViewer } from '../../services/post-service';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import useGetUserInfo from '../../hooks/useGetUserInfo';
+import PostSkeleton from '../../components/Skeleton/PostSkeleton';
 function Home() {
     const [data, setData] = useState<Response<PostForViewer[]>>();
     const [page, setPage] = useState<number>(1);
@@ -15,32 +16,40 @@ function Home() {
     const user = useGetUserInfo();
 
     useEffect(() => {
-        const callApi = async () => {
-            const res: Response<PostForViewer[]> = await getListPostForViewer(user.id, page);
-            setData(res);
-        };
+        try {
+            const callApi = async () => {
+                const res: Response<PostForViewer[]> = await getListPostForViewer(user.id, page);
+                setData(res);
+            };
 
-        callApi();
+            callApi();
+        } catch (e) {
+            console.log(e);
+        }
     }, []);
 
     const fetchMoreData = () => {
-        setTimeout(async () => {
-            const newPage = page + 1;
-            const res: Response<PostForViewer[]> = await getListPostForViewer(user.id, newPage);
-            if (res.Status === 200) {
-                if (res.Data.length > 0) {
-                    setData((prevData) => ({
-                        Status: res.Status,
-                        Message: res.Message,
-                        Exception: res.Exception,
-                        Data: [...(prevData?.Data ?? []), ...res.Data],
-                    }));
-                    setPage(newPage);
-                } else {
-                    setHasMore(false);
+        try {
+            setTimeout(async () => {
+                const newPage = page + 1;
+                const res: Response<PostForViewer[]> = await getListPostForViewer(user.id, newPage);
+                if (res.Status === 200) {
+                    if (res.Data.length > 0) {
+                        setData((prevData) => ({
+                            Status: res.Status,
+                            Message: res.Message,
+                            Exception: res.Exception,
+                            Data: [...(prevData?.Data ?? []), ...res.Data],
+                        }));
+                        setPage(newPage);
+                    } else {
+                        setHasMore(false);
+                    }
                 }
-            }
-        }, 1500);
+            }, 1500);
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     return (
@@ -51,7 +60,7 @@ function Home() {
                         dataLength={data?.Data ? data.Data.length : 10}
                         next={fetchMoreData}
                         hasMore={hasMore}
-                        loader={<h4>Loading...</h4>}
+                        loader={<PostSkeleton />}
                     >
                         {data?.Data != undefined &&
                             data.Data.length > 0 &&
@@ -59,16 +68,6 @@ function Home() {
                                 return <HomePost data={val} key={index} />;
                             })}
                     </InfiniteScroll>
-
-                    {/* <HomePost
-                        avatar={avt2}
-                        username={'sooyaaa__'}
-                        since="1d"
-                        img={avt2}
-                        likes="17.092"
-                        title="Beautiful day"
-                        comments="1208"
-                    /> */}
                 </div>
             </div>
         </>

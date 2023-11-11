@@ -26,8 +26,6 @@ function SearchItem({ user }: SearchItemProps) {
         }
     }, [user.id]);
 
-    console.log(avatar);
-
     return (
         <div className="cursor-pointer hover:bg-gray-200 px-2 h-16 flex items-center mb-3" onClick={handleClick}>
             <div className="mr-2">
