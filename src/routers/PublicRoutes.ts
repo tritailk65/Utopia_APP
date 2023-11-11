@@ -12,7 +12,7 @@ import EditProfile from '../pages/EditProfile/EditProfile';
 import DefaultLayout from '../layouts/DefaultLayout';
 import ContentOnlyLayout from '../layouts/ContentOnlyLayout';
 import LayoutProfile from '../layouts/LayoutProfile';
-import SuggestFollowAll from '../pages/SuggestFollowAll/SuggestFollowAll';
+import SuggestFollowAll from '../pages/SeeAllSuggest/SeeAllSuggest';
 
 type Route = {
     path: string;
@@ -27,5 +27,4 @@ export const PublicRoutes: Route[] = [
     { path: '/forget-password', page: ForgetPassword, layout: ContentOnlyLayout },
     { path: '/profile/:id', page: Profile, layout: LayoutProfile },
     { path: '/profile/edit', page: EditProfile, layout: LayoutProfile },
-    { path: '/suggest-follow', page: SuggestFollowAll, layout: LayoutProfile },
 ];

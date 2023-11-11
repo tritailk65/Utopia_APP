@@ -12,7 +12,6 @@ export type FollowItemProps = {
 
 const FollowItem = (props: FollowItemProps) => {
     const [dialog, setDialog] = useState<boolean>(false);
-    const user: UserInfo = useGetUserInfo();
     //const [deleteItem, setDeleteItem] = useState<number[]>([]);
 
     const onConfirm = () => {
@@ -24,7 +23,7 @@ const FollowItem = (props: FollowItemProps) => {
     };
 
     const handleUnFollow = (id: number) => {
-        PostUnFollow(user.id, id);
+        PostUnFollow(id);
         setDialog(false);
     };
 

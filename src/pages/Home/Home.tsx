@@ -9,6 +9,7 @@ import { getListPostForViewer } from '../../services/post-service';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import useGetUserInfo from '../../hooks/useGetUserInfo';
 import PostSkeleton from '../../components/Skeleton/PostSkeleton';
+
 function Home() {
     const [data, setData] = useState<Response<PostForViewer[]>>();
     const [page, setPage] = useState<number>(1);

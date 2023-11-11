@@ -8,7 +8,7 @@ import EditProfile from '../pages/EditProfile/EditProfile';
 // ========== import layout =============
 import DefaultLayout from '../layouts/DefaultLayout';
 import LayoutProfile from '../layouts/LayoutProfile';
-import SuggestFollowAll from '../pages/SuggestFollowAll/SuggestFollowAll';
+import SeeAllSuggest from '../pages/SeeAllSuggest/SeeAllSuggest';
 
 type Route = {
     path: string;
@@ -20,5 +20,5 @@ export const PrivateRoutes: Route[] = [
     { path: '/', page: Home, layout: DefaultLayout },
     { path: '/profile/:id', page: Profile, layout: LayoutProfile },
     { path: '/profile/edit', page: EditProfile, layout: LayoutProfile },
-    { path: '/suggest-follow', page: SuggestFollowAll, layout: LayoutProfile },
+    { path: '/see-all-suggest', page: SeeAllSuggest, layout: LayoutProfile },
 ];

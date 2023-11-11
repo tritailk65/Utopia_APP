@@ -14,13 +14,14 @@ function FollowModal() {
 
     useEffect(() => {
         if (user != null) {
-            getAllFollowing(user.id).then((res) => {
+            getAllFollowing().then((res) => {
+                console.log(res);
                 if (res.Status == 200) {
                     setListUserFollow(res.Data);
                 }
             });
         }
-    }, [listUserFollow]);
+    }, []);
 
     return (
         <>

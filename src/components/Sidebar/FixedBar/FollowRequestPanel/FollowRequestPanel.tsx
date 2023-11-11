@@ -19,7 +19,7 @@ const FollowRequestPanel = (props: FollowRequestPanelProps) => {
 
     useEffect(() => {
         if (user != null) {
-            getRequestFollow(user.id).then((res) => {
+            getRequestFollow().then((res) => {
                 if ((res.Status = 200)) {
                     setListUserRequest(res.Data);
                 }

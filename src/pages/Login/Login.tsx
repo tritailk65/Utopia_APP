@@ -6,6 +6,7 @@ import useInput from '../../hooks/useInput';
 import logo1 from '../../assets/image/logo/logo1.png';
 import './Login.css';
 import { userLogin } from '../../services/user-service';
+import AlertDialog from '../../components/Dialog/AlertDialog/AlertDialog';
 
 function Login() {
     const navigate = useNavigate();
@@ -138,7 +139,14 @@ function Login() {
                     <span className="text-xl font-semibold cursor-pointer">Sign up</span>
                 </Link>
             </div>
-            <CustomModal isOpen={isModalOpen} check={check} message={successMessage} onClose={closeModal} />
+            {/* <CustomModal isOpen={isModalOpen} check={check} message={successMessage} onClose={closeModal} /> */}
+            <AlertDialog
+                show={isModalOpen}
+                result={check}
+                message={successMessage}
+                onClose={closeModal}
+                title="Thông báo"
+            />
         </div>
     );
 }

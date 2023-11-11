@@ -11,7 +11,6 @@ export type FollowRequestItemProps = {
 };
 
 const FollowRequestItem = (props: FollowRequestItemProps) => {
-    const user: UserInfo = useGetUserInfo();
     const [isConfirmSuccess, setIsConfirmSuccess] = useState(false);
     const [isConfirmRequest, setIsConfirmRequest] = useState(true);
     const [isCancelSuccess, setIsCancelSuccess] = useState(false);
@@ -19,13 +18,13 @@ const FollowRequestItem = (props: FollowRequestItemProps) => {
     const [showAlert, setShowAlert] = useState(false);
 
     const handleDelete = (id: number) => {
-        deleteRequestFollow(user.id, id);
+        deleteRequestFollow(id);
         setIsCancelSuccess(true);
         setIsConfirmRequest(false);
     };
 
     const handleConfirm = (id: number) => {
-        acceptRequestFollow(user.id, id).then((res) => {
+        acceptRequestFollow(id).then((res) => {
             if (res.Status == 200) {
                 setMessageAlert('Chấp nhận follow thành công !');
                 setShowAlert(true);

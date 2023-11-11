@@ -32,18 +32,10 @@ function FriendBar() {
 
     return (
         <StickyWrapper top={14} right={0} paddingLeft={16}>
-            <ul className=" w-[319px] px-2">
+            <ul className=" w-[319px] px-2 my-6">
                 <li className="text-base flex  mb-4 items-center">
                     <div className="flex-1 w-1/6 ">
-                        {userInfo.avatarPath ? (
-                            <img
-                                src={backend.imagePath + userInfo.avatarPath}
-                                alt="avatar"
-                                className="circle w-12 h-12"
-                            />
-                        ) : (
-                            <img src={none_avt} alt="avatar" className="circle w-12 h-12" />
-                        )}
+                        <img src={backend.imagePath + userInfo.avatarPath} alt="avatar" className="circle w-12 h-12" />
                     </div>
                     <div className="flex-4 w-4/6 text-left pl-4 ">
                         <h3 className="font-semibold cursor-pointer">{userInfo?.userName}</h3>
@@ -56,9 +48,9 @@ function FriendBar() {
                     </div>
                 </li>
 
-                <li className="flex justify-between text-sm tracking-wide py-1 mb-4">
+                <li className="flex justify-between text-sm tracking-wide py-1 mb-4 ">
                     <span className="opacity-80 text-base">Suggested for you</span>
-                    <Link to="/SuggestFollowAll">
+                    <Link to="/see-all-suggest">
                         <span className="font-semibold cursor-pointer hover:text-[#787878]">See all</span>
                     </Link>
                 </li>
@@ -69,42 +61,6 @@ function FriendBar() {
                     </div>
                     <div className="flex-4 w-4/6 text-left pl-4">
                         <h3 className="font-semibold cursor-pointer">Oggy</h3>
-                        <p>Suggested for you</p>
-                    </div>
-                    <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer text-blue-600 font-semibold opacity-70 hover:opacity-100">
-                        <span className="text-sm">Follow</span>
-                    </div>
-                </li>
-                <li className="text-base flex  mb-4 ">
-                    <div className="flex-1 w-1/6 ">
-                        <img src={jack} alt="avatar" className="circle w-12 h-12" />
-                    </div>
-                    <div className="flex-4 w-4/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">Jack</h3>
-                        <p>Suggested for you</p>
-                    </div>
-                    <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer text-blue-600 font-semibold opacity-70 hover:opacity-100">
-                        <span className="text-sm">Follow</span>
-                    </div>
-                </li>
-                <li className="text-base flex  mb-4 ">
-                    <div className="flex-1 w-1/6 ">
-                        <img src={bob} alt="avatar" className="circle w-12 h-12" />
-                    </div>
-                    <div className="flex-4 w-4/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">Bob</h3>
-                        <p>Suggested for you</p>
-                    </div>
-                    <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer text-blue-600 font-semibold opacity-70 hover:opacity-100">
-                        <span className="text-sm">Follow</span>
-                    </div>
-                </li>
-                <li className="text-base flex  mb-4 ">
-                    <div className="flex-1 w-1/6 ">
-                        <img src={dee} alt="avatar" className="circle w-12 h-12" />
-                    </div>
-                    <div className="flex-4 w-4/6 text-left pl-4">
-                        <h3 className="font-semibold cursor-pointer">DeeDee</h3>
                         <p>Suggested for you</p>
                     </div>
                     <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer text-blue-600 font-semibold opacity-70 hover:opacity-100">

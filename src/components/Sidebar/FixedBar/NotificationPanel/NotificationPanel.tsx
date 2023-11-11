@@ -46,7 +46,7 @@ function NotificationPanel(props: NotificationPanelProps) {
             };
             callAPI();
         }
-        getRequestFollow(user.id).then((res) => {
+        getRequestFollow().then((res) => {
             if (res.Status == 200) {
                 setListUserRequest(res.Data);
             }

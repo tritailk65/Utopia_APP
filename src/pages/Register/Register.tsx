@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import CustomModal from '../EditProfile/CustomModal';
 import { userRegister } from '../../services/user-service';
+import AlertDialog from '../../components/Dialog/AlertDialog/AlertDialog';
 
 function Register() {
     const navigate = useNavigate();
@@ -198,7 +199,14 @@ function Register() {
                     <span className="text-xl font-semibold cursor-pointer">Log in</span>
                 </Link>
             </div>
-            <CustomModal isOpen={isModalOpen} check={check} message={successMessage} onClose={closeModal} />
+            {/* <CustomModal isOpen={isModalOpen} check={check} message={successMessage} onClose={closeModal} /> */}
+            <AlertDialog
+                show={isModalOpen}
+                result={check}
+                message={successMessage}
+                onClose={closeModal}
+                title="Thông báo"
+            />
         </div>
     );
 }
