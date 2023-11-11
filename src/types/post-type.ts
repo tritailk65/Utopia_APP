@@ -1,3 +1,5 @@
+import { ImageType } from './image-type';
+
 export type PostCreate = {
     userId: number;
     title: string;
@@ -12,11 +14,16 @@ export interface PostForViewer {
     content: string;
     likeCount: number;
     shareCount: number;
+    commentCount: number;
     isHideLike: number;
     commentStat: number;
+    isLiked: boolean;
+    isSaved: boolean;
+    isOwner: boolean;
     datePublished: Date;
     lastUpdate: Date;
     user: UserPostForViewer;
+    images: ImageType[];
 }
 
 export interface UserPostForViewer {
@@ -24,6 +31,6 @@ export interface UserPostForViewer {
     userName: string;
     createAt: Date;
     updateAt: Date | null;
-    avatarPath: string | null;
+    avatarPath: string;
     website: string | null;
 }

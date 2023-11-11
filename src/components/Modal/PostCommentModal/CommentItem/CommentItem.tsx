@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Comment } from '../../../../types/comment-type';
 import { backend_utils as backend } from '../../../../utils/api-utils';
 import ReplyItem from './ReplyItem';
+import usePostingComment from '../../../../hooks/usePostingComment';
 interface CommentItemProps {
     data: Comment;
 }
@@ -9,6 +10,8 @@ interface CommentItemProps {
 function CommentItem(props: CommentItemProps) {
     const { data } = props;
     const [show, setShow] = useState<boolean>(false);
+    const { onFocusReply } = usePostingComment();
+
     return (
         <div className="flex mb-6">
             <div className="w-[12%]">
@@ -24,7 +27,10 @@ function CommentItem(props: CommentItemProps) {
                     <span className="text-xs mr-4 cursor-pointer font-semibold opacity-70 transition hover:opacity-100">
                         Likes
                     </span>
-                    <span className="text-xs  cursor-pointer font-semibold opacity-70 transition hover:opacity-100">
+                    <span
+                        className="text-xs  cursor-pointer font-semibold opacity-70 transition hover:opacity-100"
+                        onClick={() => onFocusReply(data.postId, data.id, data.user.userName)}
+                    >
                         Reply
                     </span>
                 </div>
