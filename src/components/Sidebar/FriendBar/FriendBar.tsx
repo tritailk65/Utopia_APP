@@ -27,8 +27,6 @@ function FriendBar() {
         setTitleComfirmModel('Bạn có chắc muốn đăng xuất ?');
         setShowCofirmModel(true);
     };
-    console.log(userInfo);
-    console.log(userInfo.avatarPath);
 
     return (
         <StickyWrapper top={14} right={0} paddingLeft={16}>
