@@ -12,6 +12,7 @@ export type UserInfo = {
     gender: string;
     website: string;
 };
+
 export interface UserPostForViewer {
     id: number;
     userName: string;
