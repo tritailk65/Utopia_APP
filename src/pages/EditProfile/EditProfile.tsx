@@ -24,7 +24,7 @@ function EditProfile() {
         if (userFromLocalStorage) {
             const userData = JSON.parse(userFromLocalStorage);
             setUserData(userData);
-            fetchAvatar(userData.id);
+            fetchAvatar(userData.userName);
         }
         // mỗi lần load trang ảnh hưởng tới trạng thái nên cần lưu url hình vô local r gán cho trạng thái để xuất hình
         const storedAvatarUrl = localStorage.getItem('avatarUrl');
@@ -73,7 +73,7 @@ function EditProfile() {
         }
     };
 
-    const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+    const [avatarUrl, setAvatarUrl] = useState<string | undefined>('');
     const fetchAvatar = (id: any) => {
         getAvatar(id).then((avatarUrl) => {
             if (avatarUrl !== undefined) {
@@ -158,9 +158,14 @@ function EditProfile() {
             <div className="ml-[200px] mt-[80px]">
                 <div className="mb-4">
                     <div className="flex items-center space-x-4">
-                        <div className="w-[20%] rounded-full overflow-hidden">
-                            <img src={avatarUrl || none_avatar} className="object-cover " alt="img" />
-                        </div>
+                        {userData?.avatarPath != "unknown.png" ?( <div className="w-[20%] rounded-full overflow-hidden">
+                            <img src={avatarUrl} className="object-cover " alt="img" />
+                        </div>):(
+                             <div className="w-[20%] rounded-full overflow-hidden">
+                             <img src={ none_avatar} className="object-cover " alt="img" />
+                         </div>
+                        )}
+                       
                         <div className="">
                             {/* <input
                                 type="text"

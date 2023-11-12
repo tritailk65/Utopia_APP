@@ -9,15 +9,28 @@ import { UserInfo } from '../../../types/user-type';
 import ConfirmDialog from '../../Dialog/ConfirmDialog/ConfirmDialog';
 import { backend_utils as backend } from '../../../utils/api-utils';
 import none_avt from '../../../assets/image/none_avatar.jpg';
-
+import React, {useEffect } from 'react';
 import useGetUserInfo from '../../../hooks/useGetUserInfo';
+import { getAvatar } from '../../../services/user-service';
+import none_avatar from '../../../assets/image/none_avatar.jpg';
 
 function FriendBar() {
     const navigate = useNavigate();
     const userInfo: UserInfo = useGetUserInfo();
     const [titleComfirmModel, setTitleComfirmModel] = useState('');
     const [showConfirmModel, setShowCofirmModel] = useState(false);
-
+    const [avatar, setAvatar] = useState<string | undefined>('');
+    useEffect(() => {
+        const avatarUrlFromStorage = localStorage.getItem('avatarUrl');
+        setAvatar(avatarUrlFromStorage !== null ? avatarUrlFromStorage : undefined);
+                getAvatar(userInfo.userName).then((res) => {
+                    if (res) {
+                        setAvatar(res);
+                    }
+                });
+            }
+    
+    , []);
     const handleLogout = () => {
         if (userInfo != null) {
             localStorage.removeItem('userData');
@@ -34,9 +47,15 @@ function FriendBar() {
         <StickyWrapper top={14} right={0} paddingLeft={16}>
             <ul className=" w-[319px] px-2 my-6">
                 <li className="text-base flex  mb-4 items-center">
-                    <div className="flex-1 w-1/6 ">
-                        <img src={backend.imagePath + userInfo.avatarPath} alt="avatar" className="circle w-12 h-12" />
-                    </div>
+                    {userInfo.avatarPath != 'unknown.png' ?(
+                        <div className="flex-1 w-1/6 ">
+                        <img src={avatar} alt="avatar" className="circle w-12 h-12" />
+                        </div>
+                    ):(
+                        <div className="flex-1 w-1/6 ">
+                        <img src={none_avatar} alt="avatar" className="circle w-12 h-12" />
+                        </div>
+                    )}
                     <div className="flex-4 w-4/6 text-left pl-4 ">
                         <h3 className="font-semibold cursor-pointer">{userInfo?.userName}</h3>
                         <h3>{userInfo?.fullName}</h3>
