@@ -109,9 +109,9 @@ function SearchPanel() {
     };
 
     return (
-        <div className="p-3">
+        <div className="p-3 max-h-screen overflow-auto">
             <h1 className="text-3xl font-semibold mb-7">Search</h1>
-            <div className="relative rounded-lg mb-7 bg-gray-200 group max-h-screen overflow-auto">
+            <div className="relative rounded-lg mb-7 bg-gray-200 group ">
                 <input
                     className="bg-transparent w-full px-3 py-2 text-xl outline-none"
                     value={input}

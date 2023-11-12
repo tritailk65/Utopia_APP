@@ -103,11 +103,16 @@ function SearchItem({ user }: SearchItemProps) {
     useEffect(() => {
         const fetchAvatar = async () => {
             try {
+                //if(user.avatarPath){
                 const response = await getAvatarUser(user.id);
                 const blob = new Blob([response], { type: 'image/png' }); 
                 blobToBase64(blob, (base64Data) => {
                     setAvatarBase64(base64Data);
                 });
+                // }else{
+                //     const response = await getUserAvatar(user.id);
+                //     setAvatarBase64(response);
+                //}
             } catch (error) {
                 console.error('Error fetching avatar:', error);
             }

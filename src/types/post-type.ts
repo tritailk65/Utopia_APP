@@ -27,3 +27,10 @@ export interface UserPostForViewer {
     avatarPath: string | null;
     website: string | null;
 }
+
+export interface FollowingPostForViewer {
+    id: number;
+    userSourceId: number;
+    userTargetId: number;
+    dateFollow: Date;
+}
