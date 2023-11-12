@@ -53,10 +53,18 @@ function FriendBar() {
             <ul className=" w-[319px] px-2 my-6">
                 <li className="text-base flex  mb-8 items-center ">
                     <div className="flex-1 w-1/6 ">
-                        <img src={backend.imagePath + userInfo.avatarPath} alt="avatar" className="circle w-12 h-12" />
+                        <Link to={'/profile/' + userInfo.userName}>
+                            <img
+                                src={backend.imagePath + userInfo.avatarPath}
+                                alt="avatar"
+                                className="circle w-12 h-12 cursor-pointer"
+                            />
+                        </Link>
                     </div>
                     <div className="flex-4 w-4/6 text-left pl-4 ">
-                        <h3 className="font-semibold cursor-pointer">{userInfo?.userName}</h3>
+                        <Link to={'/profile/' + userInfo.userName}>
+                            <h3 className="font-semibold cursor-pointer">{userInfo?.userName}</h3>
+                        </Link>
                         <h3>{userInfo?.fullName}</h3>
                     </div>
                     <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer text-blue-600 font-semibold opacity-70 hover:opacity-100">

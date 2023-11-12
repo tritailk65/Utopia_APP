@@ -2,7 +2,6 @@ import logo1 from '../../../assets/image/logo/logo1.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { BiHomeAlt, BiSearchAlt } from 'react-icons/bi';
 import { AiOutlineHeart, AiOutlinePlusSquare, AiOutlineUser } from 'react-icons/ai';
-import { useEffect, useState } from 'react';
 import { LuBellRing } from 'react-icons/lu';
 import { UserInfo } from '../../../types/user-type';
 import useCreatePostModal from '../../../hooks/useCreatePostModal';
@@ -14,19 +13,10 @@ export interface ActionBarProps {
 }
 
 function ActionBar(props: ActionBarProps) {
-    const navigate = useNavigate();
     const { onOpen } = props;
-    const [navigateProfile, setNavigateProfile] = useState('');
-    const userInfo = useGetUserInfo();
+    const userInfo: UserInfo = useGetUserInfo();
     const { openCreatePostModal } = useCreatePostModal();
     const { openFollowModal } = useFollowModal();
-    useEffect(() => {
-        // const user = JSON.parse(localStorage.getItem('userData') || '');
-        // if (user) {
-        //     setUserInfo(user);
-        //     setNavigateProfile('/profile/' + user.id);
-        // }
-    }, []);
 
     return (
         <>
@@ -66,7 +56,7 @@ function ActionBar(props: ActionBarProps) {
                         </div>
                         <div className="cursor-pointer">
                             <Link
-                                to={`/profile/${userInfo.id}`}
+                                to={`/profile/${userInfo.userName}`}
                                 className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-gray-200 transition"
                             >
                                 <AiOutlineUser className="mr-2 " />
