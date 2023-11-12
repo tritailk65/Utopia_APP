@@ -19,7 +19,9 @@ function FriendBar() {
     const [showConfirmModel, setShowCofirmModel] = useState(false);
 
     const handleLogout = () => {
-        localStorage.removeItem('userData');
+        if (userInfo != null) {
+            localStorage.removeItem('userData');
+        }
         navigate('/login');
     };
 

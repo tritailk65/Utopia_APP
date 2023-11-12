@@ -4,6 +4,8 @@ export const backend_utils = {
     postController: '/Post',
     commentController: '/PostComment',
     notificationController: '/Notification',
+    requestFollowController: '/RequestFollow',
+    followingController: '/Following',
     postLikeController: '/PostLike',
     postFavoriteController: '/PostFavorite',
     imagePath: 'http://localhost:8080/api/User/Avatar/',

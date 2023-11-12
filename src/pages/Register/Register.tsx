@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import CustomModal from '../EditProfile/CustomModal';
 import { userRegister } from '../../services/user-service';
+import AlertDialog from '../../components/Dialog/AlertDialog/AlertDialog';
 
 function Register() {
     const navigate = useNavigate();
@@ -34,9 +35,9 @@ function Register() {
     //check dang ki
     const emailRegex = /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
     const phoneRegex = /^\d{10}$/;
-    const userNameRegex = /^[a-zA-Z0-9._-]{6,15}$/; // Kiểm tra userName gồm ký tự lẫn số và hơn 6 kí tự
+    const userNameRegex = /^[a-zA-Z0-9_-]{6,15}$/; // Kiểm tra userName gồm ký tự lẫn số và hơn 6 kí tự
     const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*[0-9])(?=.{8,15})/; // Kiểm tra password có ít nhất 1 chữ hoa, 1 kí tự đặt biệt và số, ít nhất 8 kí tự
-    const fullNameRegex = /^[\p{L}0-9\s]{3,10}$/u; // Kiểm tra fullName có từ 3 đến 10 ký tự và không chứa ký tự đặc biệt, lấy dấu
+    const fullNameRegex = /^.*[\p{L}A-Za-z0-9\s_-]{3,10}$/u; // Kiểm tra fullName có từ 3 đến 10 ký tự và không chứa ký tự đặc biệt, lấy dấu
 
     //For check phone or email
     function isNumeric(str: string) {
@@ -55,7 +56,6 @@ function Register() {
         } else if (!(phoneRegex.test(formData.phoneOrEmail) || emailRegex.test(formData.phoneOrEmail))) {
             error.phoneOrEmail = 'Phone or email is not valid';
         }
-
         if (!formData.fullName) {
             error.fullName = 'fullName is required';
         } else if (!fullNameRegex.test(formData.fullName)) {
@@ -199,7 +199,14 @@ function Register() {
                     <span className="text-xl font-semibold cursor-pointer">Log in</span>
                 </Link>
             </div>
-            <CustomModal isOpen={isModalOpen} check={check} message={successMessage} onClose={closeModal} />
+            {/* <CustomModal isOpen={isModalOpen} check={check} message={successMessage} onClose={closeModal} /> */}
+            <AlertDialog
+                show={isModalOpen}
+                result={check}
+                message={successMessage}
+                onClose={closeModal}
+                title="Thông báo"
+            />
         </div>
     );
 }

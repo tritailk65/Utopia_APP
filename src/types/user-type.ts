@@ -20,11 +20,3 @@ export interface UserPostForViewer {
     avatarPath?: string | null;
     website?: string | null;
 }
-
-export type userNotiProps = {
-    id: number;
-    userName: string;
-    avatar: string;
-    context: string;
-    follower: string;
-};

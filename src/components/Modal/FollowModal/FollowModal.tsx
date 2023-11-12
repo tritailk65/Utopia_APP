@@ -1,9 +1,28 @@
+import { useEffect, useState } from 'react';
 import useFollowModal from '../../../hooks/useFollowModal';
+import useGetUserInfo from '../../../hooks/useGetUserInfo';
+import { UserInfo } from '../../../types/user-type';
 import ModalContainer from '../ModalContainer/ModalContainer';
 import FollowItem from './FollowItem/FollowItem';
+import { getAllFollowing } from '../../../services/follow-service';
+import { FollowingReponse } from '../../../types/following-type';
 
 function FollowModal() {
     const { followModalState, closeFollowModal } = useFollowModal();
+    const user: UserInfo = useGetUserInfo();
+    const [listUserFollow, setListUserFollow] = useState<FollowingReponse[]>();
+
+    useEffect(() => {
+        if (user != null) {
+            getAllFollowing().then((res) => {
+                console.log(res);
+                if (res.Status == 200) {
+                    setListUserFollow(res.Data);
+                }
+            });
+        }
+    }, []);
+
     return (
         <>
             <ModalContainer show={followModalState.show} onClose={() => closeFollowModal()} width="medium" full>
@@ -18,15 +37,9 @@ function FollowModal() {
                         />
                     </div>
                     <div className="max-h-[456px] overflow-y-scroll mx-5">
-                        <FollowItem />
-                        <FollowItem />
-                        <FollowItem />
-                        <FollowItem />
-                        <FollowItem />
-                        <FollowItem />
-                        <FollowItem />
-                        <FollowItem />
-                        <FollowItem />
+                        {listUserFollow?.map((_, index) => (
+                            <FollowItem key={index} followingItem={_} />
+                        ))}
                     </div>
                 </div>
             </ModalContainer>

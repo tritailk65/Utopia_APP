@@ -1,46 +1,39 @@
-import { useState, useEffect } from 'react';
-import { getAvatar } from '../../../../services/user-service';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { backend_utils as backend } from '../../../../utils/api-utils';
+import { NotificationItemType } from '../../../../types/notification-type';
 
 type NotificationItemProps = {
-    user: {
-        id: number;
-        userName: string;
-        avatar: string;
-        follower: string;
-    };
-    context: string;
+    title: string;
+    noti: NotificationItemType[] | null;
 };
 
-function NotificationItem({ user, context }: NotificationItemProps) {
+const NotificationItem = ({ title, noti }: NotificationItemProps) => {
     const navigate = useNavigate();
-    const [avatar, setAvatar] = useState<string | undefined>();
-
-    useEffect(() => {
-        const callAPI = async () => {
-            const res = await getAvatar(user.id);
-            setAvatar(res);
-        };
-
-        callAPI();
-    }, []);
 
     return (
-        <li className="text-base flex  mb-4 ml-4" onClick={() => navigate('/')}>
-            <div className="flex-1 w-[13%]">
-                <img
-                    src={avatar}
-                    alt="avatar"
-                    className="circle w-12 h-12 cursor-pointer"
-                    onClick={() => navigate('/profile')}
-                />
-            </div>
-            <div className="flex-5 w-[87%] text-left pl-4 cursor-pointer">
-                <h3 className="font-semibold ">{user.userName}</h3>
-                <p>{context}</p>
-            </div>
-        </li>
+        <>
+            <li className="flex justify-between text-sm font-semibold tracking-wide py-1 mb-4">
+                <span className="opacity-80 text-base px-2">{title}</span>
+            </li>
+
+            {noti?.map((_) => (
+                <li className="text-base flex  mb-4 ml-4" onClick={() => navigate('/')}>
+                    <div className="flex-1 w-[13%]">
+                        <img
+                            src={backend.imagePath + _.userSource.avatarPath}
+                            alt="avatar"
+                            className="circle w-12 h-12 cursor-pointer"
+                            onClick={() => navigate('/profile')}
+                        />
+                    </div>
+                    <div className="flex-5 w-[87%] text-left pl-4 cursor-pointer">
+                        <h3 className="font-semibold ">{_.userSource.userName}</h3>
+                        <p>{_.userSource.userName + ' ' + _.context}</p>
+                    </div>
+                </li>
+            ))}
+        </>
     );
-}
+};
 
 export default NotificationItem;
