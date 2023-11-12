@@ -13,9 +13,9 @@ export const getListUser = async () => {
 };
 
 //export const getDetailUser = async (code: string) => {
-export const getUserDataById = async (userId: string | undefined) => {
+export const getUserDataById = async (userName: string | undefined) => {
     try {
-        const path = `${backend_utils.userController}/${userId}`;
+        const path = `${backend_utils.userController}/${userName}`;
         const response = await getAxios(path, {});
         if (response.Status === 200) {
             return response.Data;
@@ -35,17 +35,17 @@ export const getListSuggested = async () => {
     }
 };
 
-export const getAvatar = async (id: number | undefined) => {
-    try {
-        const path = `${backend_utils.userController}/Avatar/` + id;
+// export const getAvatar = async (id: number | undefined) => {
+//     try {
+//         const path = `${backend_utils.userController}/Avatar/` + userName;
 
-        const response = await getAxios(path, { responseType: 'blob' });
+//         const response = await getAxios(path, { responseType: 'blob' });
 
-        return URL.createObjectURL(response);
-    } catch (e) {
-        console.log(e);
-    }
-};
+//         return URL.createObjectURL(response);
+//     } catch (e) {
+//         console.log(e);
+//     }
+// };
 
 export const getUserAvatar = async (id: number) => {
     try {

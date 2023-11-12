@@ -27,7 +27,12 @@ function ActionBar(props: ActionBarProps) {
         //     setNavigateProfile('/profile/' + user.id);
         // }
     }, []);
-
+    const handleLinkClick = () => {
+        // Thực hiện các xử lý cần thiết trước khi làm mới trang (nếu cần)
+        // Ví dụ: Gửi request API để cập nhật dữ liệu trước khi làm mới trang  
+        // Làm mới trang
+        window.location.href = `/profile/${userInfo.userName}`;
+      };
     return (
         <>
             <div className="mr-2 min-h-screen shrink-0 z-10 shadow-xl max-w-[270px]">
@@ -66,8 +71,9 @@ function ActionBar(props: ActionBarProps) {
                         </div>
                         <div className="cursor-pointer">
                             <Link
-                                to={`/profile/${userInfo.id}`}
+                                to={`/profile/${userInfo.userName}`}
                                 className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-gray-200 transition"
+                                onClick={handleLinkClick}
                             >
                                 <AiOutlineUser className="mr-2 " />
                                 <span className="">Profile</span>

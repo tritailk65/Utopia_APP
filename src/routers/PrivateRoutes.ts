@@ -18,7 +18,7 @@ type Route = {
 
 export const PrivateRoutes: Route[] = [
     { path: '/', page: Home, layout: DefaultLayout },
-    { path: '/profile/:id', page: Profile, layout: LayoutProfile },
+    { path: '/profile/:username', page: Profile, layout: LayoutProfile },
     { path: '/profile/edit', page: EditProfile, layout: LayoutProfile },
     { path: '/see-all-suggest', page: SeeAllSuggest, layout: LayoutProfile },
 ];

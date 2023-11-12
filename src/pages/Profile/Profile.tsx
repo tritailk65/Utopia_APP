@@ -10,31 +10,37 @@ import Saved from './ProfilePostSaved';
 import { UserInfo } from '../../types/user-type';
 import { AiOutlinePicture } from 'react-icons/ai';
 
+
+
 function Profile() {
     const [checkUser, setIsCheckUser] = useState(true);
     const [userInfo, setUserInfo] = useState<UserInfo>();
     const [userAnyInfo, setUserAnyInfo] = useState<UserInfo>();
-    const { id } = useParams();
+    const params = useParams<{ username: string }>();
+    const { username } = params;
     const [avatar, setAvatar] = useState<string | undefined>('');
     // Sử dụng useState để quản lý trạng thái của dropdown menu
-    const [isDropdownOpen, setIsDropdownOpen] = useState(true);
-
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+   
     useEffect(() => {
         const user = JSON.parse(localStorage.getItem('userData') || '');
-        if (user) {
-            if (user.id != id) {
-                getUserDataById(id).then((_) => {
+        const avatarUrlFromStorage = localStorage.getItem('avatarUrl');
+        setAvatar(avatarUrlFromStorage !== null ? avatarUrlFromStorage : undefined);
+        if (user && username) {
+            if (user.userName != username) {
+                getUserDataById(username).then((_) => {
                     setUserAnyInfo(_);
-                    getAvatar(_.id).then((res) => {
+                    getAvatar(username).then((res) => {
                         if (res) {
                             setAvatar(res);
+                            localStorage.setItem('avatarUrl', res);
                         }
                     });
                     setIsCheckUser(false);
                 });
             } else {
                 setUserInfo(user);
-                getAvatar(user.id).then((res) => {
+                getAvatar(user.userName).then((res) => {
                     if (res) {
                         setAvatar(res);
                     }
@@ -63,10 +69,10 @@ function Profile() {
         <div className="w-[130%] mx-auto ml-10">
             <div className="profile text-xl w-[100%] mx-auto mt-8 bg-white p-4 rounded-lg ">
                 <div className="flex items-center space-x-6">
-                    {avatar ? (
+                    {userInfo?.avatarPath != "unknown.png" && userInfo?.avatarPath ? (
                         <div className="flex-shrink-0 mt-5">
                             <img
-                                src={backend.imagePath + userInfo?.avatarPath}
+                                src={avatar}
                                 alt="profile img"
                                 className="rounded-full h-[150px] w-[150px] mb-5"
                             />
@@ -74,7 +80,7 @@ function Profile() {
                     ) : (
                         <div className="flex-shrink-0 mt-5">
                             <img
-                                src={backend.imagePath + none_avatar}
+                                src={none_avatar}
                                 alt="profile img"
                                 className="rounded-full h-[150px] w-[150px] mb-5"
                             />
