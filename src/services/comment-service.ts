@@ -1,6 +1,6 @@
 import { CreateComment, EditComment } from '../types/comment-type';
 import { PostCreate } from '../types/post-type';
-import { getAxios, postAxios } from '../utils/api-request';
+import { deleteAxios, getAxios, postAxios, putAxios } from '../utils/api-request';
 import { backend_utils as backend } from '../utils/api-utils';
 
 export const getListCommentByPostId = async (id: number) => {
@@ -34,10 +34,20 @@ export const createReplyComment = async (post: CreateComment) => {
     }
 };
 
-export const editComment = async (post: EditComment, commentId: number) => {
+export const editCommentService = async (post: EditComment, commentId: number) => {
     try {
         const path = `${backend.commentController}/${commentId}/EditComment`;
-        const response = await postAxios(path, post);
+        const response = await putAxios(path, post);
+        return response;
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+export const deleteCommentService = async (commentId: number) => {
+    try {
+        const path = `${backend.commentController}/${commentId}`;
+        const response = await deleteAxios(path);
         return response;
     } catch (e) {
         console.log(e);

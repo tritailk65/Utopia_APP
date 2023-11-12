@@ -34,11 +34,8 @@ function FixedBar(props: FixedBarProps) {
     console.log(show);
 
     return (
-        <div
-            className={`w-full min-h-screen bg-transparent ${show ? 'fixed' : 'hidden'} z-50 `}
-            onClick={() => onClose(100)}
-        >
-            <div className={`w-[550px] min-h-screen bg-white  z-51 flex shadow-2xl `}>
+        <div className={`w-full min-h-screen bg-transparent ${show ? 'fixed' : 'hidden'} z-50 flex`}>
+            <div className={`w-[550px] min-h-screen bg-white  flex shadow-2xl `}>
                 <div className="w-[20%] border-r-4 border-gray-200 pt-8">
                     <div className="flex justify-center mb-4">
                         <img src={logo} alt="img" className="w-14 h-14" />
@@ -101,6 +98,7 @@ function FixedBar(props: FixedBarProps) {
                     {panel === 3 && <FollowRequestPanel onClose={onClose} />}
                 </div>
             </div>
+            <div className=" h-[100vh] flex-1" onClick={() => onClose(100)}></div>
         </div>
     );
 }
