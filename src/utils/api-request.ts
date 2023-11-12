@@ -75,7 +75,7 @@ export const postAxiosFile = async (path: string, data = {}, headers = {}) => {
 export const putAxios = async (path: string, option = {}) => {
     try {
         let response = await server.put(path, option);
-        return response;
+        return response.data;
     } catch (e: any) {
         if (e.response && e.response.data) {
             return e.response.data;
