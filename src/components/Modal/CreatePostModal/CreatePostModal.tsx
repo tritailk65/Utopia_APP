@@ -8,50 +8,83 @@ import { PostCreate } from '../../../types/post-type';
 import { Response } from '../../../types/api-type';
 import { createNewPost } from '../../../services/post-service';
 import useCreatePostModal from '../../../hooks/useCreatePostModal';
+import { uploadPostImage } from '../../../services/post-service';
+import Slider, { Settings } from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { UserInfo } from '../../../types/user-type';
+import useGetUserInfo from '../../../hooks/useGetUserInfo';
+const settings: Settings = {
+    dots: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    dotsClass: 'slick-dots',
+};
+
+interface PostImage {
+    file: File;
+    image: string;
+}
 
 function CreatePostModal() {
-    const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const user: UserInfo = useGetUserInfo();
+    const [files, setFiles] = useState<PostImage[]>([]);
     const [title, setTitle] = useState<string>('');
     const [like, setLike] = useState<boolean>(false);
     const [comment, setComment] = useState<boolean>(false);
     const { createPostModalState, closeCreatePostModal } = useCreatePostModal();
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e: any) => {
-                setSelectedImage(e.target.result as string);
-            };
-            reader.readAsDataURL(file);
+        const files = event.target.files;
+        if (files && files.length > 0) {
+            const newItems: PostImage[] = [];
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                reader.onload = (e: any) => {
+                    const newItem: PostImage = {
+                        file: file,
+                        image: e.target.result as string,
+                    };
+                    newItems.push(newItem);
+                    if (i === files.length - 1) {
+                        setFiles((prevTmp) => (prevTmp ? [...prevTmp, ...newItems] : newItems));
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
         }
     };
 
     const closeModal = () => {
         closeCreatePostModal();
         setTimeout(function () {
-            setSelectedImage(null);
             setLike(false);
             setComment(false);
+            setFiles([]);
         }, 1000);
     };
 
     const onPosting = async () => {
         const newPost: PostCreate = {
-            userId: 1,
+            userId: user.id,
             title: title,
             content: title,
             commentStat: comment ? 1 : 0,
             isHideLike: like ? 1 : 0,
         };
-        const res: Response<null> = await createNewPost(newPost);
+        const res: Response<number> = await createNewPost(newPost);
         if (res.Status === 200) {
+            files.map(async (val) => {
+                const tmp = await uploadPostImage(res.Data, val.file);
+            });
             alert('thành công');
+            window.location.reload();
         } else {
             alert('thất bại');
         }
-        closeCreatePostModal();
+        closeModal();
     };
 
     return (
@@ -73,8 +106,12 @@ function CreatePostModal() {
                     </h1>
                 </div>
                 <div className="h-[721px] flex mx-auto ">
-                    <div className="w-[721px] h-full flex flex-col items-center justify-center border-r-2 border-gray-200 ">
-                        {selectedImage == null && (
+                    <div
+                        className={`w-[721px] h-full ${
+                            files.length <= 0 && 'flex flex-col items-center justify-center '
+                        } border-r-2 border-gray-200 `}
+                    >
+                        {files.length <= 0 && (
                             <>
                                 <img src={camera} alt="img" className="w-[213px] h-[160px] mt-[-90px]" />
                                 <h1 className="text-xl font-semibold tracking-wide my-14">
@@ -88,12 +125,24 @@ function CreatePostModal() {
                                         accept="image/*"
                                         style={{ display: 'none' }}
                                         onChange={handleImageChange}
+                                        multiple
                                     />
                                 </label>
                             </>
                         )}
-                        {selectedImage && (
-                            <img src={selectedImage} alt="selected img" className="max-w-[721px] max-h-[721px]" />
+                        {files!.length > 0 && (
+                            <Slider {...settings}>
+                                {files!.map((item) => (
+                                    <div className="!flex !items-center !justify-center !h-[720.98px]">
+                                        <img
+                                            src={item.image!}
+                                            alt="selected img"
+                                            className="max-w-[721px] max-h-[721px]"
+                                        />
+                                    </div>
+                                ))}
+                            </Slider>
+                            //<img src={tmp[1].image!} alt="selected img" className="max-w-[721px] max-h-[721px]" />
                         )}
                     </div>
                     <div className="w-[319px] h-full  pt-4">

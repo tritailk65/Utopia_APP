@@ -25,6 +25,8 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({ children }) => {
     };
 
     const onClose = (index: number) => {
+        console.log(panel + ' ' + index);
+
         if (panel === index || index === 100) {
             setShow(false);
             setPanel(0);

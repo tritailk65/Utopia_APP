@@ -1,5 +1,4 @@
 import ModalContainer from '../ModalContainer/ModalContainer';
-import avt from '../../../assets/image/avt2.png';
 import { useState, useEffect } from 'react';
 import CommentItem from './CommentItem/CommentItem';
 import { AiOutlineHeart } from 'react-icons/ai';
@@ -14,6 +13,22 @@ import useGetUserInfo from '../../../hooks/useGetUserInfo';
 import { UserInfo } from '../../../types/user-type';
 import usePostingComment from '../../../hooks/usePostingComment';
 import { createNewComment, createReplyComment } from '../../../services/comment-service';
+import { ToastContainer, toast } from 'react-toastify';
+import { backend_utils as backend } from '../../../utils/api-utils';
+import avt from '../../../assets/image/avt2.png';
+import 'react-toastify/dist/ReactToastify.css';
+import Slider, { Settings } from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+
+const settings: Settings = {
+    dots: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    dotsClass: 'slick-dots',
+};
+
 function PostCommentModal() {
     const [screenHeight, setScreenHeight] = useState(window.screen.height);
     const [loading, setLoading] = useState<boolean>(false);
@@ -33,7 +48,7 @@ function PostCommentModal() {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const res: Response<Comment[]> = await getListCommentByPostId(commentModalState.postId);
+            const res: Response<Comment[]> = await getListCommentByPostId(commentModalState.post!.id);
             if (res.Status === 200) {
                 setData(res);
                 setTimeout(() => {
@@ -46,9 +61,9 @@ function PostCommentModal() {
     };
 
     useEffect(() => {
-        if (commentModalState.show === true && commentModalState.postId > 0) {
+        if (commentModalState.show === true && commentModalState.post!.id > 0) {
             fetchData();
-            onFocusComment(commentModalState.postId, '');
+            onFocusComment(commentModalState.post!.id, '');
         }
     }, [commentModalState.show]);
 
@@ -77,7 +92,12 @@ function PostCommentModal() {
                 if (res.Status === 200) {
                     fetchData();
                     setInput('');
-                    onClearState();
+                    onFocusComment(commentModalState.post!.id, '');
+                    showToast(true, 'Add comment successfully !');
+                } else {
+                    setInput('');
+                    onFocusComment(commentModalState.post!.id, '');
+                    showToast(false, 'Add comment failed !');
                 }
             } else if (commentState.type === 'reply') {
                 const tmp: CreateComment = {
@@ -90,7 +110,12 @@ function PostCommentModal() {
                 if (res.Status === 200) {
                     fetchData();
                     setInput('');
-                    onClearState();
+                    onFocusComment(commentModalState.post!.id, '');
+                    showToast(true, 'Reply comment successfully !');
+                } else {
+                    setInput('');
+                    onFocusComment(commentModalState.post!.id, '');
+                    showToast(false, 'Reply comment failed !');
                 }
             }
         } catch (e) {
@@ -106,19 +131,59 @@ function PostCommentModal() {
         }, 1000);
     };
 
+    const showToast = (result: boolean, message: string) => {
+        if (result) {
+            toast.success(message, {
+                position: 'top-left',
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
+        } else {
+            toast.error(message, {
+                position: 'top-left',
+                autoClose: 1000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+            });
+        }
+    };
+
+    console.log(commentModalState);
+
     return (
         <ModalContainer show={commentModalState.show} onClose={onClose} width="extra-larges">
             <div className={`min-h-[${screenHeight}px] flex flex-col w-full my-[-8px]`}>
                 <div className="xl:h-[60vh]  h-[90vh] flex ">
-                    <div className=" h-full flex flex-col items-center justify-center border-r-2 border-gray-200 ">
-                        <img src={avt} alt="selected img" className="h-full" />
+                    <div className=" h-full  border-r-2 border-gray-200 max-w-[723px]">
+                        {commentModalState.post != null && commentModalState.post!.images.length > 0 && (
+                            <Slider {...settings}>
+                                {commentModalState.post!.images.map((val, index) => {
+                                    return (
+                                        <img
+                                            src={backend.imagePath + val.name}
+                                            alt="selected img"
+                                            className="h-full"
+                                            key={index}
+                                        />
+                                    );
+                                })}
+                            </Slider>
+                            // <img
+                            //     src={backend.imagePath + commentModalState.post!.images[0].name}
+                            //     alt="img"
+                            //     className="h-full"
+                            // />
+                        )}
                     </div>
                     <div className="w-[460px] h-full  pt-4 flex flex-col">
                         <div className="overflow-y-auto text-justify border-b-2 border-gray-200  pl-2 h-[88%]">
                             {!loading && data?.Data && (
                                 <>
                                     {data.Data.map((val: Comment, index) => {
-                                        return <CommentItem data={val} />;
+                                        return <CommentItem data={val} toast={showToast} />;
                                     })}
                                 </>
                             )}
@@ -139,9 +204,7 @@ function PostCommentModal() {
                                     <AiOutlineHeart className="cursor-pointer mr-4" />
                                     <BsChatSquareDots
                                         className="cursor-pointer mr-4"
-                                        onClick={() =>
-                                            onFocusComment(commentModalState.postId, 'You are replying this post ...')
-                                        }
+                                        onClick={() => onFocusComment(commentModalState.post!.id, 'this post ...')}
                                     />
                                     <BsSend className="cursor-pointer mr-4" />
                                 </div>
@@ -152,29 +215,37 @@ function PostCommentModal() {
                                 <p className="text-xs opacity-80">3 hours ago</p>
                             </div>
                             <div className="px-2 flex items-center h-[30%]">
-                                <textarea
-                                    className="h-[70%] border-none w-[90%] mr-2 outline-none"
-                                    placeholder={
-                                        commentState.data.comment
-                                            ? `You are replying @${commentState.data.comment}`
-                                            : 'Add a comment...'
-                                    }
-                                    value={input}
-                                    onChange={(e) => setInput(e.target.value)}
-                                />
-                                {input.length > 0 && (
-                                    <span
-                                        onClick={handlePostComment}
-                                        className="text-base text-blue-500 w-[10%] cursor-pointer font-semibold transition hover:text-blue-700"
-                                    >
-                                        Post
-                                    </span>
+                                {commentModalState.post != null && commentModalState.post!.commentStat === 0 && (
+                                    <>
+                                        <textarea
+                                            className="h-[70%] border-none w-[90%] mr-2 outline-none"
+                                            placeholder={
+                                                commentState.data.comment
+                                                    ? `You are replying ${commentState.data.comment}`
+                                                    : 'Add a comment...'
+                                            }
+                                            value={input}
+                                            onChange={(e) => setInput(e.target.value)}
+                                        />
+                                        {input.length > 0 && (
+                                            <span
+                                                onClick={handlePostComment}
+                                                className="text-base text-blue-500 w-[10%] cursor-pointer font-semibold transition hover:text-blue-700"
+                                            >
+                                                Post
+                                            </span>
+                                        )}
+                                    </>
+                                )}
+                                {commentModalState.post != null && commentModalState.post!.commentStat === 1 && (
+                                    <p className="h-[70%] border-none w-[100%] mr-2 ">Commenting has been turned off</p>
                                 )}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </ModalContainer>
     );
 }

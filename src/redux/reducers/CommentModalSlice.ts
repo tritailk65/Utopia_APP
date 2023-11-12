@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PostForViewer } from '../../types/post-type';
 
 interface CommentModalSliceProps {
-    postId: number;
+    post: PostForViewer | null;
     show: boolean;
 }
 
 const initialState: CommentModalSliceProps = {
     show: false,
-    postId: 0,
+    post: null,
 };
 
 const CommentModalSlice = createSlice({
@@ -15,11 +16,11 @@ const CommentModalSlice = createSlice({
     initialState,
     reducers: {
         closeCommentModalReducer: (state) => {
-            state.postId = 0;
+            state.post = null;
             state.show = false;
         },
-        openCommentModalReducer: (state, action: PayloadAction<number>) => {
-            state.postId = action.payload;
+        openCommentModalReducer: (state, action: PayloadAction<PostForViewer>) => {
+            state.post = action.payload;
             state.show = true;
         },
     },

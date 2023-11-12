@@ -7,6 +7,7 @@ export interface Comment {
     comment: string;
     date: Date;
     totals: number;
+    cmtOwner: boolean;
     user: UserPostForViewer;
     replies: ReplyComment[];
 }
@@ -17,6 +18,7 @@ export interface ReplyComment {
     postId: number;
     comment: string;
     parentId: number;
+    cmtOwner: boolean;
     date: Date;
     user: UserPostForViewer;
 }
@@ -29,6 +31,6 @@ export interface CreateComment {
 }
 
 export interface EditComment {
-    userId: number;
+    idUser: number;
     comment: string;
 }
