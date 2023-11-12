@@ -1,53 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import none_avatar from '../../assets/image/none_avatar.jpg';
 import iconcamera from '../../assets/image/iconcamera.png';
 import bookmark from '../../assets/image/icon/Bookmark.png';
 import { Link, useParams } from 'react-router-dom';
-import { getUserDataById, getAvatar } from '../../services/user-service';
 import { backend_utils as backend } from '../../utils/api-utils';
 import Posts from './ProfilePosts';
 import Saved from './ProfilePostSaved';
 import { UserInfo } from '../../types/user-type';
 import { AiOutlinePicture } from 'react-icons/ai';
-
-
+import useGetUserInfo from '../../hooks/useGetUserInfo';
+import { Response } from '../../types/api-type';
+import { getUserByName } from '../../services/user-service';
 
 function Profile() {
     const [checkUser, setIsCheckUser] = useState(true);
-    const [userInfo, setUserInfo] = useState<UserInfo>();
+    const user: UserInfo = useGetUserInfo();
     const [userAnyInfo, setUserAnyInfo] = useState<UserInfo>();
     const params = useParams<{ username: string }>();
     const { username } = params;
     const [avatar, setAvatar] = useState<string | undefined>('');
     // Sử dụng useState để quản lý trạng thái của dropdown menu
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-   
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('userData') || '');
-        const avatarUrlFromStorage = localStorage.getItem('avatarUrl');
-        setAvatar(avatarUrlFromStorage !== null ? avatarUrlFromStorage : undefined);
-        if (user && username) {
-            if (user.userName != username) {
-                getUserDataById(username).then((_) => {
-                    setUserAnyInfo(_);
-                    getAvatar(username).then((res) => {
-                        if (res) {
-                            setAvatar(res);
-                            localStorage.setItem('avatarUrl', res);
-                        }
-                    });
-                    setIsCheckUser(false);
-                });
-            } else {
-                setUserInfo(user);
-                getAvatar(user.userName).then((res) => {
-                    if (res) {
-                        setAvatar(res);
-                    }
-                });
-            }
-        }
-    }, []);
+    const [notMyProfile, setNotMyProfile] = useState<boolean>(false);
+    const [dataAnyProfile, setDataAnyProfile] = useState<Response<UserInfo>>();
 
     const handleDropdownClick = () => {
         // Khi nút "..." được nhấn, đảm bảo toggle trạng thái của dropdown menu
@@ -65,45 +39,60 @@ function Profile() {
         setActiveTab(tabName);
     };
 
+    useEffect(() => {
+        try {
+            if (username != user.userName) {
+                getUserByName(username).then((res) => {
+                    if (res != undefined) {
+                        setDataAnyProfile(res);
+                    }
+                });
+                setNotMyProfile(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }, []);
+
     return (
         <div className="w-[130%] mx-auto ml-10">
             <div className="profile text-xl w-[100%] mx-auto mt-8 bg-white p-4 rounded-lg ">
                 <div className="flex items-center space-x-6">
-                    {userInfo?.avatarPath != "unknown.png" && userInfo?.avatarPath ? (
-                        <div className="flex-shrink-0 mt-5">
+                    <div className="flex-shrink-0 mt-5">
+                        {!notMyProfile && (
                             <img
-                                src={avatar}
+                                src={backend.imagePath + user?.avatarPath}
                                 alt="profile img"
                                 className="rounded-full h-[150px] w-[150px] mb-5"
                             />
-                        </div>
-                    ) : (
-                        <div className="flex-shrink-0 mt-5">
+                        )}
+                        {notMyProfile && dataAnyProfile?.Data && (
                             <img
-                                src={none_avatar}
+                                src={backend.imagePath + dataAnyProfile.Data.avatarPath}
                                 alt="profile img"
                                 className="rounded-full h-[150px] w-[150px] mb-5"
                             />
-                        </div>
-                    )}
+                        )}
+                    </div>
                     <div>
                         <div className="flex  mb-[25px]">
-                            {userInfo && (
+                            {!notMyProfile && (
                                 <h1 className="text-2xl font-semibold ml-10 min-w-[200px] max-w-[200px]">
-                                    {userInfo.fullName}
+                                    {user.fullName}
                                 </h1>
                             )}
-                            {userAnyInfo && (
+                            {notMyProfile && dataAnyProfile?.Data && (
                                 <h1 className="text-2xl font-semibold ml-10 min-w-[200px] max-w-[200px]">
-                                    {userAnyInfo.fullName}
+                                    {dataAnyProfile.Data.fullName}
                                 </h1>
                             )}
                             <div className="ml-[180px]">
-                                {checkUser ? (
+                                {!notMyProfile && (
                                     <button className=" bg-[#001F3E] w-[115px] font-semibold transition border-2 border-transparent rounded-xl text-sm text-[#ffffff] hover:bg-[#ffffff] hover:border-[#001F3E] hover:text-[#001F3E] px-4 py-1.5 mr-3">
                                         <Link to="/profile/edit">Edit profile</Link>
                                     </button>
-                                ) : (
+                                )}
+                                {notMyProfile && (
                                     <button
                                         onClick={() => {}}
                                         className=" bg-[#001F3E] transition border-2 border-transparent rounded-xl text-sm text-[#ffffff] hover:bg-[#ffffff] hover:border-[#001F3E] hover:text-[#001F3E] px-4 py-1.5 mr-3"
@@ -158,16 +147,16 @@ function Profile() {
                             </ul>
                         </div>
                         <div className="mt-10 ml-10 ">
-                            {userInfo && (
+                            {!notMyProfile && (
                                 <>
-                                    <h1 className="text-2xl font-semibold mb-4">{userInfo.bio}</h1>
-                                    <div className="text-blue-500">{userInfo.website}</div>
+                                    <h1 className="text-2xl font-semibold mb-4">{user.bio}</h1>
+                                    <div className="text-blue-500">{user.website}</div>
                                 </>
                             )}
-                            {userAnyInfo && (
+                            {notMyProfile && dataAnyProfile?.Data && (
                                 <>
-                                    <h1 className="text-2xl font-semibold mb-4">{userAnyInfo.bio}</h1>
-                                    <div className="text-blue-500">{userAnyInfo.website}</div>
+                                    <h1 className="text-2xl font-semibold mb-4">{dataAnyProfile.Data.bio}</h1>
+                                    <div className="text-blue-500">{dataAnyProfile.Data.website}</div>
                                 </>
                             )}
                         </div>
@@ -188,7 +177,7 @@ function Profile() {
                             </div>
                             <h1 className="text-lg">POSTS</h1>
                         </div>
-                        {userInfo && (
+                        {user && (
                             <div
                                 className={`flex cursor-pointer items-center p-2 rounded-2xl ${
                                     activeTab === 'SAVED' ? 'bg-gray-400/30 text-black font-semibold' : ''

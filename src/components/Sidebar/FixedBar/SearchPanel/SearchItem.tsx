@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { getAvatar } from '../../../../services/user-service';
 import { UserPostForViewer } from '../../../../types/post-type';
 import { backend_utils as backend } from '../../../../utils/api-utils';
 

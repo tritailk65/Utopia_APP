@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import none_avatar from '../../assets/image/none_avatar.jpg';
 import useInput from '../../hooks/useInput';
 import CustomModal from './CustomModal'; // Import Modal
-import { editprofile, getAvatar, uploadAvatar } from '../../services/user-service';
+import { editprofile, uploadAvatar } from '../../services/user-service';
+import { backend_utils } from '../../utils/api-utils';
 
 interface UserData {
     id: BigInteger;
@@ -24,7 +25,6 @@ function EditProfile() {
         if (userFromLocalStorage) {
             const userData = JSON.parse(userFromLocalStorage);
             setUserData(userData);
-            fetchAvatar(userData.userName);
         }
         // mỗi lần load trang ảnh hưởng tới trạng thái nên cần lưu url hình vô local r gán cho trạng thái để xuất hình
         const storedAvatarUrl = localStorage.getItem('avatarUrl');
@@ -74,14 +74,6 @@ function EditProfile() {
     };
 
     const [avatarUrl, setAvatarUrl] = useState<string | undefined>('');
-    const fetchAvatar = (id: any) => {
-        getAvatar(id).then((avatarUrl) => {
-            if (avatarUrl !== undefined) {
-                localStorage.setItem('avatarUrl', avatarUrl);
-                setAvatarUrl(avatarUrl);
-            }
-        });
-    };
 
     //kiem tra blog
     const [blog, setBlog] = useState('');
@@ -158,14 +150,13 @@ function EditProfile() {
             <div className="ml-[200px] mt-[80px]">
                 <div className="mb-4">
                     <div className="flex items-center space-x-4">
-                        {userData?.avatarPath != "unknown.png" && userData?.avatarPath ?( <div className="w-[20%] rounded-full overflow-hidden">
-                            <img src={avatarUrl} className="object-cover " alt="img" />
-                        </div>):(
-                             <div className="w-[20%] rounded-full overflow-hidden">
-                             <img src={ none_avatar} className="object-cover " alt="img" />
-                         </div>
-                        )}
-                       
+                        <div className="w-[20%] rounded-full overflow-hidden">
+                            <img
+                                src={backend_utils.imagePath + userData?.avatarPath}
+                                className="object-cover "
+                                alt="img"
+                            />
+                        </div>
                         <div className="">
                             {/* <input
                                 type="text"

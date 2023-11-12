@@ -35,17 +35,16 @@ export const getListSuggested = async () => {
     }
 };
 
-// export const getAvatar = async (id: number | undefined) => {
-//     try {
-//         const path = `${backend_utils.userController}/Avatar/` + userName;
+export const getUserByName = async (name: string | undefined) => {
+    try {
+        const path = `${backend_utils.userController}/GetByName/` + name;
+        const response = await getAxios(path, {});
 
-//         const response = await getAxios(path, { responseType: 'blob' });
-
-//         return URL.createObjectURL(response);
-//     } catch (e) {
-//         console.log(e);
-//     }
-// };
+        return response;
+    } catch (e) {
+        console.log(e);
+    }
+};
 
 export const getUserAvatar = async (id: number) => {
     try {

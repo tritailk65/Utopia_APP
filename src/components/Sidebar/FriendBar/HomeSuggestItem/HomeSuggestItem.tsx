@@ -3,6 +3,7 @@ import { UserInfo } from '../../../../types/user-type';
 import { backend_utils } from '../../../../utils/api-utils';
 import AlertDialog from '../../../Dialog/AlertDialog/AlertDialog';
 import { cancelRequestFollow, sendRequestFollow } from '../../../../services/request-follow-services';
+import { Link } from 'react-router-dom';
 
 export type HomeSuggestItemProps = {
     user: UserInfo;
@@ -47,14 +48,18 @@ const HomeSuggestItem = (props: HomeSuggestItemProps) => {
         <>
             <li className="text-base flex  mb-4 ">
                 <div className="flex-1 w-1/6 ">
-                    <img
-                        src={backend_utils.imagePath + props.user.avatarPath}
-                        alt="avatar"
-                        className="circle w-12 h-12"
-                    />
+                    <Link to={'profile/' + props.user.userName}>
+                        <img
+                            src={backend_utils.imagePath + props.user.avatarPath}
+                            alt="avatar"
+                            className="circle w-12 h-12 cursor-pointer"
+                        />
+                    </Link>
                 </div>
                 <div className="flex-4 w-4/6 text-left pl-4 ">
-                    <h3 className="font-semibold cursor-pointer">{props.user.userName}</h3>
+                    <Link to={'profile/' + props.user.userName}>
+                        <h3 className="font-semibold cursor-pointer">{props.user.userName}</h3>
+                    </Link>
                     <p>Suggested for you</p>
                 </div>
                 {!isSendSuccess && (

@@ -2,7 +2,6 @@ import logo1 from '../../../assets/image/logo/logo1.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { BiHomeAlt, BiSearchAlt } from 'react-icons/bi';
 import { AiOutlineHeart, AiOutlinePlusSquare, AiOutlineUser } from 'react-icons/ai';
-import { useEffect, useState } from 'react';
 import { LuBellRing } from 'react-icons/lu';
 import { UserInfo } from '../../../types/user-type';
 import useCreatePostModal from '../../../hooks/useCreatePostModal';
@@ -14,25 +13,11 @@ export interface ActionBarProps {
 }
 
 function ActionBar(props: ActionBarProps) {
-    const navigate = useNavigate();
     const { onOpen } = props;
-    const [navigateProfile, setNavigateProfile] = useState('');
-    const userInfo = useGetUserInfo();
+    const userInfo: UserInfo = useGetUserInfo();
     const { openCreatePostModal } = useCreatePostModal();
     const { openFollowModal } = useFollowModal();
-    useEffect(() => {
-        // const user = JSON.parse(localStorage.getItem('userData') || '');
-        // if (user) {
-        //     setUserInfo(user);
-        //     setNavigateProfile('/profile/' + user.id);
-        // }
-    }, []);
-    const handleLinkClick = () => {
-        // Thực hiện các xử lý cần thiết trước khi làm mới trang (nếu cần)
-        // Ví dụ: Gửi request API để cập nhật dữ liệu trước khi làm mới trang  
-        // Làm mới trang
-        window.location.href = `/profile/${userInfo.userName}`;
-      };
+
     return (
         <>
             <div className="mr-2 min-h-screen shrink-0 z-10 shadow-xl max-w-[270px]">
@@ -73,7 +58,6 @@ function ActionBar(props: ActionBarProps) {
                             <Link
                                 to={`/profile/${userInfo.userName}`}
                                 className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-gray-200 transition"
-                                onClick={handleLinkClick}
                             >
                                 <AiOutlineUser className="mr-2 " />
                                 <span className="">Profile</span>
