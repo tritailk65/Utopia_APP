@@ -12,6 +12,8 @@ import { uploadPostImage } from '../../../services/post-service';
 import Slider, { Settings } from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { UserInfo } from '../../../types/user-type';
+import useGetUserInfo from '../../../hooks/useGetUserInfo';
 const settings: Settings = {
     dots: true,
     speed: 500,
@@ -26,6 +28,7 @@ interface PostImage {
 }
 
 function CreatePostModal() {
+    const user: UserInfo = useGetUserInfo();
     const [files, setFiles] = useState<PostImage[]>([]);
     const [title, setTitle] = useState<string>('');
     const [like, setLike] = useState<boolean>(false);
@@ -65,7 +68,7 @@ function CreatePostModal() {
 
     const onPosting = async () => {
         const newPost: PostCreate = {
-            userId: 1,
+            userId: user.id,
             title: title,
             content: title,
             commentStat: comment ? 1 : 0,

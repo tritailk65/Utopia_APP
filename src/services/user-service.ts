@@ -5,7 +5,6 @@ export const getListUser = async () => {
     try {
         const path = `${backend_utils.userController}`;
         const response = await getAxios(path, {});
-        console.log(response);
 
         return response;
     } catch (e) {
@@ -21,6 +20,16 @@ export const getUserDataById = async (userId: string | undefined) => {
         if (response.Status === 200) {
             return response.Data;
         }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getListSuggested = async () => {
+    try {
+        const path = `${backend_utils.userController}/SuggestFollow`;
+        const response = await getAxios(path, {});
+        return response;
     } catch (error) {
         console.log(error);
     }

@@ -12,6 +12,17 @@ export const getRequestFollow = async () => {
     }
 };
 
+export const sendRequestFollow = async (UserTar: number) => {
+    try {
+        const path = `${backend_utils.requestFollowController}/SendRequestFollow/UserTar=${UserTar}`;
+        const response = await postAxios(path);
+
+        return response;
+    } catch (e) {
+        console.log(e);
+    }
+};
+
 //For user target delete
 export const deleteRequestFollow = async (UserTar: number) => {
     try {
@@ -29,6 +40,18 @@ export const acceptRequestFollow = async (UserTar: number) => {
     try {
         const path = `${backend_utils.requestFollowController}/AcceptRequestFollow/UserTar=${UserTar}`;
         const response = await postAxios(path);
+
+        return response;
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+//For user source cancel
+export const cancelRequestFollow = async (UserTar: number) => {
+    try {
+        const path = `${backend_utils.requestFollowController}/CancelRequestFollow/UserTar=${UserTar}`;
+        const response = await putAxios(path);
 
         return response;
     } catch (e) {

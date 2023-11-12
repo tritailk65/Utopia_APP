@@ -15,8 +15,7 @@ function FollowModal() {
     useEffect(() => {
         if (user != null) {
             getAllFollowing().then((res) => {
-                console.log(res);
-                if (res.Status == 200) {
+                if (res != undefined) {
                     setListUserFollow(res.Data);
                 }
             });
