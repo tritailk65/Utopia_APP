@@ -47,7 +47,7 @@ function FriendBar() {
         <StickyWrapper top={14} right={0} paddingLeft={16}>
             <ul className=" w-[319px] px-2 my-6">
                 <li className="text-base flex  mb-4 items-center">
-                    {userInfo.avatarPath != 'unknown.png' ?(
+                    {userInfo.avatarPath != 'unknown.png' && userInfo.avatarPath ?(
                         <div className="flex-1 w-1/6 ">
                         <img src={avatar} alt="avatar" className="circle w-12 h-12" />
                         </div>

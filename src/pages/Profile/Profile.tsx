@@ -69,7 +69,7 @@ function Profile() {
         <div className="w-[130%] mx-auto ml-10">
             <div className="profile text-xl w-[100%] mx-auto mt-8 bg-white p-4 rounded-lg ">
                 <div className="flex items-center space-x-6">
-                    {userInfo?.avatarPath != "unknown.png" ? (
+                    {userInfo?.avatarPath != "unknown.png" && userInfo?.avatarPath ? (
                         <div className="flex-shrink-0 mt-5">
                             <img
                                 src={avatar}

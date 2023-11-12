@@ -158,7 +158,7 @@ function EditProfile() {
             <div className="ml-[200px] mt-[80px]">
                 <div className="mb-4">
                     <div className="flex items-center space-x-4">
-                        {userData?.avatarPath != "unknown.png" ?( <div className="w-[20%] rounded-full overflow-hidden">
+                        {userData?.avatarPath != "unknown.png" && userData?.avatarPath ?( <div className="w-[20%] rounded-full overflow-hidden">
                             <img src={avatarUrl} className="object-cover " alt="img" />
                         </div>):(
                              <div className="w-[20%] rounded-full overflow-hidden">
