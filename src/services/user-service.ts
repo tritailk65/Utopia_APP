@@ -13,13 +13,21 @@ export const getListUser = async () => {
 };
 
 //export const getDetailUser = async (code: string) => {
-export const getUserDataById = async (userName: string | undefined) => {
+export const getUserDataByName = async (userName: string | undefined) => {
     try {
-        const path = `${backend_utils.userController}/${userName}`;
+        const path = `${backend_utils.userController}/GetByName/${userName}`;
         const response = await getAxios(path, {});
-        if (response.Status === 200) {
-            return response.Data;
-        }
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getUserDataById = async (id: number) => {
+    try {
+        const path = `${backend_utils.userController}/GetById/${id}`;
+        const response = await getAxios(path, {});
+        return response;
     } catch (error) {
         console.log(error);
     }
@@ -91,23 +99,22 @@ export const userRegister = async (userData: {} | undefined) => {
     }
 };
 
-export const editprofile = async (userID: Uint8Array | undefined, UserData: {} | undefined) => {
+export const editprofile = async (userID: number, UserData: {} | undefined) => {
     try {
         const path = `${backend_utils.userController}/EditProfile/${userID}`;
         const response = await putAxios(path, UserData);
-        console.log(response);
+
         return response;
     } catch (error) {
         console.log(error);
     }
 };
 
-export const uploadAvatar = async (userId: Uint8Array | undefined, selectedFile: string | Blob) => {
+export const uploadAvatar = async (userId: number, avatar: string | Blob) => {
     try {
         const path = `${backend_utils.userController}/UploadAvatar/${userId}`;
         const formData = new FormData();
-        formData.append('avatar', selectedFile);
-
+        formData.append('avatar', avatar);
         const response = await postAxiosFile(path, formData);
 
         return response;

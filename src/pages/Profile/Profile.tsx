@@ -78,12 +78,12 @@ function Profile() {
                         <div className="flex  mb-[25px]">
                             {!notMyProfile && (
                                 <h1 className="text-2xl font-semibold ml-10 min-w-[200px] max-w-[200px]">
-                                    {user.fullName}
+                                    {user.userName}
                                 </h1>
                             )}
                             {notMyProfile && dataAnyProfile?.Data && (
                                 <h1 className="text-2xl font-semibold ml-10 min-w-[200px] max-w-[200px]">
-                                    {dataAnyProfile.Data.fullName}
+                                    {dataAnyProfile.Data.userName}
                                 </h1>
                             )}
                             <div className="ml-[180px]">

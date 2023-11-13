@@ -5,6 +5,7 @@ import { backend_utils as backend } from '../../../../utils/api-utils';
 import { PostUnFollow } from '../../../../services/follow-service';
 import { UserInfo } from '../../../../types/user-type';
 import useGetUserInfo from '../../../../hooks/useGetUserInfo';
+import { Link } from 'react-router-dom';
 
 export type FollowItemProps = {
     followingItem: FollowingReponse;
@@ -31,14 +32,18 @@ const FollowItem = (props: FollowItemProps) => {
         <>
             <div className="text-base flex mb-5 mr-4">
                 <div className="flex-1 w-1/6 ">
-                    <img
-                        src={backend.imagePath + props.followingItem.user.avatarPath}
-                        alt="avatar"
-                        className="circle w-14 h-14"
-                    />
+                    <Link to={'/profile/' + props.followingItem.user.userName}>
+                        <img
+                            src={backend.imagePath + props.followingItem.user.avatarPath}
+                            alt="avatar"
+                            className="circle w-14 h-14"
+                        />
+                    </Link>
                 </div>
                 <div className="flex-4 w-4/6 text-left pl-4">
-                    <h3 className="font-semibold cursor-pointer text-lg">{props.followingItem.user.userName}</h3>
+                    <Link to={'/profile/' + props.followingItem.user.userName}>
+                        <h3 className="font-semibold cursor-pointer text-lg">{props.followingItem.user.userName}</h3>
+                    </Link>
                     <p className="text-gray-500">24.8M Followers</p>
                 </div>
                 <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer font-semibold ">
@@ -63,10 +68,10 @@ const FollowItem = (props: FollowItemProps) => {
                     <img
                         src={backend.imagePath + props.followingItem.user.avatarPath}
                         alt="avatar"
-                        className="circle w-44 h-44"
+                        className="ml-32 circle w-44 h-44"
                     />
 
-                    <p>
+                    <p className="font-medium">
                         If you change your mind, you'll have to request to follow {props.followingItem.user.userName}{' '}
                         again
                     </p>

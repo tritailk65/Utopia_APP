@@ -151,8 +151,6 @@ function PostCommentModal() {
         }
     };
 
-    console.log(commentModalState);
-
     return (
         <ModalContainer show={commentModalState.show} onClose={onClose} width="extra-larges">
             <div className={`min-h-[${screenHeight}px] flex flex-col w-full my-[-8px]`}>
