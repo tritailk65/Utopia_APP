@@ -15,6 +15,7 @@ import useGetUserInfo from '../../../hooks/useGetUserInfo';
 import Slider, { Settings } from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { UserInfo } from '../../../types/user-type';
 
 interface HomePostProps {
     data: PostForViewer;
@@ -31,11 +32,11 @@ const settings: Settings = {
 function HomePost(props: HomePostProps) {
     const { data } = props;
     const [post, setPost] = useState<PostForViewer>(data);
-    const user = useGetUserInfo();
+    const user: UserInfo = useGetUserInfo();
     const { openCommentModal } = useCommentModal();
 
     const onLikePost = async () => {
-        const res: Response<SavePostLike> = await postLikeService(user.id, post.id);
+        const res: Response<SavePostLike> = await postLikeService(post.id);
         if (res.Status === 200) {
             if (res.Data.action === 'unliked') {
                 setPost((prevPost) => ({

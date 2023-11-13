@@ -1,37 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, ChangeEvent } from 'react';
 import none_avatar from '../../assets/image/none_avatar.jpg';
 import useInput from '../../hooks/useInput';
 import CustomModal from './CustomModal'; // Import Modal
-import { editprofile, uploadAvatar } from '../../services/user-service';
+import { editprofile, getUserDataById, getUserDataByName, uploadAvatar } from '../../services/user-service';
 import { backend_utils } from '../../utils/api-utils';
-
-interface UserData {
-    id: BigInteger;
-    userName: string;
-    phone: string;
-    email: string;
-    fullName: string;
-    gender: string;
-    bio: string;
-    website: string;
-    avatarPath: string;
-}
+import { UserInfo } from '../../types/user-type';
+import useGetUserInfo from '../../hooks/useGetUserInfo';
+import AlertDialog from '../../components/Dialog/AlertDialog/AlertDialog';
 
 function EditProfile() {
-    const [userData, setUserData] = useState<UserData | null>(null);
-    useEffect(() => {
-        // Truy cập Local Storage để lấy thông tin người dùng
-        const userFromLocalStorage = localStorage.getItem('userData');
-        if (userFromLocalStorage) {
-            const userData = JSON.parse(userFromLocalStorage);
-            setUserData(userData);
-        }
-        // mỗi lần load trang ảnh hưởng tới trạng thái nên cần lưu url hình vô local r gán cho trạng thái để xuất hình
-        const storedAvatarUrl = localStorage.getItem('avatarUrl');
-        if (storedAvatarUrl) {
-            setAvatarUrl(storedAvatarUrl);
-        }
-    }, []);
+    const userData: UserInfo = useGetUserInfo();
 
     const { formData, formError, handleInputChange, setFormError } = useInput({
         website: '',
@@ -39,41 +17,6 @@ function EditProfile() {
         gender: '',
         fullName: '',
     });
-    const id = userData?.id;
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
-    // Thêm state để lưu trữ tệp người dùng đã chọn
-    const [selectedFile, setSelectedFile] = useState<File | null>(null);
-
-    const handleLinkClick = (e: React.MouseEvent) => {
-        e.preventDefault(); // Ngăn chặn hành động mặc định của liên kết (chuyển trang)
-        if (fileInputRef.current) {
-            fileInputRef.current.click(); // Khi ấn vào link, kích hoạt sự kiện click cho file input
-        }
-    };
-
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            const file = e.target.files[0];
-            if (file) {
-                setSelectedFileName(file.name); // lưu trữ tên file đã chọn
-                setSelectedFile(file); // lưu trữ file đã chọn
-            }
-        }
-    };
-    const handleFileUpload = () => {
-        if (selectedFile) {
-            uploadAvatar(userData?.id, selectedFile)
-                .then((response) => {
-                    setAvatarUrl(response);
-                })
-                .catch((error) => {
-                    console.error('File upload failed', error);
-                });
-        }
-    };
-
-    const [avatarUrl, setAvatarUrl] = useState<string | undefined>('');
 
     //kiem tra blog
     const [blog, setBlog] = useState('');
@@ -82,6 +25,24 @@ function EditProfile() {
     const [isModalOpen, setIsModalOpen] = useState(false); // Thêm trạng thái modal
     // kiem tra hien bang gi
     const [isCheck, setIsCheck] = useState(false);
+    const id = userData?.id;
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const [selectedFilePreview, setSelectedFilePreview] = useState('');
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+    const handleLinkClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files != null) {
+            setSelectedFilePreview(URL.createObjectURL(e.target.files[0]));
+            setSelectedFile(e.target.files[0]);
+        }
+    };
 
     const handleBlogChange = (e: { target: { value: any } }) => {
         const inputText = e.target.value;
@@ -91,14 +52,11 @@ function EditProfile() {
         }
     };
 
-    // Xử lý sự kiện khi giá trị "Gender" thay đổi
     const handleGenderChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-        //const selectedValue = e.target.value;
-        handleInputChange(e); // Cập nhật giá trị 'gender' trong 'formData'
+        handleInputChange(e);
     };
-    // Xử lí cập nhật
+
     const handleSubmit = () => {
-        const error: { [key: string]: string } = {};
         const data = {
             fullName: formData.fullName || (userData ? userData.fullName : ''),
             gender: formData.gender || (userData ? userData.gender : ''),
@@ -106,23 +64,16 @@ function EditProfile() {
             website: formData.website || (userData ? userData.website : ''),
         };
 
+        if (selectedFile) {
+            uploadAvatar(userData.id, selectedFile);
+        }
+
         editprofile(id, data)
             .then((response) => {
-                if (response.data.Status === 200) {
+                if (response.Status === 200) {
                     setSuccessMessage('Cập nhật thành công !');
                     setIsModalOpen(true);
                     setIsCheck(true);
-                    const userUpdate = {
-                        id: userData?.id,
-                        userName: userData?.userName,
-                        phone: userData?.phone,
-                        email: userData?.email,
-                        fullName: formData.fullName || (userData ? userData.fullName : ''),
-                        gender: formData.gender || (userData ? userData.gender : ''),
-                        bio: formData.blo || (userData ? userData.bio : ''),
-                        website: formData.website || (userData ? userData.website : ''),
-                    };
-                    localStorage.setItem('userData', JSON.stringify(userUpdate));
                 }
             })
             .catch((error) => {
@@ -134,39 +85,33 @@ function EditProfile() {
 
     const closeModal = () => {
         setIsModalOpen(false);
-        window.location.reload();
+        getUserDataById(userData.id).then((res) => {
+            if (res.Status == 200) {
+                console.log(res.Data);
+                localStorage.setItem('userData', JSON.stringify(res.Data));
+            }
+        });
     };
 
-    const handleCombinedClick = () => {
-        handleSubmit();
-        if (selectedFileName) {
-            handleFileUpload();
-        }
-    };
     return (
         <div className="w-[100%]  p-6 rounded-md">
-            <h1 className="text-2xl font-bold mt-[120px]">Edit Profile</h1>
+            <h1 className="text-2xl font-bold mt-[80px]">Edit Profile</h1>
 
             <div className="ml-[200px] mt-[80px]">
                 <div className="mb-4">
                     <div className="flex items-center space-x-4">
                         <div className="w-[20%] rounded-full overflow-hidden">
-                            <img
-                                src={backend_utils.imagePath + userData?.avatarPath}
-                                className="object-cover "
-                                alt="img"
-                            />
+                            {selectedFilePreview != '' ? (
+                                <img src={selectedFilePreview} className="rounded-full h-[70px] w-[70px] " alt="img" />
+                            ) : (
+                                <img
+                                    src={backend_utils.imagePath + userData?.avatarPath}
+                                    className="rounded-full h-[70px] w-[70px]"
+                                    alt="img"
+                                />
+                            )}
                         </div>
                         <div className="">
-                            {/* <input
-                                type="text"
-                                id="fullName"
-                                name="fullName"
-                                className="w-full rounded-md border-gray-900 shadow-sm border-2 ml-[35px] font-extrabold"
-                                value={formData.fullName}
-                                placeholder={userData?.fullName}
-                                onChange={handleInputChange}
-                            /> */}
                             <div className="bg-white w-full h-5 ">
                                 <h2 className="w-full text-base font-semibold text-black">{userData?.userName}</h2>
                             </div>
@@ -179,9 +124,8 @@ function EditProfile() {
                                 accept="image/*"
                                 ref={fileInputRef}
                                 style={{ display: 'none' }}
-                                onChange={handleFileChange}
+                                onChange={handleChange}
                             />
-                            {selectedFileName && <p className="ml-[35px]">Selected file: {selectedFileName}</p>}
                         </div>
                     </div>
                 </div>
@@ -247,13 +191,19 @@ function EditProfile() {
                         <button
                             type="submit"
                             className="bg-blue-800 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
-                            onClick={handleCombinedClick}
+                            onClick={() => handleSubmit()}
                         >
                             Submit
                         </button>
                     </div>
                 </div>
-                <CustomModal isOpen={isModalOpen} check={isCheck} message={successMessage} onClose={closeModal} />
+                <AlertDialog
+                    title="Thông báo"
+                    message={successMessage}
+                    show={isModalOpen}
+                    result={isCheck}
+                    onClose={() => closeModal()}
+                />
             </div>
         </div>
     );

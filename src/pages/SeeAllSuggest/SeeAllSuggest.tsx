@@ -4,6 +4,7 @@ import { UserInfo } from '../../types/user-type';
 import { Response } from '../../types/api-type';
 import { getListSuggested } from '../../services/user-service';
 import SuggestFollowItem from '../../components/Modal/SuggestFollowModal/SuggestFollowItem';
+import AlertDialog from '../../components/Dialog/AlertDialog/AlertDialog';
 
 function SeeAllSuggest() {
     const [isLoading, setIsLoading] = useState<boolean>(false);

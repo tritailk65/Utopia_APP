@@ -6,11 +6,11 @@ import SearchPanel from './SearchPanel/SearchPanel';
 import NotificationPanel from './NotificationPanel/NotificationPanel';
 import FollowRequestPanel from './FollowRequestPanel/FollowRequestPanel';
 import { LuBellRing } from 'react-icons/lu';
-import { BsPersonCircle } from 'react-icons/bs';
-import { useEffect } from 'react';
+import { AiOutlineUser } from 'react-icons/ai';
 import useFollowModal from '../../../hooks/useFollowModal';
 import useGetUserInfo from '../../../hooks/useGetUserInfo';
 import useCreatePostModal from '../../../hooks/useCreatePostModal';
+import { UserInfo } from '../../../types/user-type';
 
 export interface FixedBarProps {
     show: boolean;
@@ -20,18 +20,9 @@ export interface FixedBarProps {
 
 function FixedBar(props: FixedBarProps) {
     const { show, panel, onClose } = props;
-    const userInfo = useGetUserInfo();
+    const user: UserInfo = useGetUserInfo();
     const { openFollowModal } = useFollowModal();
     const { openCreatePostModal } = useCreatePostModal();
-    useEffect(() => {
-        // const user = JSON.parse(localStorage.getItem('userData') || '');
-        // if (user) {
-        //     setUserInfo(user);
-        //     setNavigateProfile('/profile/' + user.id);
-        // }
-    }, []);
-
-    console.log(show);
 
     return (
         <div className={`w-full min-h-screen bg-transparent ${show ? 'fixed' : 'hidden'} z-50 flex`}>
@@ -60,7 +51,7 @@ function FixedBar(props: FixedBarProps) {
                         </div>
 
                         {/* Following */}
-                        <div onClick={() => openFollowModal(userInfo.id)} className="cursor-pointer">
+                        <div onClick={() => openFollowModal(user.id)} className="cursor-pointer">
                             <li className="justify-center pl-1 h-[63px] text-2xl flex items-center mb-1 hover:bg-gray-200 transition">
                                 <AiOutlineHeart className="mr-3" />
                             </li>
@@ -78,16 +69,16 @@ function FixedBar(props: FixedBarProps) {
                         </div>
 
                         {/* Create */}
-                        <div onClick={() => openCreatePostModal(userInfo.id)} className="cursor-pointer">
+                        <div onClick={() => openCreatePostModal(user.id)} className="cursor-pointer">
                             <li className="justify-center pl-1 h-[63px] text-2xl flex items-center mb-1 hover:bg-gray-200 transition">
                                 <AiOutlinePlusSquare className="mr-3" />
                             </li>
                         </div>
 
                         {/* Profile */}
-                        <Link to={`/profile/${userInfo.id}`} className="">
+                        <Link to={`/profile/${user.userName}`} className="">
                             <li className="justify-center pl-1 h-[63px] text-2xl flex items-center mb-1 hover:bg-slate-200 transition">
-                                <BsPersonCircle className="mr-3" />
+                                <AiOutlineUser className="mr-2 " />
                             </li>
                         </Link>
                     </ul>

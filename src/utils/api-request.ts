@@ -10,7 +10,7 @@ server.interceptors.request.use(
     (config) => {
         const user = useGetUserInfo();
         if (user != null) {
-            config.headers.token = user.id;
+            config.headers.Token = user.id;
         }
         return config;
     },

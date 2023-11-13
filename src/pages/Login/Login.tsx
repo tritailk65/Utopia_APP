@@ -11,8 +11,6 @@ import AlertDialog from '../../components/Dialog/AlertDialog/AlertDialog';
 function Login() {
     const navigate = useNavigate();
 
-    console.log('aaa');
-
     const { formData, formError, handleInputChange, setFormError } = useInput({
         value: '',
         password: '',

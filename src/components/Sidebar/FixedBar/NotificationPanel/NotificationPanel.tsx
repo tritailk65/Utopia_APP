@@ -57,7 +57,7 @@ function NotificationPanel(props: NotificationPanelProps) {
         <div>
             {/* Follow request section */}
             <h1 className="ml-2 text-2xl font-semibold mb-7">Notifications</h1>
-            <ul className=" w-[100%] max-h-screen overflow-auto ">
+            <ul className=" w-[100%] max-h-screen overflow-auto">
                 {listUserRequest?.at(0) != null ? (
                     <>
                         <li className="text-base flex  mb-4 ">
@@ -116,13 +116,13 @@ function NotificationPanel(props: NotificationPanelProps) {
                 )}
 
                 {/* Notification this week section */}
-                {notiThisWeek ? <NotificationItem title="This month" noti={notiThisWeek.Data} /> : <></>}
+                {notiThisWeek ? <NotificationItem title="This week" noti={notiThisWeek.Data} /> : <></>}
 
                 {/* Notification this month section */}
                 {notiThisMonth ? (
                     <>
                         <div className="w-[100%] h-1 bg-[#9D9C9C]/20 mb-2 rounded-xl"></div>
-                        <NotificationItem title="This week" noti={notiThisMonth.Data} />
+                        <NotificationItem title="This month" noti={notiThisMonth.Data} />
                     </>
                 ) : (
                     <></>

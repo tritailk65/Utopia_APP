@@ -1,6 +1,5 @@
-
 // import { useState, useEffect } from 'react';
-// import SearchItem from './SearchItem'; 
+// import SearchItem from './SearchItem';
 
 // function SearchPanel() {
 //     const [input, setInput] = useState<string>('');
@@ -63,7 +62,7 @@
 // export default SearchPanel;
 import { getListUser } from '../../../../services/user-service';
 import { useState, useEffect } from 'react';
-import SearchItem from './SearchItem'; 
+import SearchItem from './SearchItem';
 import { PostForViewer, UserPostForViewer } from '../../../../types/post-type';
 import { Response } from '../../../../types/api-type';
 import useDebounce from '../../../../hooks/useDebounce';
@@ -82,14 +81,14 @@ function SearchPanel() {
     const [input, setInput] = useState<string>('');
     const [results, setResults] = useState<UserPostForViewer[]>([]);
     const delayDebounce = useDebounce(input, 1000);
-    
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response: Response<UserPostForViewer[]> = await getListUser();
                 if (response && response.Status === 200) {
                     // Lọc người dùng dựa trên input
-                    const filteredResults = response.Data.filter(user => {
+                    const filteredResults = response.Data.filter((user) => {
                         return user.userName.toLowerCase().includes(input.toLowerCase());
                     });
                     setResults(filteredResults);
@@ -116,6 +115,7 @@ function SearchPanel() {
                 <input
                     className="bg-transparent w-full px-3 py-2 text-xl outline-none"
                     value={input}
+                    placeholder="Search ..."
                     onChange={(e) => handleChange(e.target.value)}
                 />
                 {input && (
@@ -127,7 +127,7 @@ function SearchPanel() {
                     </button>
                 )}
             </div>
-            <div>
+            <div className="max-h-screen overflow-auto">
                 {results.map((user) => (
                     <SearchItem key={user.id} user={user} />
                 ))}

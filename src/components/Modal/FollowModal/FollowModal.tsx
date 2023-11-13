@@ -6,21 +6,32 @@ import ModalContainer from '../ModalContainer/ModalContainer';
 import FollowItem from './FollowItem/FollowItem';
 import { getAllFollowing } from '../../../services/follow-service';
 import { FollowingReponse } from '../../../types/following-type';
+import useDebounce from '../../../hooks/useDebounce';
 
-function FollowModal() {
+const FollowModal = () => {
     const { followModalState, closeFollowModal } = useFollowModal();
-    const user: UserInfo = useGetUserInfo();
+    const [input, setInput] = useState<string>('');
     const [listUserFollow, setListUserFollow] = useState<FollowingReponse[]>();
+    const delayDebounce = useDebounce(input, 1000);
 
     useEffect(() => {
-        if (user != null) {
+        try {
             getAllFollowing().then((res) => {
                 if (res != undefined) {
-                    setListUserFollow(res.Data);
+                    const filteredResults = res.Data.filter((_: FollowingReponse) => {
+                        return _.user.userName.toLowerCase().includes(input.toLowerCase());
+                    });
+                    setListUserFollow(filteredResults);
                 }
             });
+        } catch (error) {
+            console.log(error);
         }
-    }, []);
+    }, [delayDebounce]);
+
+    const handleChange = (value: string) => {
+        setInput(value);
+    };
 
     return (
         <>
@@ -33,6 +44,8 @@ function FollowModal() {
                         <input
                             className="w-full bg-transparent px-4 py-1 text-lg outline-none"
                             placeholder="Search ..."
+                            value={input}
+                            onChange={(e) => handleChange(e.target.value)}
                         />
                     </div>
                     <div className="max-h-[456px] overflow-y-scroll mx-5">
@@ -44,6 +57,6 @@ function FollowModal() {
             </ModalContainer>
         </>
     );
-}
+};
 
 export default FollowModal;

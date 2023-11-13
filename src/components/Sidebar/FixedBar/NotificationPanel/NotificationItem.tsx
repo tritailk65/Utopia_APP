@@ -18,7 +18,7 @@ const NotificationItem = ({ title, noti }: NotificationItemProps) => {
 
             {noti?.map((_) => (
                 <li className="text-base flex  mb-4 ml-4" onClick={() => navigate('/')}>
-                    <div className="flex-1 w-[13%]">
+                    <div className="flex-1 w-1/3">
                         <img
                             src={backend.imagePath + _.userSource.avatarPath}
                             alt="avatar"
@@ -26,9 +26,9 @@ const NotificationItem = ({ title, noti }: NotificationItemProps) => {
                             onClick={() => navigate('/profile')}
                         />
                     </div>
-                    <div className="flex-5 w-[87%] text-left pl-4 cursor-pointer">
+                    <div className="flex-5 w-5/6 text-left pl-4 cursor-pointer mr-4">
                         <h3 className="font-semibold ">{_.userSource.userName}</h3>
-                        <p>{_.userSource.userName + ' ' + _.context}</p>
+                        <p>{_.context}</p>
                     </div>
                 </li>
             ))}

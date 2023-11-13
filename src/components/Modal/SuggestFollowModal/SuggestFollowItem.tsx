@@ -1,12 +1,51 @@
 import { Link } from 'react-router-dom';
 import { UserInfo } from '../../../types/user-type';
 import { backend_utils } from '../../../utils/api-utils';
+import { useState } from 'react';
+import AlertDialog from '../../Dialog/AlertDialog/AlertDialog';
+import { cancelRequestFollow, sendRequestFollow } from '../../../services/request-follow-services';
 
 export interface SuggesFollowItemProps {
     user: UserInfo;
 }
 
 const SuggestFollowItem = (props: SuggesFollowItemProps) => {
+    const [isSendFollow, setIsSendFollow] = useState<boolean>(false);
+    const [messageFollow, setMessageFollow] = useState<string>('');
+    const [showAlert, setShowAlert] = useState<boolean>(false);
+
+    const handleSendFollow = (req: UserInfo) => {
+        try {
+            sendRequestFollow(req.id).then((res) => {
+                if (res.Status == 200) {
+                    setMessageFollow('Gửi lời mời follow thành công');
+                    setShowAlert(true);
+                }
+            });
+            setMessageFollow('Gửi lời mời follow thành công');
+            setShowAlert(true);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleCloseAlert = () => {
+        setShowAlert(false);
+        setIsSendFollow(true);
+    };
+
+    const handleCancelSendFollow = (user: UserInfo) => {
+        try {
+            cancelRequestFollow(user.id).then((res) => {
+                if (res.Status == 200) {
+                    setIsSendFollow(false);
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <>
             <ul className=" w-full px-2">
@@ -26,16 +65,35 @@ const SuggestFollowItem = (props: SuggesFollowItemProps) => {
                         </Link>
                         <p>{props.user.fullName}</p>
                     </div>
-                    <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer font-semibold ">
-                        <button
-                            onClick={() => {}}
-                            className=" bg-[#001F3E] px-5 border-2 border-[#001F3E] rounded-lg text-sm text-white hover:bg-white hover:text-black py-2"
-                        >
-                            Following
-                        </button>
-                    </div>
+                    {!isSendFollow && (
+                        <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer font-semibold ">
+                            <button
+                                onClick={() => handleSendFollow(props.user)}
+                                className=" bg-[#001F3E] px-5 border-2 border-[#001F3E] rounded-lg text-sm text-white hover:bg-white hover:text-black py-2"
+                            >
+                                Follow
+                            </button>
+                        </div>
+                    )}
+                    {isSendFollow && (
+                        <div className="flex-1 w-1/6 flex flex-row-reverse items-center cursor-pointer font-semibold ">
+                            <button
+                                onClick={() => handleCancelSendFollow(props.user)}
+                                className="  bg-[#8E8E8E]/30 transition border-2 border-transparent cursor-pointer rounded-xl text-sm text-black hover:bg-[#464646]/30 px-4 py-1.5"
+                            >
+                                Following
+                            </button>
+                        </div>
+                    )}
                 </li>
             </ul>
+            <AlertDialog
+                title="Thông báo"
+                message={messageFollow}
+                show={showAlert}
+                result={true}
+                onClose={() => handleCloseAlert()}
+            />
         </>
     );
 };
