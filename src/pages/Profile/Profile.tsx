@@ -11,7 +11,6 @@ import { UserInfo } from '../../types/user-type';
 import { AiOutlinePicture } from 'react-icons/ai';
 
 
-
 function Profile() {
     const [checkUser, setIsCheckUser] = useState(true);
     const [userInfo, setUserInfo] = useState<UserInfo>();
@@ -64,12 +63,13 @@ function Profile() {
         p > 0 ? setPost(true) : setPost(false);
         setActiveTab(tabName);
     };
+   
 
     return (
         <div className="w-[130%] mx-auto ml-10">
             <div className="profile text-xl w-[100%] mx-auto mt-8 bg-white p-4 rounded-lg ">
                 <div className="flex items-center space-x-6">
-                    {userInfo?.avatarPath != "unknown.png" && userInfo?.avatarPath ? (
+                    {userInfo?.avatarPath != "unknown.png" || userInfo?.avatarPath || avatar? (
                         <div className="flex-shrink-0 mt-5">
                             <img
                                 src={avatar}
@@ -208,7 +208,7 @@ function Profile() {
                     </div>
                     {activeTab === 'POSTS' ? (
                         checkPost ? (
-                            <Posts />
+                            <Posts/>
                         ) : (
                             <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
                                 <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
