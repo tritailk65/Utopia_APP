@@ -1,62 +1,70 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import iconcamera from '../../assets/image/iconcamera.png';
 import bookmark from '../../assets/image/icon/Bookmark.png';
 import { Link, useParams } from 'react-router-dom';
 import { backend_utils as backend } from '../../utils/api-utils';
-import Posts from './ProfilePosts';
-import Saved from './ProfilePostSaved';
+import Saved from '../../components/Profile/ProfilePostSaved';
 import { UserInfo } from '../../types/user-type';
 import { AiOutlinePicture } from 'react-icons/ai';
 import useGetUserInfo from '../../hooks/useGetUserInfo';
 import { Response } from '../../types/api-type';
 import { getUserByName } from '../../services/user-service';
+import { PostForViewer } from '../../types/post-type';
+import { getListPostProfile } from '../../services/post-service';
+import { error } from 'console';
+import ProfilePosts from '../../components/Profile/ProfilePosts';
+import emptyPost from '../../assets/image/empty.png';
+import useCreatePostModal from '../../hooks/useCreatePostModal';
 
 function Profile() {
-    const [checkUser, setIsCheckUser] = useState(true);
     const user: UserInfo = useGetUserInfo();
-    const [userAnyInfo, setUserAnyInfo] = useState<UserInfo>();
     const params = useParams<{ username: string }>();
     const { username } = params;
-    const [avatar, setAvatar] = useState<string | undefined>('');
-    // Sử dụng useState để quản lý trạng thái của dropdown menu
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [notMyProfile, setNotMyProfile] = useState<boolean>(false);
     const [dataAnyProfile, setDataAnyProfile] = useState<Response<UserInfo>>();
+    const [dataPostProfile, setDataPostProfile] = useState<Response<PostForViewer[]>>();
+    const [dataPostAnyProfile, setDataPostAnyProfile] = useState<Response<PostForViewer[]>>();
+    const [activeTab, setActiveTab] = useState('POSTS'); // kiem tra trang thai dang click
+    const [checkSave, setCheckSave] = useState(false); // kiem tra co save k
+    const [checkPost, setCheckPost] = useState<boolean>(false); // kiem tra co post k
+    const [checkAnyPost, setCheckAnyPost] = useState<boolean>(false);
+    const { openCreatePostModal } = useCreatePostModal();
 
     const handleDropdownClick = () => {
-        // Khi nút "..." được nhấn, đảm bảo toggle trạng thái của dropdown menu
         setIsDropdownOpen(!isDropdownOpen);
     };
 
-    const [activeTab, setActiveTab] = useState('POSTS'); // kiem tra trang thai dang click
-    const [checkSave, setSave] = useState(false); // kiem tra co save k
-    const [checkPost, setPost] = useState(false); // kiem tra co post k
-    const s = 0; // save
-    const p = 0; // post
     const handleTabClick = (tabName: React.SetStateAction<string>) => {
-        s > 0 ? setSave(true) : setSave(false);
-        p > 0 ? setPost(true) : setPost(false);
         setActiveTab(tabName);
     };
 
     useEffect(() => {
         try {
-            if (username != user.userName) {
+            if (username != user.userName && username != undefined) {
                 getUserByName(username).then((res) => {
                     if (res != undefined) {
                         setDataAnyProfile(res);
                     }
                 });
+                getListPostProfile(username, 1).then((res) => {
+                    setDataPostAnyProfile(res);
+                });
                 setNotMyProfile(true);
+            } else if (username == user.userName) {
+                getListPostProfile(user.userName, 1).then((res) => {
+                    setDataPostProfile(res);
+                });
+                setNotMyProfile(false);
             }
         } catch (error) {
             console.log(error);
         }
-    }, []);
+    }, [username]);
 
     return (
         <div className="w-[130%] mx-auto ml-10">
-            <div className="profile text-xl w-[100%] mx-auto mt-8 bg-white p-4 rounded-lg ">
+            <div className="profile text-xl w-[100%] mx-auto mt-4 bg-white p-4 rounded-lg ">
                 <div className="flex items-center space-x-6">
                     <div className="flex-shrink-0 mt-5">
                         {!notMyProfile && (
@@ -163,7 +171,107 @@ function Profile() {
                     </div>
                 </div>
 
-                <div>
+                {!notMyProfile && (
+                    <div>
+                        <div className="border-t-[3px] border-gray-300 rounded-xl mt-5 mb-4"></div>
+                        <div className="flex space-x-6 justify-center">
+                            <div
+                                className={`flex cursor-pointer items-center p-2 rounded-2xl ${
+                                    activeTab === 'POSTS' ? 'bg-gray-400/30 text-black font-semibold' : ''
+                                }`}
+                                onClick={() => handleTabClick('POSTS')}
+                            >
+                                <div className={`w-8 h-8 ${activeTab === 'POSTS' ? 'bg-gray-400/0' : ''}`}>
+                                    <AiOutlinePicture className="w-6 h-6 ml-1 mt-1" />
+                                </div>
+                                <h1 className="text-lg">POSTS</h1>
+                            </div>
+                            {user && (
+                                <div
+                                    className={`flex cursor-pointer items-center p-2 rounded-2xl ${
+                                        activeTab === 'SAVED' ? 'bg-gray-400/30 text-black font-semibold' : ''
+                                    }`}
+                                    onClick={() => handleTabClick('SAVED')}
+                                >
+                                    <div
+                                        className={`w-6 h-6 mr-1 rounded-full ${
+                                            activeTab === 'SAVED' ? 'bg-gray-400/0' : ''
+                                        }`}
+                                    >
+                                        <img src={bookmark} alt=""></img>
+                                    </div>
+                                    <h1 className="text-lg">SAVED</h1>
+                                </div>
+                            )}
+                        </div>
+                        {activeTab === 'POSTS' && dataPostProfile?.Data != undefined ? (
+                            dataPostProfile?.Data.length > 0 ? (
+                                <ProfilePosts user={user} />
+                            ) : (
+                                <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
+                                    <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
+                                    <h1 className="text-2xl font-bold">Share Photos</h1>
+                                    <p className="text-center text-lg">
+                                        When you share photos, they will appear on your profile
+                                    </p>
+
+                                    <span
+                                        className="text-xl font-semibold cursor-pointer text-blue-500"
+                                        onClick={() => openCreatePostModal(user.id)}
+                                    >
+                                        Share your first photos
+                                    </span>
+                                </div>
+                            )
+                        ) : checkSave ? (
+                            <Saved />
+                        ) : (
+                            <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
+                                <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
+                                <h1 className="text-2xl font-bold">Save</h1>
+                                <p className="text-center text-lg w-[480px] text-[19px]">
+                                    Save photos and videos that you want to see again. No one is notified, and only you
+                                    can see what you've saved.
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                )}
+                {notMyProfile && (
+                    <div>
+                        <div className="border-t-[3px] border-gray-300 rounded-xl mt-5 mb-4"></div>
+                        <div className="flex space-x-6 justify-center">
+                            <div
+                                className={`flex cursor-pointer items-center p-2 rounded-2xl ${
+                                    activeTab === 'POSTS' ? 'bg-gray-400/30 text-black font-semibold' : ''
+                                }`}
+                                onClick={() => handleTabClick('POSTS')}
+                            >
+                                <div className={`w-8 h-8 ${activeTab === 'POSTS' ? 'bg-gray-400/0' : ''}`}>
+                                    <AiOutlinePicture className="w-6 h-6 ml-1 mt-1" />
+                                </div>
+                                <h1 className="text-lg">POSTS</h1>
+                            </div>
+                        </div>
+                        {dataAnyProfile?.Data != undefined &&
+                        dataPostAnyProfile?.Data != undefined &&
+                        dataPostAnyProfile.Data.length > 0 ? (
+                            <ProfilePosts user={dataAnyProfile.Data} />
+                        ) : (
+                            <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
+                                <img src={emptyPost} className="w-[100px] h-[100px]" alt="Camera Icon" />
+                                <h1 className="text-2xl font-bold">Empty...</h1>
+                                <p className="text-center text-lg">This account has never posted anything</p>
+                                <Link to={'/'}>
+                                    <span className="text-xl font-semibold cursor-pointer text-blue-500">
+                                        Go to home
+                                    </span>
+                                </Link>
+                            </div>
+                        )}
+                    </div>
+                )}
+                {/* <div>
                     <div className="border-t-[3px] border-gray-300 rounded-xl mt-5 mb-4"></div>
                     <div className="flex space-x-6 justify-center">
                         <div
@@ -197,7 +305,7 @@ function Profile() {
                     </div>
                     {activeTab === 'POSTS' ? (
                         checkPost ? (
-                            <Posts />
+                            <ProfilePosts user={user} />
                         ) : (
                             <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
                                 <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
@@ -224,7 +332,7 @@ function Profile() {
                             </p>
                         </div>
                     )}
-                </div>
+                </div> */}
             </div>
         </div>
     );

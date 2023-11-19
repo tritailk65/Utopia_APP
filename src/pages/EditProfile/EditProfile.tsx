@@ -96,7 +96,6 @@ function EditProfile() {
     return (
         <div className="w-[100%]  p-6 rounded-md">
             <h1 className="text-2xl font-bold mt-[80px]">Edit Profile</h1>
-
             <div className="ml-[200px] mt-[80px]">
                 <div className="mb-4">
                     <div className="flex items-center space-x-4">
@@ -151,7 +150,7 @@ function EditProfile() {
 
                     <div className="flex space-x-[42px]">
                         <label htmlFor="blog" className="block text-[20px] font-bold">
-                            Blog
+                            Bio
                         </label>
                         <input
                             type="text"
