@@ -11,6 +11,9 @@ export type UserInfo = {
     email: string;
     gender: string;
     website: string;
+    postCount: number;
+    followerCount: number;
+    followingCount: number;
 };
 
 export interface UserPostForViewer {

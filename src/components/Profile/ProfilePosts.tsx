@@ -7,6 +7,7 @@ import useGetUserInfo from '../../hooks/useGetUserInfo';
 import { getListPostProfile } from '../../services/post-service';
 import ProfilePostItem from './ProfilePostItem/ProfilePostItem';
 import ProfilePostSkeleton from '../Skeleton/ProfilePostSkeleton';
+import { getListPostFavoriteByUser } from '../../services/post-favorite-service';
 
 export type ProfilePostsProps = {
     user: UserInfo;

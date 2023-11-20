@@ -3,7 +3,6 @@ import iconcamera from '../../assets/image/iconcamera.png';
 import bookmark from '../../assets/image/icon/Bookmark.png';
 import { Link, useParams } from 'react-router-dom';
 import { backend_utils as backend } from '../../utils/api-utils';
-import Saved from '../../components/Profile/ProfilePostSaved';
 import { UserInfo } from '../../types/user-type';
 import { AiOutlinePicture } from 'react-icons/ai';
 import useGetUserInfo from '../../hooks/useGetUserInfo';
@@ -15,6 +14,8 @@ import { error } from 'console';
 import ProfilePosts from '../../components/Profile/ProfilePosts';
 import emptyPost from '../../assets/image/empty.png';
 import useCreatePostModal from '../../hooks/useCreatePostModal';
+import { getListPostFavoriteByUser } from '../../services/post-favorite-service';
+import ProfilePostFavorite from '../../components/Profile/ProfilePostFavorite';
 
 function Profile() {
     const user: UserInfo = useGetUserInfo();
@@ -25,11 +26,10 @@ function Profile() {
     const [dataAnyProfile, setDataAnyProfile] = useState<Response<UserInfo>>();
     const [dataPostProfile, setDataPostProfile] = useState<Response<PostForViewer[]>>();
     const [dataPostAnyProfile, setDataPostAnyProfile] = useState<Response<PostForViewer[]>>();
+    const [dataPostFavorite, setDataPostFavorite] = useState<Response<PostForViewer[]>>();
     const [activeTab, setActiveTab] = useState('POSTS'); // kiem tra trang thai dang click
-    const [checkSave, setCheckSave] = useState(false); // kiem tra co save k
-    const [checkPost, setCheckPost] = useState<boolean>(false); // kiem tra co post k
-    const [checkAnyPost, setCheckAnyPost] = useState<boolean>(false);
     const { openCreatePostModal } = useCreatePostModal();
+    const [userProfileInfo, setUserProfileInfo] = useState<Response<UserInfo>>();
 
     const handleDropdownClick = () => {
         setIsDropdownOpen(!isDropdownOpen);
@@ -52,8 +52,14 @@ function Profile() {
                 });
                 setNotMyProfile(true);
             } else if (username == user.userName) {
+                getUserByName(user.userName).then((res) => {
+                    setUserProfileInfo(res);
+                });
                 getListPostProfile(user.userName, 1).then((res) => {
                     setDataPostProfile(res);
+                });
+                getListPostFavoriteByUser(user.id).then((res) => {
+                    setDataPostFavorite(res);
                 });
                 setNotMyProfile(false);
             }
@@ -139,20 +145,38 @@ function Profile() {
                             </div>
                         </div>
                         <div className="ml-10">
-                            <ul className="flex space-x-12">
-                                <li>
-                                    <span className="font-semibold">9,990</span>
-                                    <span className="text-gray-600 ml-1">posts</span>
-                                </li>
-                                <li>
-                                    <span className="font-semibold">1,100</span>
-                                    <span className="text-gray-600 ml-1">followers</span>
-                                </li>
-                                <li>
-                                    <span className="font-semibold">1,150</span>
-                                    <span className="text-gray-600 ml-1">following</span>
-                                </li>
-                            </ul>
+                            {!notMyProfile && userProfileInfo?.Data != undefined && (
+                                <ul className="flex space-x-12">
+                                    <li>
+                                        <span className="font-semibold">{userProfileInfo.Data.postCount}</span>
+                                        <span className="text-gray-600 ml-1">posts</span>
+                                    </li>
+                                    <li>
+                                        <span className="font-semibold">{userProfileInfo.Data.followerCount}</span>
+                                        <span className="text-gray-600 ml-1">followers</span>
+                                    </li>
+                                    <li>
+                                        <span className="font-semibold">{userProfileInfo.Data.followingCount}</span>
+                                        <span className="text-gray-600 ml-1">following</span>
+                                    </li>
+                                </ul>
+                            )}
+                            {notMyProfile && dataAnyProfile?.Data && (
+                                <ul className="flex space-x-12">
+                                    <li>
+                                        <span className="font-semibold">{dataAnyProfile.Data.postCount}</span>
+                                        <span className="text-gray-600 ml-1">posts</span>
+                                    </li>
+                                    <li>
+                                        <span className="font-semibold">{dataAnyProfile.Data.followerCount}</span>
+                                        <span className="text-gray-600 ml-1">followers</span>
+                                    </li>
+                                    <li>
+                                        <span className="font-semibold">{dataAnyProfile.Data.followingCount}</span>
+                                        <span className="text-gray-600 ml-1">following</span>
+                                    </li>
+                                </ul>
+                            )}
                         </div>
                         <div className="mt-10 ml-10 ">
                             {!notMyProfile && (
@@ -223,8 +247,8 @@ function Profile() {
                                     </span>
                                 </div>
                             )
-                        ) : checkSave ? (
-                            <Saved />
+                        ) : dataPostFavorite?.Data != undefined ? (
+                            dataPostFavorite.Data.length > 0 && <ProfilePostFavorite user={user} />
                         ) : (
                             <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
                                 <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
@@ -259,7 +283,6 @@ function Profile() {
                             <ProfilePosts user={dataAnyProfile.Data} />
                         ) : (
                             <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
-                                <img src={emptyPost} className="w-[100px] h-[100px]" alt="Camera Icon" />
                                 <h1 className="text-2xl font-bold">Empty...</h1>
                                 <p className="text-center text-lg">This account has never posted anything</p>
                                 <Link to={'/'}>
@@ -271,68 +294,6 @@ function Profile() {
                         )}
                     </div>
                 )}
-                {/* <div>
-                    <div className="border-t-[3px] border-gray-300 rounded-xl mt-5 mb-4"></div>
-                    <div className="flex space-x-6 justify-center">
-                        <div
-                            className={`flex cursor-pointer items-center p-2 rounded-2xl ${
-                                activeTab === 'POSTS' ? 'bg-gray-400/30 text-black font-semibold' : ''
-                            }`}
-                            onClick={() => handleTabClick('POSTS')}
-                        >
-                            <div className={`w-8 h-8 ${activeTab === 'POSTS' ? 'bg-gray-400/0' : ''}`}>
-                                <AiOutlinePicture className="w-6 h-6 ml-1 mt-1" />
-                            </div>
-                            <h1 className="text-lg">POSTS</h1>
-                        </div>
-                        {user && (
-                            <div
-                                className={`flex cursor-pointer items-center p-2 rounded-2xl ${
-                                    activeTab === 'SAVED' ? 'bg-gray-400/30 text-black font-semibold' : ''
-                                }`}
-                                onClick={() => handleTabClick('SAVED')}
-                            >
-                                <div
-                                    className={`w-6 h-6 mr-1 rounded-full ${
-                                        activeTab === 'SAVED' ? 'bg-gray-400/0' : ''
-                                    }`}
-                                >
-                                    <img src={bookmark} alt=""></img>
-                                </div>
-                                <h1 className="text-lg">SAVED</h1>
-                            </div>
-                        )}
-                    </div>
-                    {activeTab === 'POSTS' ? (
-                        checkPost ? (
-                            <ProfilePosts user={user} />
-                        ) : (
-                            <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
-                                <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
-                                <h1 className="text-2xl font-bold">Share Photos</h1>
-                                <p className="text-center text-lg">
-                                    When you share photos, they will appear on your profile
-                                </p>
-                                <Link to={'/'}>
-                                    <span className="text-xl font-semibold cursor-pointer text-blue-500">
-                                        Share your first photos
-                                    </span>
-                                </Link>
-                            </div>
-                        )
-                    ) : checkSave ? (
-                        <Saved />
-                    ) : (
-                        <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
-                            <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
-                            <h1 className="text-2xl font-bold">Save</h1>
-                            <p className="text-center text-lg w-[480px] text-[19px]">
-                                Save photos and videos that you want to see again. No one is notified, and only you can
-                                see what you've saved.
-                            </p>
-                        </div>
-                    )}
-                </div> */}
             </div>
         </div>
     );

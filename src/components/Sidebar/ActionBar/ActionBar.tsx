@@ -22,7 +22,9 @@ function ActionBar(props: ActionBarProps) {
         <>
             <div className="mr-2 min-h-screen shrink-0 z-10 shadow-xl max-w-[270px]">
                 <div className="sticky top-0 left-0">
-                    <img src={logo1} alt="img" />
+                    <Link to={'/'} className="cursor-pointer">
+                        <img src={logo1} alt="img" />
+                    </Link>
                     <ul>
                         <Link to={'/'} className="">
                             <li className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-gray-200 transition">

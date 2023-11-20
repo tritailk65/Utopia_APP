@@ -1,6 +1,7 @@
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { backend_utils as backend } from '../../../../utils/api-utils';
 import { NotificationItemType } from '../../../../types/notification-type';
+import useCommentModal from '../../../../hooks/useCommentModal';
 
 type NotificationItemProps = {
     title: string;
@@ -8,7 +9,7 @@ type NotificationItemProps = {
 };
 
 const NotificationItem = ({ title, noti }: NotificationItemProps) => {
-    const navigate = useNavigate();
+    const { openCommentModal } = useCommentModal();
 
     return (
         <>
@@ -17,16 +18,20 @@ const NotificationItem = ({ title, noti }: NotificationItemProps) => {
             </li>
 
             {noti?.map((_) => (
-                <li className="text-base flex  mb-4 ml-4" onClick={() => navigate('/')}>
+                <li
+                    className="text-base flex pt-2 pb-2 mb-2 pl-4 cursor-pointer hover:bg-slate-300/30"
+                    onClick={() => {}}
+                >
                     <div className="flex-1 w-1/3">
-                        <img
-                            src={backend.imagePath + _.userSource.avatarPath}
-                            alt="avatar"
-                            className="circle w-12 h-12 cursor-pointer"
-                            onClick={() => navigate('/profile')}
-                        />
+                        <Link to={`/profile/` + _.userSource.userName}>
+                            <img
+                                src={backend.imagePath + _.userSource.avatarPath}
+                                alt="avatar"
+                                className="circle w-12 h-12 cursor-pointer"
+                            />
+                        </Link>
                     </div>
-                    <div className="flex-5 w-5/6 text-left pl-4 cursor-pointer mr-4">
+                    <div className="flex-5 w-5/6 text-left pl-4 mr-4">
                         <h3 className="font-semibold ">{_.userSource.userName}</h3>
                         <p>{_.context}</p>
                     </div>

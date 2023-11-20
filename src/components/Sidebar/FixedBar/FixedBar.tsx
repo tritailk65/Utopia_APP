@@ -29,7 +29,9 @@ function FixedBar(props: FixedBarProps) {
             <div className={`w-[550px] min-h-screen bg-white  flex shadow-2xl `}>
                 <div className="w-[20%] border-r-4 border-gray-200 pt-8">
                     <div className="flex justify-center mb-4">
-                        <img src={logo} alt="img" className="w-14 h-14" />
+                        <Link to={'/'} className="cursor-pointer">
+                            <img src={logo} alt="img" className="w-14 h-14" />
+                        </Link>
                     </div>
                     <ul>
                         {/* Home */}

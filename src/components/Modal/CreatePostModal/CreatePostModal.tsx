@@ -14,6 +14,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { UserInfo } from '../../../types/user-type';
 import useGetUserInfo from '../../../hooks/useGetUserInfo';
+import AlertDialog from '../../Dialog/AlertDialog/AlertDialog';
+import { backend_utils } from '../../../utils/api-utils';
 const settings: Settings = {
     dots: true,
     speed: 500,
@@ -34,6 +36,8 @@ function CreatePostModal() {
     const [like, setLike] = useState<boolean>(false);
     const [comment, setComment] = useState<boolean>(false);
     const { createPostModalState, closeCreatePostModal } = useCreatePostModal();
+    const [messageAlert, setMessageAlert] = useState<string>('');
+    const [showAlert, setShowAlert] = useState<boolean>(false);
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -57,12 +61,18 @@ function CreatePostModal() {
         }
     };
 
+    const handleCloseAlert = () => {
+        setShowAlert(false);
+        closeModal();
+    };
+
     const closeModal = () => {
         closeCreatePostModal();
         setTimeout(function () {
             setLike(false);
             setComment(false);
             setFiles([]);
+            setTitle('');
         }, 1000);
     };
 
@@ -79,12 +89,11 @@ function CreatePostModal() {
             files.map(async (val) => {
                 const tmp = await uploadPostImage(res.Data, val.file);
             });
-            alert('thành công');
-            window.location.reload();
+            setMessageAlert('Tạo mới bài viết thành công');
+            setShowAlert(true);
         } else {
             alert('thất bại');
         }
-        closeModal();
     };
 
     return (
@@ -147,8 +156,16 @@ function CreatePostModal() {
                     </div>
                     <div className="w-[319px] h-full  pt-4">
                         <div className="flex items-center pl-4">
-                            <img src={avt} alt="avt" className="w-12 h-12 circle mr-4" />
-                            <h2 className="text-base font-semibold">cr7.ronaldo.official</h2>
+                            {user != null && (
+                                <>
+                                    <img
+                                        src={backend_utils.imagePath + user.avatarPath}
+                                        alt="avt"
+                                        className="w-12 h-12 circle mr-4"
+                                    />
+                                    <h2 className="text-base font-semibold">{user.userName}</h2>
+                                </>
+                            )}
                         </div>
                         <div className="mt-4 border-b-2 border-gray-200 pl-4">
                             <textarea
@@ -196,7 +213,14 @@ function CreatePostModal() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>{' '}
+            <AlertDialog
+                title="Thông báo"
+                message={messageAlert}
+                show={showAlert}
+                result={true}
+                onClose={() => handleCloseAlert()}
+            />
         </ModalContainer>
     );
 }
