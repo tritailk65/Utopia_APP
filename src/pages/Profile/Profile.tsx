@@ -259,7 +259,6 @@ function Profile() {
                             <ProfilePosts user={dataAnyProfile.Data} />
                         ) : (
                             <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
-                                <img src={emptyPost} className="w-[100px] h-[100px]" alt="Camera Icon" />
                                 <h1 className="text-2xl font-bold">Empty...</h1>
                                 <p className="text-center text-lg">This account has never posted anything</p>
                                 <Link to={'/'}>
@@ -271,68 +270,6 @@ function Profile() {
                         )}
                     </div>
                 )}
-                {/* <div>
-                    <div className="border-t-[3px] border-gray-300 rounded-xl mt-5 mb-4"></div>
-                    <div className="flex space-x-6 justify-center">
-                        <div
-                            className={`flex cursor-pointer items-center p-2 rounded-2xl ${
-                                activeTab === 'POSTS' ? 'bg-gray-400/30 text-black font-semibold' : ''
-                            }`}
-                            onClick={() => handleTabClick('POSTS')}
-                        >
-                            <div className={`w-8 h-8 ${activeTab === 'POSTS' ? 'bg-gray-400/0' : ''}`}>
-                                <AiOutlinePicture className="w-6 h-6 ml-1 mt-1" />
-                            </div>
-                            <h1 className="text-lg">POSTS</h1>
-                        </div>
-                        {user && (
-                            <div
-                                className={`flex cursor-pointer items-center p-2 rounded-2xl ${
-                                    activeTab === 'SAVED' ? 'bg-gray-400/30 text-black font-semibold' : ''
-                                }`}
-                                onClick={() => handleTabClick('SAVED')}
-                            >
-                                <div
-                                    className={`w-6 h-6 mr-1 rounded-full ${
-                                        activeTab === 'SAVED' ? 'bg-gray-400/0' : ''
-                                    }`}
-                                >
-                                    <img src={bookmark} alt=""></img>
-                                </div>
-                                <h1 className="text-lg">SAVED</h1>
-                            </div>
-                        )}
-                    </div>
-                    {activeTab === 'POSTS' ? (
-                        checkPost ? (
-                            <ProfilePosts user={user} />
-                        ) : (
-                            <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
-                                <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
-                                <h1 className="text-2xl font-bold">Share Photos</h1>
-                                <p className="text-center text-lg">
-                                    When you share photos, they will appear on your profile
-                                </p>
-                                <Link to={'/'}>
-                                    <span className="text-xl font-semibold cursor-pointer text-blue-500">
-                                        Share your first photos
-                                    </span>
-                                </Link>
-                            </div>
-                        )
-                    ) : checkSave ? (
-                        <Saved />
-                    ) : (
-                        <div className="mt-[50px] flex flex-col items-center justify-center space-y-10">
-                            <img src={iconcamera} className="w-[100px] h-[100px]" alt="Camera Icon" />
-                            <h1 className="text-2xl font-bold">Save</h1>
-                            <p className="text-center text-lg w-[480px] text-[19px]">
-                                Save photos and videos that you want to see again. No one is notified, and only you can
-                                see what you've saved.
-                            </p>
-                        </div>
-                    )}
-                </div> */}
             </div>
         </div>
     );

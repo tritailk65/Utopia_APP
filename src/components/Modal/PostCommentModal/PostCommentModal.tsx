@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Slider, { Settings } from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { Link } from 'react-router-dom';
 
 const settings: Settings = {
     dots: true,
@@ -37,6 +38,8 @@ function PostCommentModal() {
     const user: UserInfo = useGetUserInfo();
     const { commentModalState, closeCommentModal } = useCommentModal();
     const { commentState, onFocusComment, onClearState } = usePostingComment();
+
+    console.log(commentModalState);
 
     useEffect(() => {
         if (commentState.type === 'reply') {
@@ -169,14 +172,34 @@ function PostCommentModal() {
                                     );
                                 })}
                             </Slider>
-                            // <img
-                            //     src={backend.imagePath + commentModalState.post!.images[0].name}
-                            //     alt="img"
-                            //     className="h-full"
-                            // />
                         )}
                     </div>
-                    <div className="w-[460px] h-full  pt-4 flex flex-col">
+                    <div className="w-[460px] pl-4 pt-4 flex flex-col m">
+                        <div className="pl-1 text-base flex items-center">
+                            <Link to={'/profile/' + `user.userName`}>
+                                <img
+                                    src={`backend.imagePath + commentModalState.post?.user.avatarPath`}
+                                    alt="avatar"
+                                    className="w-10 h-10 circle mr-1"
+                                />
+                            </Link>
+
+                            <Link to={'/profile/' + `user.userName`}>
+                                <span className="px-2 font-semibold tracking-wide cursor-pointer">
+                                    {`commentModalState.post?.user.userName`}
+                                </span>
+                            </Link>
+
+                            <span className="">-</span>
+                            {commentModalState.post && (
+                                <span className="px-2">
+                                    {commentModalState.post.time / 24 < 1
+                                        ? commentModalState.post.time + 'h'
+                                        : (commentModalState.post.time % 24) + 'd'}
+                                </span>
+                            )}
+                        </div>
+                        <div className="w-full h-[1px] bg-slate-600/40 mt-2 mb-2"></div>
                         <div className="overflow-y-auto text-justify border-b-2 border-gray-200  pl-2 h-[88%]">
                             {!loading && data?.Data && (
                                 <>
@@ -196,7 +219,7 @@ function PostCommentModal() {
                                 </>
                             )}
                         </div>
-                        <div className="h-[18%]  w-full pt-2">
+                        <div className="h-auto  w-full pt-2">
                             <div className="flex justify-between text-2xl px-2 h-[35%]">
                                 <div className="flex">
                                     <AiOutlineHeart className="cursor-pointer mr-4" />
@@ -209,14 +232,14 @@ function PostCommentModal() {
                                 <BiBookmark className="cursor-pointer" />
                             </div>
                             <div className="px-2  border-b-2 border-gray-200  h-[35%]">
-                                <p className="text-sm font-semibold">1.408 likes</p>
-                                <p className="text-xs opacity-80">3 hours ago</p>
+                                <p className="text-sm font-semibold">{commentModalState.post?.likeCount} likes</p>
+                                <p className="text-base opacity-80 mt-1 ">{commentModalState.post?.title}</p>
                             </div>
-                            <div className="px-2 flex items-center h-[30%]">
+                            <div className="px-2 flex items-center h-[30%] pt-2 ">
                                 {commentModalState.post != null && commentModalState.post!.commentStat === 0 && (
                                     <>
                                         <textarea
-                                            className="h-[70%] border-none w-[90%] mr-2 outline-none"
+                                            className="h-[50px] border-none w-full mr-2 outline-none mt-2"
                                             placeholder={
                                                 commentState.data.comment
                                                     ? `You are replying ${commentState.data.comment}`

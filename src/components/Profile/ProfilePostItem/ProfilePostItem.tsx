@@ -24,7 +24,7 @@ const ProfilePostItem = (props: ProfilePostItemProps) => {
 
     return (
         <div
-            className="relative inline-block"
+            className="relative inline-block transition-all"
             onMouseEnter={() => handleMouseEnter()}
             onMouseLeave={() => handleMouseLeave()}
         >

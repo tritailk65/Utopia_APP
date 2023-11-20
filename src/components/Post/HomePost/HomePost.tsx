@@ -16,6 +16,7 @@ import Slider, { Settings } from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { UserInfo } from '../../../types/user-type';
+import { Link } from 'react-router-dom';
 
 interface HomePostProps {
     data: PostForViewer;
@@ -75,16 +76,24 @@ function HomePost(props: HomePostProps) {
 
     return (
         <>
-            <div className="w-full mb-12">
-                <div className="pl-3 text-lg flex items-center">
-                    <img
-                        src={backend.imagePath + post.user.avatarPath}
-                        alt="avatar"
-                        className="w-14 h-14 circle mr-1"
-                    />
-                    <span className="px-2 font-semibold tracking-wide cursor-pointer">{post.user.userName}</span>
+            <div className="w-full mb-8">
+                <div className="pl-1 text-base flex items-center">
+                    <Link to={'/profile/' + user.userName}>
+                        <img
+                            src={backend.imagePath + post.user.avatarPath}
+                            alt="avatar"
+                            className="w-10 h-10 circle mr-1"
+                        />
+                    </Link>
+
+                    <Link to={'/profile/' + user.userName}>
+                        <span className="px-2 font-semibold tracking-wide cursor-pointer">{post.user.userName}</span>
+                    </Link>
+
                     <span className="">-</span>
-                    <span className="px-2">{'2d'}</span>
+                    <span className="px-2">
+                        {props.data.time / 24 < 1 ? props.data.time + 'h' : (props.data.time % 24) + 'd'}
+                    </span>
                 </div>
                 <div className="w-[468px] mt-5 bg-slate-900 min-h-[468px]">
                     {data.images.length > 0 && (
@@ -104,30 +113,30 @@ function HomePost(props: HomePostProps) {
                     <div className="flex items-center">
                         {post.isLiked ? (
                             <AiFillHeart
-                                className="mr-6 text-3xl cursor-pointer text-red-600 transition"
+                                className="mr-6 text-2xl cursor-pointer text-red-600 transition"
                                 onClick={() => onLikePost()}
                             />
                         ) : (
                             <AiOutlineHeart
-                                className="mr-6 text-3xl cursor-pointer hover:text-gray-500 transition"
+                                className="mr-6 text-2xl cursor-pointer hover:text-gray-500 transition"
                                 onClick={() => onLikePost()}
                             />
                         )}
                         <BsChatSquareDots
-                            className="mr-6 text-3xl cursor-pointer hover:text-gray-500"
+                            className="mr-6 text-2xl cursor-pointer hover:text-gray-500"
                             onClick={() => openCommentModal(data)}
                         />
-                        <BsSend className="mr-6 text-3xl cursor-pointer hover:text-gray-500" />
+                        <BsSend className="mr-6 text-2xl cursor-pointer hover:text-gray-500" />
                     </div>
                     <div>
                         {post.isSaved ? (
                             <BsFillBookmarkFill
-                                className="text-3xl cursor-pointer text-black"
+                                className="text-2xl cursor-pointer text-black"
                                 onClick={() => onFavirotePost()}
                             />
                         ) : (
                             <BiBookmark
-                                className="text-3xl cursor-pointer hover:text-gray-500"
+                                className="text-2xl cursor-pointer hover:text-gray-500"
                                 onClick={() => onFavirotePost()}
                             />
                         )}
@@ -135,18 +144,21 @@ function HomePost(props: HomePostProps) {
                 </div>
                 {post.isHideLike === 0 && <p className="font-semibold text-lg text-left">{post.likeCount} likes</p>}
                 <div className="flex items-center mt-1">
-                    <span className="font-semibold text-lg mr-3">{post.user.userName}</span>
+                    <span className="font-semibold text-base mr-3">{post.user.userName}</span>
                     <span className="text-xl">{post.title}</span>
                 </div>
                 <p
-                    className="text-gray-500 text-left text-xl mt-2 hover:cursor-pointer hover:text-black"
+                    className="text-gray-500 text-left text-lg mt-2 hover:cursor-pointer hover:text-black"
                     onClick={() => openCommentModal(data)}
                 >
                     View all {post.commentCount} comments
                 </p>
-                <p className="text-gray-500 text-left text-xl mt-2 hover:cursor-pointer hover:text-black">
-                    Add a comment ...
-                </p>
+                <input
+                    className="w-full text-gray-500 outline-none text-left text-lg mt-2 "
+                    placeholder="Add a comment ..."
+                />
+
+                <div className="w-full h-[1px] bg-slate-600/40 mt-3"></div>
             </div>
         </>
     );
