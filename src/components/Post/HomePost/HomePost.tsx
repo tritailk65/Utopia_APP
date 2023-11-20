@@ -78,16 +78,16 @@ function HomePost(props: HomePostProps) {
         <>
             <div className="w-full mb-8">
                 <div className="pl-1 text-base flex items-center">
-                    <Link to={'/profile/' + user.userName}>
+                    <Link to={'/profile/' + data.user.userName}>
                         <img
-                            src={backend.imagePath + post.user.avatarPath}
+                            src={backend.imagePath + data.user.avatarPath}
                             alt="avatar"
                             className="w-10 h-10 circle mr-1"
                         />
                     </Link>
 
-                    <Link to={'/profile/' + user.userName}>
-                        <span className="px-2 font-semibold tracking-wide cursor-pointer">{post.user.userName}</span>
+                    <Link to={'/profile/' + data.user.userName}>
+                        <span className="px-2 font-semibold tracking-wide cursor-pointer">{data.user.userName}</span>
                     </Link>
 
                     <span className="">-</span>

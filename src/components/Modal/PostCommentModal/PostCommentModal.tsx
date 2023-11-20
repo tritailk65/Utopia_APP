@@ -176,19 +176,23 @@ function PostCommentModal() {
                     </div>
                     <div className="w-[460px] pl-4 pt-4 flex flex-col m">
                         <div className="pl-1 text-base flex items-center">
-                            <Link to={'/profile/' + `user.userName`}>
-                                <img
-                                    src={`backend.imagePath + commentModalState.post?.user.avatarPath`}
-                                    alt="avatar"
-                                    className="w-10 h-10 circle mr-1"
-                                />
-                            </Link>
+                            {user != null && (
+                                <>
+                                    <Link to={'/profile/' + `user.userName`}>
+                                        <img
+                                            src={backend.imagePath + commentModalState.post?.user.avatarPath}
+                                            alt="avatar"
+                                            className="w-10 h-10 circle mr-1"
+                                        />
+                                    </Link>
 
-                            <Link to={'/profile/' + `user.userName`}>
-                                <span className="px-2 font-semibold tracking-wide cursor-pointer">
-                                    {`commentModalState.post?.user.userName`}
-                                </span>
-                            </Link>
+                                    <Link to={'/profile/' + user.userName}>
+                                        <span className="px-2 font-semibold tracking-wide cursor-pointer">
+                                            {commentModalState.post?.user.userName}
+                                        </span>
+                                    </Link>
+                                </>
+                            )}
 
                             <span className="">-</span>
                             {commentModalState.post && (

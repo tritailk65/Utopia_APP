@@ -18,7 +18,7 @@ const HomeSuggestItem = (props: HomeSuggestItemProps) => {
         try {
             sendRequestFollow(req.id).then((res) => {
                 if (res != undefined) {
-                    setMessageAlert('Gửi lời mời follow đến ' + req.userName + ' thành công !');
+                    setMessageAlert('Follow ' + req.userName + ' thành công');
                     setShowAlert(true);
                 }
             });
@@ -78,10 +78,10 @@ const HomeSuggestItem = (props: HomeSuggestItemProps) => {
                 )}
             </li>
             <AlertDialog
+                result={true}
                 title="Thông báo"
                 message={messageFollow}
                 show={showAlert}
-                result={true}
                 onClose={() => handleCloseAlert()}
             />
         </>

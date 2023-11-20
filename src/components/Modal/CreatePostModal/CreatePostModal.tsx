@@ -156,8 +156,16 @@ function CreatePostModal() {
                     </div>
                     <div className="w-[319px] h-full  pt-4">
                         <div className="flex items-center pl-4">
-                            <img src={avt} alt="avt" className="w-12 h-12 circle mr-4" />
-                            <h2 className="text-base font-semibold">{`user.userName`}</h2>
+                            {user != null && (
+                                <>
+                                    <img
+                                        src={backend_utils.imagePath + user.avatarPath}
+                                        alt="avt"
+                                        className="w-12 h-12 circle mr-4"
+                                    />
+                                    <h2 className="text-base font-semibold">{user.userName}</h2>
+                                </>
+                            )}
                         </div>
                         <div className="mt-4 border-b-2 border-gray-200 pl-4">
                             <textarea
