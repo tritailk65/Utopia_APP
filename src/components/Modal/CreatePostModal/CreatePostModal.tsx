@@ -16,6 +16,7 @@ import { UserInfo } from '../../../types/user-type';
 import useGetUserInfo from '../../../hooks/useGetUserInfo';
 import AlertDialog from '../../Dialog/AlertDialog/AlertDialog';
 import { backend_utils } from '../../../utils/api-utils';
+import ReactPlayer from 'react-player';
 const settings: Settings = {
     dots: true,
     speed: 500,
@@ -131,7 +132,7 @@ function CreatePostModal() {
                                     Select from computer
                                     <input
                                         type="file"
-                                        accept="image/*"
+                                        accept="image/*,video/*"
                                         style={{ display: 'none' }}
                                         onChange={handleImageChange}
                                         multiple
@@ -143,11 +144,18 @@ function CreatePostModal() {
                             <Slider {...settings}>
                                 {files!.map((item) => (
                                     <div className="!flex !items-center !justify-center !h-[720.98px]">
-                                        <img
-                                            src={item.image!}
-                                            alt="selected img"
-                                            className="max-w-[721px] max-h-[721px]"
-                                        />
+                                        {item.file.type.startsWith('image/') && (
+                                            <img
+                                                src={item.image!}
+                                                alt="selected img"
+                                                className="max-w-[721px] max-h-[721px]"
+                                            />
+                                        )}
+                                        {item.file.type.startsWith('video/') && (
+                                            <div className="max-w-[721px] max-h-[721px]">
+                                                <ReactPlayer url={item.image!} playsinline={true} controls />
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </Slider>

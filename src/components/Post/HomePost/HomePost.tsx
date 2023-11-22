@@ -2,7 +2,7 @@ import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { BsChatSquareDots, BsSend } from 'react-icons/bs';
 import { BiBookmark } from 'react-icons/bi';
 import { BsFillBookmarkFill } from 'react-icons/bs';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useCommentModal from '../../../hooks/useCommentModal';
 import { Response } from '../../../types/api-type';
 import { SavePostLike } from '../../../types/post-like-type';
@@ -17,6 +17,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { UserInfo } from '../../../types/user-type';
 import { Link } from 'react-router-dom';
+import ReactPlayer from 'react-player';
+import useOnScreen from '../../../hooks/useOnScreen';
 
 interface HomePostProps {
     data: PostForViewer;
@@ -33,8 +35,16 @@ const settings: Settings = {
 function HomePost(props: HomePostProps) {
     const { data } = props;
     const [post, setPost] = useState<PostForViewer>(data);
+    const [played, setPlayed] = useState(false);
     const user: UserInfo = useGetUserInfo();
     const { openCommentModal } = useCommentModal();
+    const videoRef = useRef<HTMLDivElement>(null);
+
+    const isVisible = useOnScreen(videoRef);
+
+    useEffect(() => {
+        setPlayed(isVisible);
+    }, [isVisible]);
 
     const onLikePost = async () => {
         const res: Response<SavePostLike> = await postLikeService(post.id);
@@ -95,16 +105,29 @@ function HomePost(props: HomePostProps) {
                         {props.data.time / 24 < 1 ? props.data.time + 'h' : (props.data.time % 24) + 'd'}
                     </span>
                 </div>
-                <div className="w-[468px] mt-5 bg-slate-900 min-h-[468px]">
+                <div className="w-[468px] mt-5 bg-slate-600/60 min-h-[468px] ">
                     {data.images.length > 0 && (
                         <Slider {...settings}>
-                            {data.images.map((image) => (
-                                <img
-                                    src={backend.imagePath + image.name}
-                                    alt={`avatar${image.id}`}
-                                    className="mx-auto h-full w-full"
-                                />
-                            ))}
+                            {data.images.map((image) =>
+                                image.type == 'video/mp4' ? (
+                                    <div ref={videoRef} className="object-center h-full w-full">
+                                        <ReactPlayer
+                                            url={backend.imagePath + image.name}
+                                            playsinline={true}
+                                            playing={played}
+                                            width="100%"
+                                            height="100%"
+                                            controls
+                                        />
+                                    </div>
+                                ) : (
+                                    <img
+                                        src={backend.imagePath + image.name}
+                                        alt={`avatar${image.id}`}
+                                        className="mx-auto h-full w-full"
+                                    />
+                                ),
+                            )}
                         </Slider>
                     )}
                 </div>
