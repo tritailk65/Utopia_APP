@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import avatar from '../../../assets/image/avt2.png';
-import { FaHeart } from 'react-icons/fa6';
+// import { FaHeart } from 'react-icons/fa6';
 import { IoChatbubble } from 'react-icons/io5';
 import { type } from 'os';
 import { PostForViewer } from '../../../types/post-type';
@@ -39,7 +39,7 @@ const ProfilePostItem = (props: ProfilePostItemProps) => {
                     onClick={() => openCommentModal(props.item)}
                 >
                     <div className="flex">
-                        <FaHeart className="mt-1 mr-1" />
+                        {/* <FaHeart className="mt-1 mr-1" /> */}
                         <span>{props.item.likeCount}</span>
                     </div>
                     <div className="flex">
