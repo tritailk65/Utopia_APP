@@ -5,6 +5,7 @@ import Login from '../pages/Login/Login';
 import Register from '../pages/Register/Register';
 import Home from '../pages/Home/Home';
 import ForgetPassword from '../pages/ForgetPassword/ForgetPassword';
+import ChangePassword from '../pages/ForgetPassword/ChangePassword';
 import Profile from '../pages/Profile/Profile';
 import EditProfile from '../pages/EditProfile/EditProfile';
 
@@ -25,6 +26,7 @@ export const PublicRoutes: Route[] = [
     { path: '/login', page: Login, layout: ContentOnlyLayout },
     { path: '/register', page: Register, layout: ContentOnlyLayout },
     { path: '/forget-password', page: ForgetPassword, layout: ContentOnlyLayout },
+    { path: '/change-password', page: ChangePassword, layout: ContentOnlyLayout },
     { path: '/profile/:username', page: Profile, layout: LayoutProfile },
     { path: '/profile/edit', page: EditProfile, layout: LayoutProfile },
 ];

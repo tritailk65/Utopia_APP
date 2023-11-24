@@ -3,10 +3,50 @@ import khoa from '../../assets/image/khoa.png'
 import './ForgetPassword.css';
 import useInput from '../../hooks/useInput';
 import { Link } from 'react-router-dom';
+import { userForgetPassword } from '../../services/user-service';
+import AlertDialog from '../../components/Dialog/AlertDialog/AlertDialog';
+import  {  useState } from 'react';
 function ForgetPassword() {
-    const { formData, handleInputChange } = useInput({
-        username: '',
+    const { formData, formError, handleInputChange,setFormError } = useInput({
+        email: '',
     });
+    const [check, setIsCheck] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false); // Thêm trạng thái modal
+    const [successMessage, setSuccessMessage] = useState('');
+
+    const closeModal = () => {
+            setIsModalOpen(false);
+    
+    };
+
+
+    const handleClickButton = () =>{
+        const error: { [key: string]: string } = {};
+        if (!formData.email) {
+            error.email = 'Input email!';
+        }
+        setFormError(error);
+        if (Object.keys(error).length === 0) {
+            const forgetData = {
+                email: formData.email
+            };
+            userForgetPassword(forgetData)
+                .then((response) => {
+                    if (response.Status === 200) {
+                        setSuccessMessage('Chúng tôi đã gửi qua gmail của bạn, mời bạn check thư gmail !');
+                        setIsModalOpen(true);
+                        setIsCheck(true);
+                    } else if (response.Status === 404) {
+                        setSuccessMessage('Kiểm tra lại gmail của bạn!');
+                        setIsModalOpen(true);
+                        setIsCheck(false);
+                    }
+                })
+                .catch(() => {
+                    console.error('Kiểm tra lại gmail');
+                });
+        }
+    }
 
     return (
 
@@ -25,14 +65,18 @@ function ForgetPassword() {
                     <input
                         className="bg-transparent w-full h-full text-xl outline-none"
                         type="text"
-                        name="username"
-                        placeholder="Phone number, username or email"
-                        value={formData.username}
+                        name="email"
+                        placeholder="Input your email"
+                        value={formData.email}
                         onChange={handleInputChange}
                     />
+                    {formError.email && <div className="error-messag text-red-600 mt-2">{formError.email}</div>}
                 </div>
 
-                <button className="bg-dark-blue border-dark-blue transition sm-border text-white text-2xl w-[410px] m-auto  h-14 mt-7 ml-20 hover:bg-white hover:text-dark-blue">
+                <button 
+                className="bg-dark-blue border-dark-blue transition sm-border text-white text-2xl w-[410px] m-auto  h-14 mt-7 ml-20 hover:bg-white hover:text-dark-blue"
+                onClick={handleClickButton}
+                >
                     Send Login Link
                 </button>
                 <div className="flex items-center mt-20 ml-20">
@@ -51,6 +95,13 @@ function ForgetPassword() {
                 </div>
 
             </div>
+            <AlertDialog
+                show={isModalOpen}
+                result={check}
+                message={successMessage}
+                onClose={closeModal}
+                title="Thông báo"
+            />
             
         </div>
     );

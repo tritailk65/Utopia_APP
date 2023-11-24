@@ -92,7 +92,27 @@ export const userRegister = async (userData: {} | undefined) => {
     try {
         const path = `${backend_utils.userController}/SignUp`;
         const response = await postAxios(path, userData);
-        console.log(response);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const userForgetPassword = async (forgetData:{}) => {
+    try {
+        const path = `${backend_utils.userController}/sendmail`;
+        const response = await postAxios(path, forgetData);
+        console.log(forgetData);
+        return response;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const userChangePassword = async (dataChangePassword:{}) => {
+    try {
+        const path = `${backend_utils.userController}/ResetPassword`;
+        const response = await postAxios(path, dataChangePassword);
         return response;
     } catch (error) {
         console.log(error);
