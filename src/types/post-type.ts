@@ -8,6 +8,13 @@ export type PostCreate = {
     commentStat: number;
 };
 
+export type PostEdit = {
+    postId: number;
+    title: string;
+    isHideLike: number;
+    commentStat: number;
+};
+
 export interface PostForViewer {
     id: number;
     title: string;

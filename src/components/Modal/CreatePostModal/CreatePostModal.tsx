@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import ModalContainer from '../ModalContainer/ModalContainer';
 import camera from '../../../assets/image/icon/camera.png';
-import avt from '../../../assets/image/avatar.png';
 import { HiOutlineLocationMarker } from 'react-icons/hi';
 import { Switch } from '@headlessui/react';
 import { PostCreate } from '../../../types/post-type';

@@ -16,6 +16,9 @@ module.exports = {
             animation: {
                 slideRight: 'slideRight .6s ease-in-out',
             },
+            boxShadow: {
+                utopia: '4px 4px 4px 4px rgba(0, 0, 0, 0.3)',
+            },
         },
         screens: {
             // Small tablet

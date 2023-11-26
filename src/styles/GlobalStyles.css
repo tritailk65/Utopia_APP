@@ -22,3 +22,7 @@
 .flex-all-center {
     @apply flex justify-center items-center;
 }
+
+.full-shadow {
+    @apply ring-2 shadow-md rounded-md;
+}

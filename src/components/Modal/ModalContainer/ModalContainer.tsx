@@ -2,21 +2,23 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { ReactNode } from 'react';
 import './ModalContainer.css';
+
 export interface ModalContainerProps {
     show: boolean;
     width: string;
     full?: boolean;
+    zIndex?: string;
     onClose: () => void;
     children?: ReactNode;
 }
 
 function ModalContainer(props: ModalContainerProps) {
-    const { show, full = false, width, onClose, children } = props;
+    const { show, full = false, width, onClose, children, zIndex } = props;
 
     return (
         <>
             <Transition appear show={show} as={Fragment}>
-                <Dialog as="div" className="relative z-50" onClose={onClose}>
+                <Dialog as="div" className={`relative z-20`} onClose={onClose}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"

@@ -13,11 +13,12 @@ import useGetUserInfo from '../../../../hooks/useGetUserInfo';
 
 interface CommentItemProps {
     data: Comment;
+    fetchData: () => void;
     toast: (result: boolean, message: string) => void;
 }
 
 function CommentItem(props: CommentItemProps) {
-    const { toast } = props;
+    const { toast, fetchData } = props;
     const [data, setData] = useState<Comment>(props.data);
     const [show, setShow] = useState<boolean>(false);
     const [edit, setEdit] = useState<boolean>(false);
@@ -62,6 +63,7 @@ function CommentItem(props: CommentItemProps) {
         } catch (e) {
             console.log(e);
         }
+        fetchData();
     };
 
     return (
@@ -98,7 +100,7 @@ function CommentItem(props: CommentItemProps) {
                             <span>{data.comment}</span>
                         )}
                     </div>
-                    {edit === false && (
+                    {edit === false && data.cmtOwner === true && (
                         <Menu as="div" className="inline-block">
                             <Menu.Button>
                                 <BsThreeDotsVertical className="mb-[-2px] transition cursor-pointer opacity-80 hover:opacity-100 ml-2" />
@@ -180,7 +182,7 @@ function CommentItem(props: CommentItemProps) {
                             <div className="mt-4">
                                 {data.replies &&
                                     data.replies.map((val, index) => {
-                                        return <ReplyItem data={val} />;
+                                        return <ReplyItem data={val} toast={toast} fetchData={fetchData} />;
                                     })}
                             </div>
                         )}
