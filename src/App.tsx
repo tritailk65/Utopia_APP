@@ -8,6 +8,7 @@ import FollowModal from './components/Modal/FollowModal/FollowModal';
 import CreatePostModal from './components/Modal/CreatePostModal/CreatePostModal';
 import PostCommentModal from './components/Modal/PostCommentModal/PostCommentModal';
 import Auth from './routers/ProtectRoutes';
+import EditPostModal from './components/Modal/EditPostModal/EditPostModal';
 
 function App() {
     return (

@@ -25,7 +25,7 @@ function FixedBar(props: FixedBarProps) {
     const { openCreatePostModal } = useCreatePostModal();
 
     return (
-        <div className={`w-full min-h-screen bg-transparent ${show ? 'fixed' : 'hidden'} z-50 flex`}>
+        <div className={`w-full min-h-screen bg-transparent ${show ? 'fixed' : 'hidden'} z-20 flex`}>
             <div className={`w-[550px] min-h-screen bg-white  flex shadow-2xl `}>
                 <div className="w-[20%] border-r-4 border-gray-200 pt-8">
                     <div className="flex justify-center mb-4">

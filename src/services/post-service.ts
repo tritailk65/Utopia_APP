@@ -1,5 +1,5 @@
-import { PostCreate } from '../types/post-type';
-import { getAxios, postAxios, postAxiosFile } from '../utils/api-request';
+import { PostCreate, PostEdit } from '../types/post-type';
+import { deleteAxios, getAxios, postAxios, postAxiosFile, putAxios } from '../utils/api-request';
 import { backend_utils as backend } from '../utils/api-utils';
 
 export const getListPostForViewer = async (id: number, page: number) => {
@@ -28,6 +28,26 @@ export const createNewPost = async (post: PostCreate) => {
     try {
         const path = `${backend.postController}`;
         const response = await postAxios(path, post);
+        return response;
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+export const editPostService = async (post: PostEdit) => {
+    try {
+        const path = `${backend.postController}`;
+        const response = await putAxios(path, post);
+        return response;
+    } catch (e) {
+        console.log(e);
+    }
+};
+
+export const deletePostService = async (id: number) => {
+    try {
+        const path = `${backend.postController}/${id}`;
+        const response = await deleteAxios(path);
         return response;
     } catch (e) {
         console.log(e);

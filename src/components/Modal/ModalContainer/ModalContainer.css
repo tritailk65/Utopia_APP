@@ -3,6 +3,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.tiny {
+    @apply max-w-xs;
+}
+
 .small {
     @apply max-w-sm;
 }
