@@ -28,6 +28,7 @@ export interface PostForViewer {
     isLiked: boolean;
     isSaved: boolean;
     isOwner: boolean;
+    alert: boolean;
     datePublished: Date;
     lastUpdate: Date;
     user: UserPostForViewer;

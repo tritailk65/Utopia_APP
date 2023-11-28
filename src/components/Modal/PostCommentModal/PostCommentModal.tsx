@@ -266,6 +266,20 @@ function PostCommentModal() {
                                                 <Menu.Item>
                                                     {({ active }) => (
                                                         <button
+                                                            // onClick={() => handleDeletePost()}
+                                                            className={`${
+                                                                active ? 'bg-gray-100 ' : 'text-gray-900'
+                                                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                                        >
+                                                            {commentModalState.post?.alert === true
+                                                                ? 'Turn off notification'
+                                                                : 'Turn on notification'}
+                                                        </button>
+                                                    )}
+                                                </Menu.Item>
+                                                <Menu.Item>
+                                                    {({ active }) => (
+                                                        <button
                                                             onClick={() => handleDeletePost()}
                                                             className={`${
                                                                 active ? 'bg-gray-100 ' : 'text-gray-900'

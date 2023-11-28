@@ -11,11 +11,13 @@ import PostCommentModal from './components/Modal/PostCommentModal/PostCommentMod
 import Auth from './routers/ProtectRoutes';
 import EditPostModal from './components/Modal/EditPostModal/EditPostModal';
 import useGetUserInfo from './hooks/useGetUserInfo';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Message } from './types/message-type';
+import useNotification from './hooks/useNotification';
 
 function App() {
     const user = useGetUserInfo();
-
+    const { addMoreNotification } = useNotification();
     const showToast = (message: string) => {
         toast.info(message, {
             position: 'bottom-right',
@@ -27,23 +29,41 @@ function App() {
     };
 
     useEffect(() => {
+        let eventSource: EventSource | null = null;
+
         const connectSSE = () => {
             try {
-                const eventSource = new EventSource(`http://localhost:8080/api/SSE/${user.id}/callNotification`);
+                // Đóng kết nối cũ trước khi mở kết nối mới
+                if (eventSource) {
+                    eventSource.close();
+                }
+
+                eventSource = new EventSource(`http://localhost:8080/api/SSE/${user.id}/callNotification`);
 
                 eventSource.onmessage = (event) => {
                     console.log('Received message from server:', event.data);
-                    if (event.data.includes('message')) showToast(event.data);
+                    if (event.data.includes('content')) {
+                        const data: Message = JSON.parse(event.data) as Message;
+                        addMoreNotification(data);
+                        if (data.isAlert === true) {
+                            showToast(data.content);
+                        }
+                    }
                 };
 
                 eventSource.onerror = (error) => {
                     console.error('EventSource failed:', error);
-                    eventSource.close();
+                    // Kiểm tra trước khi đóng kết nối
+                    if (eventSource) {
+                        eventSource.close();
+                    }
                     reconnectSSE();
                 };
 
                 return () => {
-                    eventSource.close();
+                    if (eventSource) {
+                        eventSource.close();
+                    }
                 };
             } catch (ex) {
                 console.log(ex);
@@ -57,6 +77,13 @@ function App() {
         if (user != null) {
             connectSSE();
         }
+
+        // Clean up function
+        return () => {
+            if (eventSource) {
+                eventSource.close();
+            }
+        };
     }, [user]);
 
     return (

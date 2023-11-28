@@ -4,6 +4,8 @@ import FollowModalReducer from './reducers/FollowModalSlice';
 import CreatePostModalReducer from './reducers/CreatePostModalSlice';
 import PostingCommentReducer from './reducers/PostingCommentSlice';
 import EditPostReducer from './reducers/EditPostModalSlice';
+import NotificationReducer from './reducers/NotificationSlice';
+import DetailPostReducer from './reducers/DetailPostSlice';
 export const store = configureStore({
     reducer: {
         commentModal: CommentModalReducer,
@@ -11,6 +13,8 @@ export const store = configureStore({
         createPostModal: CreatePostModalReducer,
         postingComment: PostingCommentReducer,
         editPostModal: EditPostReducer,
+        notification: NotificationReducer,
+        detailPost: DetailPostReducer,
     },
 });
 

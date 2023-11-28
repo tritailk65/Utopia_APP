@@ -7,6 +7,7 @@ import { UserInfo } from '../../../types/user-type';
 import useCreatePostModal from '../../../hooks/useCreatePostModal';
 import useFollowModal from '../../../hooks/useFollowModal';
 import useGetUserInfo from '../../../hooks/useGetUserInfo';
+import useNotification from '../../../hooks/useNotification';
 
 export interface ActionBarProps {
     onOpen: (index: number) => void;
@@ -14,9 +15,15 @@ export interface ActionBarProps {
 
 function ActionBar(props: ActionBarProps) {
     const { onOpen } = props;
+    const { notificationState, clearNotification } = useNotification();
     const userInfo: UserInfo = useGetUserInfo();
     const { openCreatePostModal } = useCreatePostModal();
     const { openFollowModal } = useFollowModal();
+
+    const onNotification = () => {
+        onOpen(2);
+        clearNotification();
+    };
 
     return (
         <>
@@ -44,10 +51,12 @@ function ActionBar(props: ActionBarProps) {
                                 <span className="">Following</span>
                             </li>
                         </div>
-                        <div onClick={() => onOpen(2)} className="cursor-pointer">
+                        <div onClick={() => onNotification()} className="cursor-pointer">
                             <li className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-gray-200 transition">
                                 <LuBellRing className="mr-3" />
-                                <span className="">Notification</span>
+                                <span className="">{`Notification ${
+                                    notificationState.count > 0 && `(${notificationState.count})`
+                                }`}</span>
                             </li>
                         </div>
                         <div className="cursor-pointer" onClick={() => openCreatePostModal(1)}>

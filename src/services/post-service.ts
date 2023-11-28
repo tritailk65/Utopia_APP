@@ -13,6 +13,16 @@ export const getListPostForViewer = async (id: number, page: number) => {
     }
 };
 
+export const getPostById = async (id: number) => {
+    try {
+        const path = `${backend.postController}/${id}`;
+        const response = await getAxios(path, {});
+        return response;
+    } catch (e) {
+        console.log(e);
+    }
+};
+
 export const getListPostProfile = async (name: string | undefined, page: number) => {
     try {
         const path = `${backend.postController}/GetListPostProfile/UserName=${name}&page=${page}`;
