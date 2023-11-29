@@ -105,7 +105,7 @@ function HomePost(props: HomePostProps) {
                         {props.data.time / 24 < 1 ? props.data.time + 'h' : (props.data.time % 24) + 'd'}
                     </span>
                 </div>
-                <div className="w-[468px] mt-5 bg-slate-600/60 min-h-[468px] ">
+                <div className="w-[468px] mt-5 bg-slate-600/60 min-h-[468px] flex flex-col justify-center">
                     {data.images.length > 0 && (
                         <Slider {...settings}>
                             {data.images.map((image) =>
@@ -166,9 +166,9 @@ function HomePost(props: HomePostProps) {
                     </div>
                 </div>
                 {post.isHideLike === 0 && <p className="font-semibold text-lg text-left">{post.likeCount} likes</p>}
-                <div className="flex items-center mt-1">
-                    <span className="font-semibold text-base mr-3">{post.user.userName}</span>
-                    <span className="text-xl">{post.title}</span>
+                <div className=" mt-1">
+                    <span className="font-semibold text-base mr-2">{post.user.userName}</span>
+                    <span className="text-lg">{post.title}</span>
                 </div>
                 <p
                     className="text-gray-500 text-left text-lg mt-2 hover:cursor-pointer hover:text-black"

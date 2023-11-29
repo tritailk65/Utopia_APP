@@ -76,6 +76,7 @@ function Login() {
                         setIsModalOpen(true);
                         setIsCheck(true);
                         setIsLoginSuccess(true);
+                        window.location.href = '/';
                     } else if (response.Status === 404) {
                         setSuccessMessage('Đăng nhập thất bại, kiểm tra lại thông tin đăng nhập!');
                         setIsModalOpen(true);

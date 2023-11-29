@@ -16,6 +16,7 @@ import useGetUserInfo from '../../../hooks/useGetUserInfo';
 import AlertDialog from '../../Dialog/AlertDialog/AlertDialog';
 import { backend_utils } from '../../../utils/api-utils';
 import ReactPlayer from 'react-player';
+import { useNavigate } from 'react-router-dom';
 const settings: Settings = {
     dots: true,
     speed: 500,
@@ -91,6 +92,7 @@ function CreatePostModal() {
             });
             setMessageAlert('Tạo mới bài viết thành công');
             setShowAlert(true);
+            window.location.href = `/post/${res.Data}`;
         } else {
             alert('thất bại');
         }

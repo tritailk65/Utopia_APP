@@ -6,6 +6,7 @@ import useCommentModal from '../../../hooks/useCommentModal';
 import { Response } from '../../../types/api-type';
 import { editPostService } from '../../../services/post-service';
 import { PostEdit } from '../../../types/post-type';
+import { useNavigate } from 'react-router-dom';
 
 function EditPostModal() {
     const { editPostState, closeEditModal } = useEditPostModal();
@@ -28,7 +29,9 @@ function EditPostModal() {
         };
         const res: Response<null> = await editPostService(model);
         if (res.Status === 200) {
-            window.location.reload();
+            setTimeout(() => {
+                window.location.href = `/post/${editPostState.postId}`;
+            }, 1500);
         }
     };
 

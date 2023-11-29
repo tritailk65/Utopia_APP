@@ -54,9 +54,8 @@ function ActionBar(props: ActionBarProps) {
                         <div onClick={() => onNotification()} className="cursor-pointer">
                             <li className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-gray-200 transition">
                                 <LuBellRing className="mr-3" />
-                                <span className="">{`Notification ${
-                                    notificationState.count > 0 && `(${notificationState.count})`
-                                }`}</span>
+                                <span className="mr-1">{`Notification `}</span>
+                                <span>{notificationState.count > 0 ? `(${notificationState.count})` : ''}</span>
                             </li>
                         </div>
                         <div className="cursor-pointer" onClick={() => openCreatePostModal(1)}>

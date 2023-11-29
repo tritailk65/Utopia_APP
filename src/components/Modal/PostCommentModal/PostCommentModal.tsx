@@ -176,7 +176,7 @@ function PostCommentModal() {
     const handleDeletePost = async () => {
         const res: Response<null> = await deletePostService(commentModalState.post!.id);
         if (res.Status === 200) {
-            showToast(true, 'Delete post successfully');
+            //showToast(true, 'Delete post successfully');
             setTimeout(() => {
                 window.location.reload();
             }, 1000);
@@ -260,20 +260,6 @@ function PostCommentModal() {
                                                             } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                                         >
                                                             Edit
-                                                        </button>
-                                                    )}
-                                                </Menu.Item>
-                                                <Menu.Item>
-                                                    {({ active }) => (
-                                                        <button
-                                                            // onClick={() => handleDeletePost()}
-                                                            className={`${
-                                                                active ? 'bg-gray-100 ' : 'text-gray-900'
-                                                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                                        >
-                                                            {commentModalState.post?.alert === true
-                                                                ? 'Turn off notification'
-                                                                : 'Turn on notification'}
                                                         </button>
                                                     )}
                                                 </Menu.Item>
@@ -364,7 +350,7 @@ function PostCommentModal() {
                     </div>
                 </div>
             </div>
-            <ToastContainer />
+            {/* <ToastContainer /> */}
             <EditPostModal />
         </ModalContainer>
     );
