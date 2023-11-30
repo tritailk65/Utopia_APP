@@ -1,5 +1,5 @@
 import logo1 from '../../../assets/image/logo/logo1.png';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { BiHomeAlt, BiSearchAlt } from 'react-icons/bi';
 import { AiOutlineHeart, AiOutlinePlusSquare, AiOutlineUser } from 'react-icons/ai';
 import { LuBellRing } from 'react-icons/lu';
@@ -8,6 +8,7 @@ import useCreatePostModal from '../../../hooks/useCreatePostModal';
 import useFollowModal from '../../../hooks/useFollowModal';
 import useGetUserInfo from '../../../hooks/useGetUserInfo';
 import useNotification from '../../../hooks/useNotification';
+import useRedirect from '../../../hooks/useRedirect';
 
 export interface ActionBarProps {
     onOpen: (index: number) => void;
@@ -19,7 +20,7 @@ function ActionBar(props: ActionBarProps) {
     const userInfo: UserInfo = useGetUserInfo();
     const { openCreatePostModal } = useCreatePostModal();
     const { openFollowModal } = useFollowModal();
-
+    const { onRedirect } = useRedirect();
     const onNotification = () => {
         onOpen(2);
         clearNotification();
@@ -29,16 +30,16 @@ function ActionBar(props: ActionBarProps) {
         <>
             <div className="mr-2 min-h-screen shrink-0 z-10 shadow-xl max-w-[270px]">
                 <div className="sticky top-0 left-0">
-                    <Link to={'/'} className="cursor-pointer">
+                    <div onClick={() => onRedirect('/')} className="cursor-pointer">
                         <img src={logo1} alt="img" />
-                    </Link>
+                    </div>
                     <ul>
-                        <Link to={'/'} className="">
+                        <div onClick={() => onRedirect('/')} className="cursor-pointer">
                             <li className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-gray-200 transition">
                                 <BiHomeAlt className="mr-3" />
                                 <span className="">Home</span>
                             </li>
-                        </Link>
+                        </div>
                         <div onClick={() => onOpen(1)} className="cursor-pointer">
                             <li className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-gray-200 transition">
                                 <BiSearchAlt className="mr-3" />
@@ -65,13 +66,13 @@ function ActionBar(props: ActionBarProps) {
                             </li>
                         </div>
                         <div className="cursor-pointer">
-                            <Link
-                                to={`/profile/${userInfo.userName}`}
+                            <div
+                                onClick={() => onRedirect(`/profile/${userInfo.userName}`)}
                                 className="pl-9 h-[63px] text-xl flex items-center mb-1 hover:bg-gray-200 transition"
                             >
                                 <AiOutlineUser className="mr-2 " />
                                 <span className="">Profile</span>
-                            </Link>
+                            </div>
                         </div>
                     </ul>
                 </div>

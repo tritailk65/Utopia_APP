@@ -19,6 +19,7 @@ import { UserInfo } from '../../../types/user-type';
 import { Link } from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import useOnScreen from '../../../hooks/useOnScreen';
+import PostCommentModalV2 from '../../Modal/PostCommentModal/PostCommentModalV2';
 
 interface HomePostProps {
     data: PostForViewer;
@@ -36,6 +37,7 @@ function HomePost(props: HomePostProps) {
     const { data } = props;
     const [post, setPost] = useState<PostForViewer>(data);
     const [played, setPlayed] = useState(false);
+    const [show, setShow] = useState<boolean>(false);
     const user: UserInfo = useGetUserInfo();
     const { openCommentModal } = useCommentModal();
     const videoRef = useRef<HTMLDivElement>(null);
@@ -147,7 +149,7 @@ function HomePost(props: HomePostProps) {
                         )}
                         <BsChatSquareDots
                             className="mr-6 text-2xl cursor-pointer hover:text-gray-500"
-                            onClick={() => openCommentModal(data)}
+                            onClick={() => setShow(true)}
                         />
                         <BsSend className="mr-6 text-2xl cursor-pointer hover:text-gray-500" />
                     </div>
@@ -172,7 +174,7 @@ function HomePost(props: HomePostProps) {
                 </div>
                 <p
                     className="text-gray-500 text-left text-lg mt-2 hover:cursor-pointer hover:text-black"
-                    onClick={() => openCommentModal(data)}
+                    onClick={() => setShow(true)}
                 >
                     View all {post.commentCount} comments
                 </p>
@@ -183,6 +185,13 @@ function HomePost(props: HomePostProps) {
 
                 <div className="w-full h-[1px] bg-slate-600/40 mt-3"></div>
             </div>
+            <PostCommentModalV2
+                show={show}
+                post={post}
+                onCloseModal={() => setShow(false)}
+                onLike={onLikePost}
+                onSave={onFavirotePost}
+            />
         </>
     );
 }

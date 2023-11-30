@@ -10,7 +10,10 @@ import { useNavigate } from 'react-router-dom';
 
 function EditPostModal() {
     const { editPostState, closeEditModal } = useEditPostModal();
+    console.log(editPostState.alert);
+
     const [input, setInput] = useState<string>(editPostState.title);
+    const [alert, setAlert] = useState<boolean>(editPostState.alert);
     const [like, setLike] = useState<boolean>(editPostState.isHideLike === 0 ? false : true);
     const [comment, setComment] = useState<boolean>(editPostState.commentStat === 0 ? false : true);
 
@@ -18,7 +21,10 @@ function EditPostModal() {
         setInput(editPostState.title);
         setLike(editPostState.isHideLike === 0 ? false : true);
         setComment(editPostState.commentStat === 0 ? false : true);
+        setAlert(editPostState.alert);
     }, [editPostState]);
+
+    console.log(alert);
 
     const handleConfirm = async () => {
         const model: PostEdit = {
@@ -26,12 +32,13 @@ function EditPostModal() {
             title: input,
             isHideLike: like === true ? 1 : 0,
             commentStat: comment === true ? 1 : 0,
+            alert: alert,
         };
         const res: Response<null> = await editPostService(model);
         if (res.Status === 200) {
             setTimeout(() => {
                 window.location.href = `/post/${editPostState.postId}`;
-            }, 1500);
+            }, 500);
         }
     };
 
@@ -53,6 +60,22 @@ function EditPostModal() {
                         className="w-full h-20 px-4 py-1 outline-none border-b-2 border-gray-200"
                         placeholder="Write a caption ..."
                     ></textarea>
+                    <div className="flex justify-between items-center h-10 pl-4 mb-[-6px]">
+                        <h2 className="font-semibold tracking-wide">Notification</h2>
+                        <Switch
+                            checked={alert}
+                            onChange={setAlert}
+                            className={`${alert ? 'bg-blue-500' : 'bg-gray-400'}
+                               mr-4  relative inline-flex h-6 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                        >
+                            <span className="sr-only">Use setting</span>
+                            <span
+                                aria-hidden="true"
+                                className={`${alert ? 'translate-x-6' : 'translate-x-0'}
+                                pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                            />
+                        </Switch>
+                    </div>
                     <div className="flex justify-between items-center border-b-2 border-gray-200 h-11 pl-4">
                         <h2 className="font-semibold tracking-wide">Hide like</h2>
                         <Switch

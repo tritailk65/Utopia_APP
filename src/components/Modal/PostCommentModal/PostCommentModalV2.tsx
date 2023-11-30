@@ -1,19 +1,18 @@
 import ModalContainer from '../ModalContainer/ModalContainer';
 import { useState, useEffect, Fragment } from 'react';
 import CommentItem from './CommentItem/CommentItem';
-import { AiOutlineHeart } from 'react-icons/ai';
-import { BsChatSquareDots, BsSend } from 'react-icons/bs';
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import { BsChatSquareDots, BsSend, BsFillBookmarkFill } from 'react-icons/bs';
 import { BiBookmark } from 'react-icons/bi';
 import { Response } from '../../../types/api-type';
 import { getListCommentByPostId } from '../../../services/comment-service';
 import CommentSkeleton from '../../Skeleton/CommentSkeleton';
-import useCommentModal from '../../../hooks/useCommentModal';
 import { Comment, CreateComment } from '../../../types/comment-type';
 import useGetUserInfo from '../../../hooks/useGetUserInfo';
 import { UserInfo } from '../../../types/user-type';
 import usePostingComment from '../../../hooks/usePostingComment';
 import { createNewComment, createReplyComment } from '../../../services/comment-service';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { backend_utils as backend } from '../../../utils/api-utils';
 import 'react-toastify/dist/ReactToastify.css';
 import Slider, { Settings } from 'react-slick';
@@ -23,7 +22,7 @@ import { Link } from 'react-router-dom';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { Menu, Transition } from '@headlessui/react';
 import useEditPostModal from '../../../hooks/useEditPostModal';
-import { PostEdit } from '../../../types/post-type';
+import { PostEdit, PostForViewer } from '../../../types/post-type';
 import EditPostModal from '../EditPostModal/EditPostModal';
 import { deletePostService } from '../../../services/post-service';
 const settings: Settings = {
@@ -34,15 +33,27 @@ const settings: Settings = {
     dotsClass: 'slick-dots',
 };
 
-function PostCommentModal() {
+interface PostCommentModalProps {
+    show: boolean;
+    post: PostForViewer;
+    onCloseModal: () => void;
+    onLike: () => void;
+    onSave: () => void;
+}
+
+function PostCommentModalV2(props: PostCommentModalProps) {
+    const [post, setPost] = useState<PostForViewer>(props.post);
     const [screenHeight, setScreenHeight] = useState(window.screen.height);
     const [loading, setLoading] = useState<boolean>(false);
     const [data, setData] = useState<Response<Comment[]>>();
     const [input, setInput] = useState<string>('');
     const user: UserInfo = useGetUserInfo();
-    const { commentModalState, closeCommentModal } = useCommentModal();
     const { commentState, onFocusComment, onClearState } = usePostingComment();
     const { editPostState, openEditModal } = useEditPostModal();
+
+    useEffect(() => {
+        setPost(props.post);
+    }, [props.post]);
 
     useEffect(() => {
         if (commentState.type === 'reply') {
@@ -54,7 +65,7 @@ function PostCommentModal() {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const res: Response<Comment[]> = await getListCommentByPostId(commentModalState.post!.id);
+            const res: Response<Comment[]> = await getListCommentByPostId(post.id);
             if (res.Status === 200) {
                 setData(res);
                 setTimeout(() => {
@@ -67,11 +78,11 @@ function PostCommentModal() {
     };
 
     useEffect(() => {
-        if (commentModalState.show === true && commentModalState.post!.id > 0) {
+        if (props.show === true && post.id > 0) {
             fetchData();
-            onFocusComment(commentModalState.post!.id, '');
+            onFocusComment(post.id, '');
         }
-    }, [commentModalState.show]);
+    }, [props.show]);
 
     useEffect(() => {
         const updateScreenHeight = () => {
@@ -85,22 +96,22 @@ function PostCommentModal() {
 
     const handleOpenEditModal = () => {
         const tmp: PostEdit = {
-            postId: commentModalState.post!.id,
-            title: commentModalState.post!.title,
-            isHideLike: commentModalState.post!.isHideLike,
-            commentStat: commentModalState.post!.commentStat,
-            alert: commentModalState.post!.alert,
+            postId: post.id,
+            title: post.title,
+            isHideLike: post.isHideLike,
+            commentStat: post.commentStat,
+            alert: post.alert,
         };
         // closeCommentModal();
         // setTimeout(() => {
         //     openEditModal(tmp);
         // }, 400);
+        console.log(tmp);
+
         openEditModal(tmp);
     };
 
     const handlePostComment = async () => {
-        console.log(commentState);
-
         try {
             if (commentState.type === 'comment') {
                 const tmp: CreateComment = {
@@ -113,11 +124,11 @@ function PostCommentModal() {
                 if (res.Status === 200) {
                     fetchData();
                     setInput('');
-                    onFocusComment(commentModalState.post!.id, '');
+                    onFocusComment(post.id, '');
                     showToast(true, 'Add comment successfully !');
                 } else {
                     setInput('');
-                    onFocusComment(commentModalState.post!.id, '');
+                    onFocusComment(post.id, '');
                     showToast(false, 'Add comment failed !');
                 }
             } else if (commentState.type === 'reply') {
@@ -131,11 +142,11 @@ function PostCommentModal() {
                 if (res.Status === 200) {
                     fetchData();
                     setInput('');
-                    onFocusComment(commentModalState.post!.id, '');
+                    onFocusComment(post.id, '');
                     showToast(true, 'Reply comment successfully !');
                 } else {
                     setInput('');
-                    onFocusComment(commentModalState.post!.id, '');
+                    onFocusComment(post.id, '');
                     showToast(false, 'Reply comment failed !');
                 }
             }
@@ -146,7 +157,7 @@ function PostCommentModal() {
 
     const onClose = () => {
         if (editPostState.show === false) {
-            closeCommentModal();
+            props.onCloseModal();
             setTimeout(() => {
                 setInput('');
                 onClearState();
@@ -175,11 +186,11 @@ function PostCommentModal() {
     };
 
     const handleDeletePost = async () => {
-        const res: Response<null> = await deletePostService(commentModalState.post!.id);
+        const res: Response<null> = await deletePostService(post.id);
         if (res.Status === 200) {
-            //showToast(true, 'Delete post successfully');
+            showToast(true, 'Delete post successfully');
             setTimeout(() => {
-                window.location.reload();
+                window.location.href = '/';
             }, 1000);
         } else {
             showToast(false, 'Someting wrong please try again ');
@@ -187,13 +198,13 @@ function PostCommentModal() {
     };
 
     return (
-        <ModalContainer show={commentModalState.show} onClose={onClose} width="extra-larges">
+        <ModalContainer show={props.show} onClose={onClose} width="extra-larges">
             <div className={`min-h-[${screenHeight}px] flex flex-col w-full my-[-8px]`}>
                 <div className="xl:h-[60vh]  h-[90vh] flex ">
                     <div className=" h-full  border-r-2 border-gray-200 max-w-[723px]">
-                        {commentModalState.post != null && commentModalState.post!.images.length > 0 && (
+                        {post != null && post.images.length > 0 && (
                             <Slider {...settings}>
-                                {commentModalState.post!.images.map((val, index) => {
+                                {post.images.map((val, index) => {
                                     return (
                                         <img
                                             src={backend.imagePath + val.name}
@@ -213,7 +224,7 @@ function PostCommentModal() {
                                     <>
                                         <Link to={'/profile/' + `user.userName`}>
                                             <img
-                                                src={backend.imagePath + commentModalState.post?.user.avatarPath}
+                                                src={backend.imagePath + post.user.avatarPath}
                                                 alt="avatar"
                                                 className="w-10 h-10 circle mr-1"
                                             />
@@ -221,22 +232,20 @@ function PostCommentModal() {
 
                                         <Link to={'/profile/' + user.userName}>
                                             <span className="px-2 font-semibold tracking-wide cursor-pointer">
-                                                {commentModalState.post?.user.userName}
+                                                {post.user.userName}
                                             </span>
                                         </Link>
                                     </>
                                 )}
 
                                 <span className="">-</span>
-                                {commentModalState.post && (
+                                {post && (
                                     <span className="px-2">
-                                        {commentModalState.post.time / 24 < 1
-                                            ? commentModalState.post.time + 'h'
-                                            : (commentModalState.post.time % 24) + 'd'}
+                                        {post.time / 24 < 1 ? post.time + 'h' : (post.time % 24) + 'd'}
                                     </span>
                                 )}
                             </div>
-                            {commentModalState.post != undefined && commentModalState.post.isOwner === true && (
+                            {post != undefined && post.isOwner === true && (
                                 <Menu as="div" className="inline-block pr-2">
                                     <Menu.Button>
                                         <BsThreeDotsVertical className="mb-[-2px] transition cursor-pointer opacity-80 hover:opacity-100 ml-2" />
@@ -305,23 +314,43 @@ function PostCommentModal() {
                         <div className="h-auto  w-full pt-2">
                             <div className="flex justify-between text-2xl px-2 h-[35%]">
                                 <div className="flex">
-                                    <AiOutlineHeart className="cursor-pointer mr-4" />
+                                    {post.isLiked ? (
+                                        <AiFillHeart
+                                            className="mr-6 text-2xl cursor-pointer text-red-600 transition"
+                                            onClick={() => props.onLike()}
+                                        />
+                                    ) : (
+                                        <AiOutlineHeart
+                                            className="mr-6 text-2xl cursor-pointer hover:text-gray-500 transition"
+                                            onClick={() => props.onLike()}
+                                        />
+                                    )}
                                     <BsChatSquareDots
                                         className="cursor-pointer mr-4"
-                                        onClick={() => onFocusComment(commentModalState.post!.id, 'this post ...')}
+                                        onClick={() => onFocusComment(post!.id, 'this post ...')}
                                     />
                                     <BsSend className="cursor-pointer mr-4" />
                                 </div>
-                                <BiBookmark className="cursor-pointer" />
+                                {post.isSaved ? (
+                                    <BsFillBookmarkFill
+                                        className="text-2xl cursor-pointer text-black"
+                                        onClick={() => props.onSave()}
+                                    />
+                                ) : (
+                                    <BiBookmark
+                                        className="text-2xl cursor-pointer hover:text-gray-500"
+                                        onClick={() => props.onSave()}
+                                    />
+                                )}
                             </div>
                             <div className="px-2  border-b-2 border-gray-200  h-[35%]">
-                                {commentModalState.post != undefined && commentModalState.post.isHideLike === 0 && (
-                                    <p className="text-sm font-semibold">{commentModalState.post?.likeCount} likes</p>
+                                {post != undefined && post.isHideLike === 0 && (
+                                    <span className="text-sm font-semibold mr-2">{post.likeCount} likes</span>
                                 )}
-                                <p className="text-base opacity-80 ">{commentModalState.post?.title}</p>
+                                <span className="text-base opacity-80 ">{post?.title}</span>
                             </div>
                             <div className="px-2 flex items-center h-[30%] pt-2 ">
-                                {commentModalState.post != null && commentModalState.post!.commentStat === 0 && (
+                                {post != null && post!.commentStat === 0 && (
                                     <>
                                         <textarea
                                             className="h-[50px] border-none w-full mr-2 outline-none mt-2"
@@ -343,7 +372,7 @@ function PostCommentModal() {
                                         )}
                                     </>
                                 )}
-                                {commentModalState.post != null && commentModalState.post!.commentStat === 1 && (
+                                {post != null && post.commentStat === 1 && (
                                     <p className="h-[70%] border-none w-[100%] mr-2 ">Commenting has been turned off</p>
                                 )}
                             </div>
@@ -357,4 +386,4 @@ function PostCommentModal() {
     );
 }
 
-export default PostCommentModal;
+export default PostCommentModalV2;

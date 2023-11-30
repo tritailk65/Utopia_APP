@@ -11,6 +11,7 @@ import useFollowModal from '../../../hooks/useFollowModal';
 import useGetUserInfo from '../../../hooks/useGetUserInfo';
 import useCreatePostModal from '../../../hooks/useCreatePostModal';
 import { UserInfo } from '../../../types/user-type';
+import useRedirect from '../../../hooks/useRedirect';
 
 export interface FixedBarProps {
     show: boolean;
@@ -23,23 +24,24 @@ function FixedBar(props: FixedBarProps) {
     const user: UserInfo = useGetUserInfo();
     const { openFollowModal } = useFollowModal();
     const { openCreatePostModal } = useCreatePostModal();
+    const { onRedirect } = useRedirect();
 
     return (
         <div className={`w-full min-h-screen bg-transparent ${show ? 'fixed' : 'hidden'} z-20 flex`}>
             <div className={`w-[550px] min-h-screen bg-white  flex shadow-2xl `}>
                 <div className="w-[20%] border-r-4 border-gray-200 pt-8">
                     <div className="flex justify-center mb-4">
-                        <Link to={'/'} className="cursor-pointer">
+                        <div onClick={() => onRedirect('/')} className="cursor-pointer">
                             <img src={logo} alt="img" className="w-14 h-14" />
-                        </Link>
+                        </div>
                     </div>
                     <ul>
                         {/* Home */}
-                        <Link to={'/'} className="">
+                        <div onClick={() => onRedirect('/')} className="cursor-pointer">
                             <li className="justify-center pl-1 h-[63px] text-2xl flex items-center mb-1 hover:bg-gray-200 transition">
                                 <BiHomeAlt className="mr-3" />
                             </li>
-                        </Link>
+                        </div>
 
                         {/* Search */}
                         <div onClick={() => onClose(1)} className="cursor-pointer">
@@ -78,11 +80,11 @@ function FixedBar(props: FixedBarProps) {
                         </div>
 
                         {/* Profile */}
-                        <Link to={`/profile/${user.userName}`} className="">
+                        <div onClick={() => onRedirect(`/profile/${user.userName}`)} className="cursor-pointer">
                             <li className="justify-center pl-1 h-[63px] text-2xl flex items-center mb-1 hover:bg-slate-200 transition">
                                 <AiOutlineUser className="mr-2 " />
                             </li>
-                        </Link>
+                        </div>
                     </ul>
                 </div>
                 <div className="w-[80%]  py-8">

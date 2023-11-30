@@ -8,6 +8,7 @@ import useGetUserInfo from '../../../hooks/useGetUserInfo';
 import { getListSuggested } from '../../../services/user-service';
 import HomeSuggestSkeleton from '../../Skeleton/HomeSuggestSkeleton';
 import HomeSuggestItem from './HomeSuggestItem/HomeSuggestItem';
+import { removeConnection } from '../../../services/sse-service';
 
 function FriendBar() {
     const navigate = useNavigate();
@@ -36,8 +37,9 @@ function FriendBar() {
         }
     }, []);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
         if (userInfo != null) {
+            await removeConnection(userInfo.id);
             localStorage.removeItem('userData');
         }
         navigate('/login');

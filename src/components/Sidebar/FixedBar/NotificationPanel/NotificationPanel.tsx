@@ -57,7 +57,7 @@ function NotificationPanel(props: NotificationPanelProps) {
         <div>
             {/* Follow request section */}
             <h1 className="ml-2 text-2xl font-semibold mb-7">Notifications</h1>
-            <ul className=" w-[100%] max-h-screen overflow-auto">
+            <ul className=" w-[100%] max-h-screen overflow-auto h-[calc(100vh-92px)]">
                 {listUserRequest?.at(0) != null ? (
                     <>
                         <li className="text-base flex  mb-4 ">

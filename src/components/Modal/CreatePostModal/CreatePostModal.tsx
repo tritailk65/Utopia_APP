@@ -78,6 +78,11 @@ function CreatePostModal() {
     };
 
     const onPosting = async () => {
+        console.log(title.length + ' ' + files.length);
+        if (title.length <= 0 || files.length <= 0) {
+            return;
+        }
+
         const newPost: PostCreate = {
             userId: user.id,
             title: title,

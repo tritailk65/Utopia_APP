@@ -6,6 +6,7 @@ interface EditPostSliceProps {
     title: string;
     isHideLike: number;
     commentStat: number;
+    alert: boolean;
     show: boolean;
 }
 
@@ -13,6 +14,7 @@ const initialState: EditPostSliceProps = {
     show: false,
     postId: 0,
     title: '',
+    alert: true,
     isHideLike: 0,
     commentStat: 0,
 };
@@ -27,12 +29,14 @@ const EditPostModalSlice = createSlice({
             state.commentStat = 0;
             state.isHideLike = 0;
             state.show = false;
+            state.alert = true;
         },
         openEditPostModalReducer: (state, action: PayloadAction<PostEdit>) => {
             state.postId = action.payload.postId;
             state.title = action.payload.title;
             state.isHideLike = action.payload.isHideLike;
             state.commentStat = action.payload.commentStat;
+            state.alert = action.payload.alert;
             state.show = true;
         },
     },

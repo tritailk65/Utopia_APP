@@ -80,7 +80,7 @@ interface User {
 function SearchPanel() {
     const [input, setInput] = useState<string>('');
     const [results, setResults] = useState<UserPostForViewer[]>([]);
-    const delayDebounce = useDebounce(input, 1000);
+    const delayDebounce = useDebounce(input, 500);
 
     useEffect(() => {
         const fetchData = async () => {

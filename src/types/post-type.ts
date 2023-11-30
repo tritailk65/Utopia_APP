@@ -13,6 +13,7 @@ export type PostEdit = {
     title: string;
     isHideLike: number;
     commentStat: number;
+    alert: boolean;
 };
 
 export interface PostForViewer {

@@ -8,5 +8,6 @@ export const backend_utils = {
     followingController: '/Following',
     postLikeController: '/PostLike',
     postFavoriteController: '/PostFavorite',
+    sseController: 'SSE',
     imagePath: 'http://localhost:8080/api/User/Avatar/',
 };

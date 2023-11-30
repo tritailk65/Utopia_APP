@@ -32,8 +32,15 @@ function App() {
         let eventSource: EventSource | null = null;
 
         const connectSSE = () => {
+            let check_user = null;
+            if (localStorage['userData']) {
+                check_user = JSON.parse(localStorage['userData']);
+            }
+            if (check_user == null) {
+                return;
+            }
+            console.log(check_user);
             try {
-                // Đóng kết nối cũ trước khi mở kết nối mới
                 if (eventSource) {
                     eventSource.close();
                 }
