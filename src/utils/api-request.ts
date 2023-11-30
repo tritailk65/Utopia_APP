@@ -55,6 +55,7 @@ export const postAxios = async (path: string, option = {}) => {
     }
 };
 
+
 export const postAxiosFile = async (path: string, data = {}, headers = {}) => {
     try {
         const response = await server.post(path, data, {
