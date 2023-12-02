@@ -82,7 +82,7 @@ const ProfilePostItem = (props: ProfilePostItemProps) => {
                 onMouseLeave={() => handleMouseLeave()}
             >
                 <img
-                    src={backend.imagePath + smallestIdImage.name}
+                    src={backend.imagePath + 'smallestIdImage.name'}
                     className="top-0 object-cover h-[300px] w-[300px] cursor-pointer"
                     alt="img"
                 />
