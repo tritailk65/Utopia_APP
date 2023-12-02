@@ -1,9 +1,13 @@
 import axios from 'axios';
 import { backend_utils } from './api-utils';
 import useGetUserInfo from '../hooks/useGetUserInfo';
+import useToken from '../hooks/useToken';
 
 export const server = axios.create({
     baseURL: backend_utils.backend_url,
+    headers: {
+        'Content-type': 'application/json',
+    },
 });
 
 server.interceptors.request.use(
@@ -12,6 +16,8 @@ server.interceptors.request.use(
         if (user != null) {
             config.headers.Token = user.id;
         }
+        config.headers.Authorization =
+            'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0X3VzZXIiLCJpYXQiOjE3MDExNzcyNjcsImV4cCI6MTcwMTI2MzY2N30.vlUbt9PxsmEoC2hBBC83-yzig2ErCY6LFg2tct3Ct-3jV3lfiPXRmbAIzwDoF3CT7dae9kM-BZ2LULla3fe8IA';
         return config;
     },
     (error) => {

@@ -1,5 +1,6 @@
 export const backend_utils = {
     backend_url: 'http://localhost:8080/api',
+    authController: '/auth',
     userController: '/User',
     postController: '/Post',
     commentController: '/PostComment',

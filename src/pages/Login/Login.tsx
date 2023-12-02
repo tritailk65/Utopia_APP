@@ -5,8 +5,8 @@ import CustomModal from '../EditProfile/CustomModal';
 import useInput from '../../hooks/useInput';
 import logo1 from '../../assets/image/logo/logo1.png';
 import './Login.css';
-import { userLogin } from '../../services/user-service';
 import AlertDialog from '../../components/Dialog/AlertDialog/AlertDialog';
+import { authSignIn } from '../../services/auth-service';
 
 function Login() {
     const navigate = useNavigate();
@@ -16,13 +16,13 @@ function Login() {
         password: '',
     });
 
-    const [fieldType, setFieldType] = useState<'userName' | 'phone' | 'email'>('userName');
+    const [fieldType, setFieldType] = useState<'username' | 'phone' | 'email'>('username');
     const [isModalOpen, setIsModalOpen] = useState(false); // Thêm trạng thái modal
     const [successMessage, setSuccessMessage] = useState('');
     const [check, setIsCheck] = useState(false);
     const [isLoginSuccess, setIsLoginSuccess] = useState(false);
 
-    const determineFieldType = (value: string): 'userName' | 'phone' | 'email' => {
+    const determineFieldType = (value: string): 'username' | 'phone' | 'email' => {
         const phoneRegex = /^\d{10}$/;
         const emailRegex = /^[A-Za-z0-9._-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
         if (emailRegex.test(value)) {
@@ -30,7 +30,7 @@ function Login() {
         } else if (phoneRegex.test(value)) {
             return 'phone';
         } else {
-            return 'userName';
+            return 'username';
         }
     };
 
@@ -67,7 +67,7 @@ function Login() {
                 password: formData.password,
             };
 
-            userLogin(loginData)
+            authSignIn(loginData)
                 .then((response) => {
                     if (response.Status === 200) {
                         console.log(response);

@@ -77,17 +77,6 @@ export const getDetailUser = async (code: string) => {
     }
 };
 
-export const userLogin = async (loginData: { [key: string]: string } | undefined) => {
-    try {
-        const path = `${backend_utils.userController}/Login`;
-        const response = await postAxios(path, loginData);
-
-        return response;
-    } catch (error) {
-        console.log(error);
-    }
-};
-
 export const userRegister = async (userData: {} | undefined) => {
     try {
         const path = `${backend_utils.userController}/SignUp`;

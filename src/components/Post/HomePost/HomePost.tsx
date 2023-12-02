@@ -110,7 +110,7 @@ function HomePost(props: HomePostProps) {
                         <Slider {...settings}>
                             {data.images.map((image) =>
                                 image.type == 'video/mp4' ? (
-                                    <div ref={videoRef} className="object-center h-full w-full">
+                                    <div ref={videoRef} className=" h-full w-full">
                                         <ReactPlayer
                                             url={backend.imagePath + image.name}
                                             playsinline={true}

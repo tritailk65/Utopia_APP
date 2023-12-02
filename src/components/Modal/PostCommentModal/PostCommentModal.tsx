@@ -39,8 +39,6 @@ function PostCommentModal() {
     const { commentModalState, closeCommentModal } = useCommentModal();
     const { commentState, onFocusComment, onClearState } = usePostingComment();
 
-    console.log(commentModalState);
-
     useEffect(() => {
         if (commentState.type === 'reply') {
             const replacedString = input.replace(/@[^ ]+\s+/, '');
@@ -81,8 +79,6 @@ function PostCommentModal() {
     }, []);
 
     const handlePostComment = async () => {
-        console.log(commentState);
-
         try {
             if (commentState.type === 'comment') {
                 const tmp: CreateComment = {
